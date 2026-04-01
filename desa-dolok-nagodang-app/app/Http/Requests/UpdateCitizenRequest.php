@@ -2,33 +2,32 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class StoreCitizenRequest extends FormRequest
+class UpdateCitizenRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
+        $id = $this->route('citizen');
+
         return [
-            'nik' => 'required|string|size:16|unique:citizens,nik',
+            'nik' => [
+                'required',
+                'string',
+                'size:16',
+                Rule::unique('citizens', 'nik')->ignore($id),
+            ],
             'full_name' => 'required|string|max:255',
-            'gender' => 'required|string|in:L,P',
+            'gender' => 'required|in:L,P',
             'birth_place' => 'nullable|string|max:100',
             'birth_date' => 'nullable|date',
-            'religion'  => 'nullable|string|max:100',
+            'religion' => 'nullable|string|max:100',
             'education' => 'nullable|string|max:100',
             'occupation' => 'nullable|string|max:100',
             'marital_status' => 'nullable|string|max:50',
@@ -43,7 +42,7 @@ class StoreCitizenRequest extends FormRequest
             'postal_code' => 'nullable|string|max:10',
             'phone' => 'nullable|string|max:20',
             'email' => 'nullable|email|max:255',
-            'life_status' => 'required|in:alive,deceased',
+            'life_status' => 'required|in:hidup,meninggal',
         ];
     }
 }
