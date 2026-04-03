@@ -20,7 +20,15 @@ class CitizenRepository implements CitizenRepositoryInterface
             });
         }
 
-        return $query->paginate($perPage);
+        if(!empty($filters['gender'])){
+            $query->where('gender', $filters['gender']);
+        }
+
+        if(!empty($filters['life_status'])){
+            $query->where('life_status', $filters['life_status']);
+        }
+
+        return $query->orderBy('id', 'desc')->paginate($perPage);
     }
 
     public function getById(int $id)
@@ -44,6 +52,7 @@ class CitizenRepository implements CitizenRepositoryInterface
     public function delete(int $id)
     {
         $citizen = Citizen::findOrFail($id);
-        return $citizen->delete();
+        $citizen->delete();
+        return true;
     }
 }

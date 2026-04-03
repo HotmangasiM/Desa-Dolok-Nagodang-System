@@ -42,7 +42,7 @@ class UpdateCitizenRequest extends FormRequest
             'postal_code' => 'nullable|string|max:10',
             'phone' => 'nullable|string|max:20',
             'email' => 'nullable|email|max:255',
-            'life_status' => 'required|in:hidup,meninggal',
+            'life_status' => 'required|in:alive,deceased',
         ];
     }
 }

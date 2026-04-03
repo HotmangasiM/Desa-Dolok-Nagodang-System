@@ -58,20 +58,20 @@ class CitizenController extends Controller {
         ]);
     }
 
-    public function update(UpdateCitizenRequest $request, int $id ): JsonResponse
+    public function update(UpdateCitizenRequest $request, int $citizen ): JsonResponse
     {
-        $citizen = $this->citizenService->update($id, $request->validated());
+        $data = $this->citizenService->update($citizen, $request->validated());
 
         return response()->json([
             'success' => true,
             'message' => 'Data penduduk berhasil diperbaharui',
-            'data' => $citizen,
+            'data' => $data,
         ]);
     }
 
-    public function destroy(int $id): JsonResponse
+    public function destroy(int $citizen): JsonResponse
     {
-        $this->citizenService->delete($id);
+        $this->citizenService->delete($citizen);
 
         return response()->json([
             'success' => true,
