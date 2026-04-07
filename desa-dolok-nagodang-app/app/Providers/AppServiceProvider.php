@@ -5,6 +5,8 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use App\Interfaces\CitizenRepositoryInterface;  
 use App\Repositories\CitizenRepository;
+use App\Interfaces\NewsRepositoryInterface;
+use App\Repositories\NewsRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -14,6 +16,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(CitizenRepositoryInterface::class, CitizenRepository::class);
+        $this->app->bind(\App\Interfaces\NewsRepositoryInterface::class, \App\Repositories\NewsRepository::class);
     }
 
     /**
