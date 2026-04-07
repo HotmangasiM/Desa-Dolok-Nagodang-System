@@ -2,7 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminCitizenPageController;
+use App\Http\Controllers\AdminNewsPageController;
 
+//Citizen
 Route::get('/admin/citizens', [AdminCitizenPageController::class, 'index'])
         ->name('admin.citizens.index');
 
@@ -20,3 +22,11 @@ Route::put('/admin/citizens/{citizen}', [AdminCitizenPageController::class, 'upd
         
 Route::delete('/admin/citizens/{citizen}', [AdminCitizenPageController::class, 'destroy'])
         ->name('admin.citizens.destroy');
+
+//news
+Route::get('/admin/news', [AdminNewsPageController::class, 'index'])->name('admin.news.index');
+Route::get('/admin/news/create', [AdminNewsPageController::class, 'create'])->name('admin.news.create');
+Route::post('/admin/news', [AdminNewsPageController::class, 'store'])->name('admin.news.store');
+Route::get('/admin/news/{news}/edit', [AdminNewsPageController::class, 'edit'])->name('admin.news.edit');
+Route::put('/admin/news/{news}', [AdminNewsPageController::class, 'update'])->name('admin.news.update');
+Route::delete('/admin/news/{news}', [AdminNewsPageController::class, 'destroy'])->name('admin.news.destroy');

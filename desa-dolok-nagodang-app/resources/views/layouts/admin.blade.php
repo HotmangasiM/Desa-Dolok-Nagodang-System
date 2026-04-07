@@ -22,16 +22,22 @@
                     <span class="font-medium">Dashboard</span>
                 </a>
 
-                <a href="{{ url('/admin/citizens') }}"
-                   class="flex items-center gap-3 px-4 py-3 rounded-xl bg-emerald-600 text-white shadow-lg shadow-emerald-900/30">
+                <a href="{{ route('admin.citizens.index') }}"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl transition
+                    {{ request()->routeIs('admin.citizens.*')
+                        ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-900/30'
+                        : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
                     <span>👥</span>
                     <span class="font-semibold">Penduduk</span>
                 </a>
 
-                <a href="#"
-                   class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition">
+                <a href="{{ route('admin.news.index') }}"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl transition
+                    {{ request()->routeIs('admin.news.*')
+                        ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-900/30'
+                        : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
                     <span>📰</span>
-                    <span class="font-medium">Berita Desa</span>
+                    <span class="font-semibold">Berita Desa</span>
                 </a>
 
                 <a href="#"
