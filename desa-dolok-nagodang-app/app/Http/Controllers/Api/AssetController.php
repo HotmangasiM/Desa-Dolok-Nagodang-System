@@ -9,6 +9,7 @@ use App\Services\AssetService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
+
 class AssetController extends Controller
 {
     public function __construct(
@@ -30,18 +31,17 @@ class AssetController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'List inventaris berhasil diambil',
+            'message' => 'List assets berhasil diambil',
             'data' => $data,
         ]);
     }
-
     public function store(StoreAssetRequest $request): JsonResponse
     {
         $asset = $this->assetService->create($request->validated());
 
         return response()->json([
             'success' => true,
-            'message' => 'Data inventaris berhasil ditambahkan',
+            'message' => 'Data asset berhasil ditambahkan',
             'data' => $asset,
         ], 201);
     }
@@ -52,7 +52,7 @@ class AssetController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Detail inventaris berhasil diambil',
+            'message' => 'Detail asset berhasil diambil',
             'data' => $data,
         ]);
     }
@@ -63,7 +63,7 @@ class AssetController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Data inventaris berhasil diperbarui',
+            'message' => 'Data asset berhasil diperbarui',
             'data' => $updated,
         ]);
     }
@@ -74,7 +74,7 @@ class AssetController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Data inventaris berhasil dihapus',
+            'message' => 'Data asset berhasil dihapus',
             'data' => null,
         ]);
     }
