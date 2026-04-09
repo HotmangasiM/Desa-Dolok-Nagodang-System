@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('assets', function (Blueprint $table) {
@@ -26,15 +23,15 @@ return new class extends Migration
 
             $table->decimal('asset_value', 15, 2)->nullable();
             $table->string('asset_photo')->nullable();
+
+            $table->text('description')->nullable();
             $table->text('notes')->nullable();
 
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('assets');

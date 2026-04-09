@@ -40,10 +40,10 @@
                     <span class="font-semibold">Berita Desa</span>
                 </a>
 
-                <a href="#"
-                   class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition">
+                <a href="{{ route('admin.assets.index') }}"
+                   class="flex items-center gap-3 px-4 py-3 rounded-xl transition {{ request()->routeIs('admin.assets.*')}}">
                     <span>🏢</span>
-                    <span class="font-medium">Inventaris</span>
+                    <span class="font-semibold">Inventaris</span>
                 </a>
 
                 <a href="#"
