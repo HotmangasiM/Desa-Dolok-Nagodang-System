@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminCitizenPageController;
 use App\Http\Controllers\AdminNewsPageController;
 use App\Http\Controllers\AdminAssetPageController;
+use App\Http\Controllers\AdminOfficialPageController;
 
 //Citizen
 Route::get('/admin/citizens', [AdminCitizenPageController::class, 'index'])
@@ -39,3 +40,12 @@ Route::post('/admin/assets', [AdminAssetPageController::class, 'store'])->name('
 Route::get('/admin/assets/{asset}/edit', [AdminAssetPageController::class, 'edit'])->name('admin.assets.edit');
 Route::put('/admin/assets/{asset}', [AdminAssetPageController::class, 'update'])->name('admin.assets.update');
 Route::delete('/admin/assets/{asset}', [AdminAssetPageController::class, 'destroy'])->name('admin.assets.destroy');
+
+//officials
+
+Route::get('/admin/officials', [AdminOfficialPageController::class, 'index'])->name('admin.officials.index');
+Route::get('/admin/officials/create', [AdminOfficialPageController::class, 'create'])->name('admin.officials.create');
+Route::post('/admin/officials', [AdminOfficialPageController::class, 'store'])->name('admin.officials.store');
+Route::get('/admin/officials/{official}/edit', [AdminOfficialPageController::class, 'edit'])->name('admin.officials.edit');
+Route::put('/admin/officials/{official}', [AdminOfficialPageController::class, 'update'])->name('admin.officials.update');
+Route::delete('/admin/officials/{official}', [AdminOfficialPageController::class, 'destroy'])->name('admin.officials.destroy');
