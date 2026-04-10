@@ -9,6 +9,8 @@ use App\Interfaces\NewsRepositoryInterface;
 use App\Repositories\NewsRepository;
 use App\Interfaces\AssetRepositoryInterface;
 use App\Repositories\AssetRepository;
+use App\Interfaces\OfficialRepositoryInterface;
+use App\Repositories\OfficialRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,6 +22,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(CitizenRepositoryInterface::class, CitizenRepository::class);
         $this->app->bind(\App\Interfaces\NewsRepositoryInterface::class, \App\Repositories\NewsRepository::class);
         $this->app->bind(AssetRepositoryInterface::class, AssetRepository::class);
+        $this->app->bind(OfficialRepositoryInterface::class, OfficialRepository::class);
     }
 
     /**
