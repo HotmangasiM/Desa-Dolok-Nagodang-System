@@ -16,10 +16,10 @@
             </div>
 
             <nav class="flex-1 px-4 py-6 space-y-2">
-                <a href="#"
-                   class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition">
-                    <span>🏠</span>
-                    <span class="font-medium">Dashboard</span>
+                <a href="{{ route('admin.dashboard') }}"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl transition {{ request()->routeIs('admin.dashboard') }}">
+                        <span>📊</span>
+                        <span class="font-semibold">Dashboard</span>
                 </a>
 
                 <a href="{{ route('admin.citizens.index') }}"
@@ -52,10 +52,10 @@
                         <span class="font-semibold">Aparat Desa</span>
                 </a>
 
-                <a href="#"
-                   class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition">
-                    <span>📄</span>
-                    <span class="font-medium">Surat Elektronik</span>
+                <a href="{{ route('admin.letters.index') }}"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl transition {{ request()->routeIs('admin.letters.*') }}">
+                        <span>📄</span>
+                        <span class="font-semibold">Surat Elektronik</span>
                 </a>
             </nav>
 
@@ -110,5 +110,6 @@
     </div>
 
     @stack('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 </html>

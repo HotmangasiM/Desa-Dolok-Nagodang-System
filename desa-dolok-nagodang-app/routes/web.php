@@ -5,6 +5,8 @@ use App\Http\Controllers\AdminCitizenPageController;
 use App\Http\Controllers\AdminNewsPageController;
 use App\Http\Controllers\AdminAssetPageController;
 use App\Http\Controllers\AdminOfficialPageController;
+use App\Http\Controllers\AdminLetterPageController;
+use App\Http\Controllers\AdminDashboardController;
 
 //Citizen
 Route::get('/admin/citizens', [AdminCitizenPageController::class, 'index'])
@@ -49,3 +51,16 @@ Route::post('/admin/officials', [AdminOfficialPageController::class, 'store'])->
 Route::get('/admin/officials/{official}/edit', [AdminOfficialPageController::class, 'edit'])->name('admin.officials.edit');
 Route::put('/admin/officials/{official}', [AdminOfficialPageController::class, 'update'])->name('admin.officials.update');
 Route::delete('/admin/officials/{official}', [AdminOfficialPageController::class, 'destroy'])->name('admin.officials.destroy');
+
+
+//Letters
+Route::get('/admin/letters', [AdminLetterPageController::class, 'index'])->name('admin.letters.index');
+Route::get('/admin/letters/create', [AdminLetterPageController::class, 'create'])->name('admin.letters.create');
+Route::post('/admin/letters', [AdminLetterPageController::class, 'store'])->name('admin.letters.store');
+Route::get('/admin/letters/{letter}/edit', [AdminLetterPageController::class, 'edit'])->name('admin.letters.edit');
+Route::put('/admin/letters/{letter}', [AdminLetterPageController::class, 'update'])->name('admin.letters.update');
+Route::delete('/admin/letters/{letter}', [AdminLetterPageController::class, 'destroy'])->name('admin.letters.destroy');
+
+//Dashboard
+Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])
+    ->name('admin.dashboard');
