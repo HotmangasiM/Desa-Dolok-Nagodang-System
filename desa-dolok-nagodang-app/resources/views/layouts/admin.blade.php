@@ -88,7 +88,7 @@
                 <div class="flex items-center gap-4">
                     <button class="hidden md:inline-flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50 transition">
                         🔔
-                        <span>Notifications</span>
+                        <span>Pemberitahuan</span>
                     </button>
 
                     <div class="flex items-center gap-3">

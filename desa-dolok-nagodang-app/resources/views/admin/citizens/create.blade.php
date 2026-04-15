@@ -54,10 +54,10 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">Gender <span class="text-rose-500">*</span></label>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Jenis Kelamin <span class="text-rose-500">*</span></label>
                     <select name="gender"
                             class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
-                        <option value="">Pilih Gender</option>
+                        <option value="">Pilih Jenis Kelamin</option>
                         <option value="L" {{ old('gender') === 'L' ? 'selected' : '' }}>L</option>
                         <option value="P" {{ old('gender') === 'P' ? 'selected' : '' }}>P</option>
                     </select>
@@ -68,8 +68,8 @@
                     <select name="life_status"
                             class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
                         <option value="">Pilih Status</option>
-                        <option value="alive" {{ old('life_status') === 'alive' ? 'selected' : '' }}>alive</option>
-                        <option value="deceased" {{ old('life_status') === 'deceased' ? 'selected' : '' }}>deceased</option>
+                        <option value="alive" {{ old('life_status') === 'alive' ? 'selected' : '' }}>Hidup</option>
+                        <option value="deceased" {{ old('life_status') === 'deceased' ? 'selected' : '' }}>Meninggal</option>
                     </select>
                 </div>
 
