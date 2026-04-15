@@ -1,0 +1,196 @@
+@extends('layouts.admin')
+
+@section('content')
+<div class="space-y-6">
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div>
+            <a href="{{ route('admin.assets.index') }}"
+               class="inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-slate-700 mb-3">
+                ← Kembali ke Inventaris Desa
+            </a>
+
+            <h1 class="text-3xl font-bold tracking-tight text-slate-800">Edit Inventaris Desa</h1>
+            <p class="text-sm text-slate-500 mt-2">
+                Perbarui informasi inventaris yang sudah tersimpan di sistem.
+            </p>
+        </div>
+    </div>
+
+    @if ($errors->any())
+        <div class="rounded-2xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-700">
+            <div class="font-semibold mb-2">Terjadi kesalahan pada input:</div>
+            <ul class="list-disc list-inside space-y-1">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <form action="{{ route('admin.assets.update', $asset->id) }}" method="POST" class="space-y-6">
+        @csrf
+        @method('PUT')
+
+        <div class="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
+            <div class="px-6 py-4 border-b border-slate-200">
+                <h2 class="text-lg font-bold text-slate-800">Informasi Inventaris</h2>
+                <p class="text-sm text-slate-500 mt-1">Perbarui informasi utama aset inventaris desa.</p>
+            </div>
+
+            <div class="p-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">
+                        Nama Barang <span class="text-rose-500">*</span>
+                    </label>
+                    <input
+                        type="text"
+                        name="item_name"
+                        value="{{ old('item_name', $asset->item_name) }}"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        placeholder="Masukkan nama barang"
+                    >
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">
+                        Kode Barang <span class="text-rose-500">*</span>
+                    </label>
+                    <input
+                        type="text"
+                        name="item_code"
+                        value="{{ old('item_code', $asset->item_code) }}"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        placeholder="Masukkan kode barang"
+                    >
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Kategori</label>
+                    <input
+                        type="text"
+                        name="category"
+                        value="{{ old('category', $asset->category) }}"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        placeholder="Contoh: Elektronik"
+                    >
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">
+                        Jumlah <span class="text-rose-500">*</span>
+                    </label>
+                    <input
+                        type="number"
+                        name="quantity"
+                        min="0"
+                        value="{{ old('quantity', $asset->quantity) }}"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    >
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">
+                        Kondisi <span class="text-rose-500">*</span>
+                    </label>
+                    <select
+                        name="condition"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    >
+                        <option value="">Pilih Kondisi</option>
+                        <option value="good" {{ old('condition', $asset->condition) === 'good' ? 'selected' : '' }}>good</option>
+                        <option value="damaged" {{ old('condition', $asset->condition) === 'damaged' ? 'selected' : '' }}>damaged</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Lokasi</label>
+                    <input
+                        type="text"
+                        name="location"
+                        value="{{ old('location', $asset->location) }}"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        placeholder="Contoh: Ruang Admin"
+                    >
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Tanggal Perolehan</label>
+                    <input
+                        type="date"
+                        name="acquisition_date"
+                        value="{{ old('acquisition_date', $asset->acquisition_date ? $asset->acquisition_date->format('Y-m-d') : '') }}"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    >
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Sumber</label>
+                    <input
+                        type="text"
+                        name="source"
+                        value="{{ old('source', $asset->source) }}"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        placeholder="Contoh: Dana Desa"
+                    >
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Nilai Aset</label>
+                    <input
+                        type="number"
+                        step="0.01"
+                        name="asset_value"
+                        value="{{ old('asset_value', $asset->asset_value) }}"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        placeholder="Contoh: 15000000"
+                    >
+                </div>
+
+                <div class="md:col-span-2 xl:col-span-2">
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Foto Aset</label>
+                    <input
+                        type="text"
+                        name="asset_photo"
+                        value="{{ old('asset_photo', $asset->asset_photo) }}"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        placeholder="Contoh: assets/laptop-desa.jpg"
+                    >
+                </div>
+
+                <div class="xl:col-span-3">
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Catatan</label>
+                    <textarea
+                        name="notes"
+                        rows="3"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm leading-6 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        placeholder="Catatan tambahan inventaris..."
+                    >{{ old('notes', $asset->notes) }}</textarea>
+                </div>
+
+                <div class="xl:col-span-3">
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Deskripsi</label>
+                    <textarea
+                        name="description"
+                        rows="4"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm leading-6 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        placeholder="Deskripsi detail aset inventaris..."
+                    >{{ old('description', $asset->description) }}</textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center justify-end gap-3">
+            <a href="{{ route('admin.assets.index') }}"
+               class="w-full sm:w-auto inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 transition">
+                Batal
+            </a>
+
+            <button
+                type="submit"
+                class="w-full sm:w-auto inline-flex items-center justify-center rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-700 shadow-lg shadow-emerald-600/20 transition">
+                Simpan Perubahan
+            </button>
+        </div>
+    </form>
+</div>
+@endsection
