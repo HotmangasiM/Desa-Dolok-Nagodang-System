@@ -129,7 +129,7 @@
                         <th class="px-5 py-4 text-left font-semibold">No</th>
                         <th class="px-5 py-4 text-left font-semibold">Nama</th>
                         <th class="px-5 py-4 text-left font-semibold">Jabatan</th>
-                        <th class="px-5 py-4 text-left font-semibold">Phone</th>
+                        <th class="px-5 py-4 text-left font-semibold">No. Telepon</th>
                         <th class="px-5 py-4 text-left font-semibold">Email</th>
                         <th class="px-5 py-4 text-left font-semibold">Masa Jabatan</th>
                         <th class="px-5 py-4 text-center font-semibold">Aksi</th>
