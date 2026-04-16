@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminAssetPageController;
 use App\Http\Controllers\AdminOfficialPageController;
 use App\Http\Controllers\AdminLetterPageController;
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\AdminLetterPdfController;
 
 //Citizen
 Route::get('/admin/citizens', [AdminCitizenPageController::class, 'index'])
@@ -64,3 +65,10 @@ Route::delete('/admin/letters/{letter}', [AdminLetterPageController::class, 'des
 //Dashboard
 Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])
     ->name('admin.dashboard');
+
+//Letter
+Route::get('/admin/letters/{letter}/preview-pdf', [AdminLetterPdfController::class, 'preview'])
+    ->name('admin.letters.preview-pdf');
+
+Route::get('/admin/letters/{letter}/download-pdf', [AdminLetterPdfController::class, 'download'])
+    ->name('admin.letters.download-pdf');

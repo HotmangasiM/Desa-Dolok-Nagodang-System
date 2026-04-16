@@ -39,14 +39,13 @@
             <div class="p-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">
-                        Nomor Surat <span class="text-rose-500">*</span>
+                        Nomor Surat 
                     </label>
                     <input
                         type="text"
-                        name="letter_number"
-                        value="{{ old('letter_number') }}"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                        placeholder="Masukkan nomor surat"
+                        value="Otomatis dibuat setelah data disimpan"
+                        readonly
+                        class="w-full rounded-xl border border-slate-200 bg-slate-100 px-4 py-3 text-sm text-slate-500"
                     >
                 </div>
 
@@ -124,11 +123,11 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">Tanggal Disetujui</label>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Tanggal Persetujuan</label>
                     <input
                         type="date"
-                        name="approved_date"
-                        value="{{ old('approved_date') }}"
+                        name="approval_date"
+                        value="{{ old('approval_date') }}"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     >
                 </div>
