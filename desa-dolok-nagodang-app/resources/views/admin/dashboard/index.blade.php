@@ -15,55 +15,63 @@
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
 
         {{-- Citizens --}}
-        <div class="rounded-2xl bg-white border p-5 shadow-sm">
+        <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm">
             <p class="text-sm text-slate-500">Penduduk</p>
-            <h3 class="text-3xl font-bold mt-2">{{ $totalCitizens }}</h3>
+            <h3 class="text-3xl font-bold mt-2 text-slate-800">{{ $totalCitizens }}</h3>
             <p class="text-xs text-slate-500 mt-2">
                 L: {{ $maleCitizens }} | P: {{ $femaleCitizens }}
             </p>
         </div>
 
         {{-- Officials --}}
-        <div class="rounded-2xl bg-white border p-5 shadow-sm">
+        <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm">
             <p class="text-sm text-slate-500">Aparat Desa</p>
-            <h3 class="text-3xl font-bold mt-2">{{ $totalOfficials }}</h3>
+            <h3 class="text-3xl font-bold mt-2 text-slate-800">{{ $totalOfficials }}</h3>
+            <p class="text-xs text-slate-500 mt-2">
+                Total aparat aktif di sistem
+            </p>
         </div>
 
         {{-- News --}}
-        <div class="rounded-2xl bg-white border p-5 shadow-sm">
+        <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm">
             <p class="text-sm text-slate-500">Berita</p>
-            <h3 class="text-3xl font-bold mt-2">{{ $totalNews }}</h3>
+            <h3 class="text-3xl font-bold mt-2 text-slate-800">{{ $totalNews }}</h3>
             <p class="text-xs text-slate-500 mt-2">
                 Published: {{ $publishedNews }}
             </p>
         </div>
 
         {{-- Assets --}}
-        <div class="rounded-2xl bg-white border p-5 shadow-sm">
+        <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm">
             <p class="text-sm text-slate-500">Inventaris</p>
-            <h3 class="text-3xl font-bold mt-2">{{ $totalAssets }}</h3>
+            <h3 class="text-3xl font-bold mt-2 text-slate-800">{{ $totalAssets }}</h3>
             <p class="text-xs text-slate-500 mt-2">
                 Good: {{ $goodAssets }}
             </p>
         </div>
     </div>
 
+    {{-- CHARTS --}}
     <div class="grid grid-cols-1 xl:grid-cols-2 gap-5">
 
         {{-- CHART SURAT --}}
-        <div class="rounded-2xl bg-white border p-5 shadow-sm">
+        <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm">
             <h3 class="text-lg font-bold text-slate-800 mb-4">
                 Statistik Surat per Bulan
             </h3>
-            <canvas id="lettersChart" height="120"></canvas>
+            <div class="relative h-[320px]">
+                <canvas id="lettersChart"></canvas>
+            </div>
         </div>
 
         {{-- CHART GENDER --}}
-        <div class="rounded-2xl bg-white border p-5 shadow-sm">
+        <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm">
             <h3 class="text-lg font-bold text-slate-800 mb-4">
                 Distribusi Penduduk
             </h3>
-            <canvas id="genderChart" height="120"></canvas>
+            <div class="relative h-[320px]">
+                <canvas id="genderChart"></canvas>
+            </div>
         </div>
 
     </div>
@@ -71,25 +79,25 @@
     {{-- LETTER STATS --}}
     <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
 
-        <div class="rounded-2xl bg-white border p-5 shadow-sm">
+        <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm">
             <p class="text-sm text-slate-500">Total Surat</p>
-            <h3 class="text-3xl font-bold mt-2">{{ $totalLetters }}</h3>
+            <h3 class="text-3xl font-bold mt-2 text-slate-800">{{ $totalLetters }}</h3>
         </div>
 
-        <div class="rounded-2xl bg-white border p-5 shadow-sm">
+        <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm">
             <p class="text-sm text-slate-500">Submitted</p>
-            <h3 class="text-3xl font-bold mt-2">{{ $submittedLetters }}</h3>
+            <h3 class="text-3xl font-bold mt-2 text-slate-800">{{ $submittedLetters }}</h3>
         </div>
 
-        <div class="rounded-2xl bg-white border p-5 shadow-sm">
+        <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm">
             <p class="text-sm text-slate-500">Approved</p>
-            <h3 class="text-3xl font-bold mt-2">{{ $approvedLetters }}</h3>
+            <h3 class="text-3xl font-bold mt-2 text-slate-800">{{ $approvedLetters }}</h3>
         </div>
     </div>
 
     {{-- RECENT LETTERS --}}
-    <div class="rounded-2xl bg-white border shadow-sm">
-        <div class="px-5 py-4 border-b">
+    <div class="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
+        <div class="px-5 py-4 border-b border-slate-200">
             <h2 class="text-lg font-bold text-slate-800">Surat Terbaru</h2>
         </div>
 
@@ -97,23 +105,43 @@
             <table class="min-w-full text-sm">
                 <thead class="bg-slate-50">
                     <tr>
-                        <th class="px-5 py-3 text-left">Nomor</th>
-                        <th class="px-5 py-3 text-left">Jenis</th>
-                        <th class="px-5 py-3 text-left">Pemohon</th>
-                        <th class="px-5 py-3 text-left">Status</th>
+                        <th class="px-5 py-3 text-left font-semibold text-slate-600">Nomor</th>
+                        <th class="px-5 py-3 text-left font-semibold text-slate-600">Jenis</th>
+                        <th class="px-5 py-3 text-left font-semibold text-slate-600">Pemohon</th>
+                        <th class="px-5 py-3 text-left font-semibold text-slate-600">Status</th>
                     </tr>
                 </thead>
 
                 <tbody>
                     @forelse ($recentLetters as $letter)
-                        <tr class="border-t">
-                            <td class="px-5 py-3">{{ $letter->letter_number }}</td>
-                            <td class="px-5 py-3">{{ $letter->letterType->name ?? '-' }}</td>
-                            <td class="px-5 py-3">{{ $letter->citizen->full_name ?? '-' }}</td>
+                        <tr class="border-t border-slate-100 hover:bg-slate-50 transition">
+                            <td class="px-5 py-3 text-slate-700">
+                                {{ $letter->letter_number }}
+                            </td>
+                            <td class="px-5 py-3 text-slate-700">
+                                {{ optional($letter->letterType)->name ?? '-' }}
+                            </td>
+                            <td class="px-5 py-3 text-slate-700">
+                                {{ optional($letter->citizen)->full_name ?? '-' }}
+                            </td>
                             <td class="px-5 py-3">
-                                <span class="px-2 py-1 rounded-full text-xs bg-slate-100">
-                                    {{ $letter->status }}
-                                </span>
+                                @if ($letter->status === 'approved')
+                                    <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700">
+                                        approved
+                                    </span>
+                                @elseif ($letter->status === 'submitted')
+                                    <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-700">
+                                        submitted
+                                    </span>
+                                @elseif ($letter->status === 'processed')
+                                    <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-medium bg-sky-100 text-sky-700">
+                                        processed
+                                    </span>
+                                @else
+                                    <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-medium bg-rose-100 text-rose-700">
+                                        rejected
+                                    </span>
+                                @endif
                             </td>
                         </tr>
                     @empty
@@ -130,59 +158,91 @@
 
 </div>
 @endsection
+
 @push('scripts')
 <script>
-    // ===== CHART SURAT =====
-    const lettersCtx = document.getElementById('lettersChart');
+    document.addEventListener('DOMContentLoaded', function () {
+        // ===== CHART SURAT =====
+        const lettersCtx = document.getElementById('lettersChart');
 
-    new Chart(lettersCtx, {
-        type: 'line',
-        data: {
-            labels: @json($monthlyLabels),
-            datasets: [{
-                label: 'Jumlah Surat',
-                data: @json($monthlyData),
-                tension: 0.4,
-                fill: true,
-                borderColor: '#10b981',
-                backgroundColor: 'rgba(16, 185, 129, 0.1)',
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    display: true
+        if (lettersCtx) {
+            new Chart(lettersCtx, {
+                type: 'line',
+                data: {
+                    labels: @json($monthlyLabels),
+                    datasets: [{
+                        label: 'Jumlah Surat',
+                        data: @json($monthlyData),
+                        tension: 0.4,
+                        fill: true,
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.10)',
+                        pointBackgroundColor: '#10b981',
+                        pointBorderColor: '#10b981',
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            },
+                            grid: {
+                                color: 'rgba(148, 163, 184, 0.15)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
                 }
-            }
+            });
         }
-    });
 
-    // ===== CHART GENDER =====
-    const genderCtx = document.getElementById('genderChart');
+        // ===== CHART GENDER =====
+        const genderCtx = document.getElementById('genderChart');
 
-    new Chart(genderCtx, {
-        type: 'doughnut',
-        data: {
-            labels: ['Laki-laki', 'Perempuan'],
-            datasets: [{
-                data: [
-                    {{ $genderData['L'] }},
-                    {{ $genderData['P'] }}
-                ],
-                backgroundColor: [
-                    '#3b82f6',
-                    '#ec4899'
-                ]
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'bottom'
+        if (genderCtx) {
+            new Chart(genderCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Laki-laki', 'Perempuan'],
+                    datasets: [{
+                        data: [
+                            {{ $genderData['L'] ?? 0 }},
+                            {{ $genderData['P'] ?? 0 }}
+                        ],
+                        backgroundColor: [
+                            '#3b82f6',
+                            '#ec4899'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '65%',
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
                 }
-            }
+            });
         }
     });
 </script>
