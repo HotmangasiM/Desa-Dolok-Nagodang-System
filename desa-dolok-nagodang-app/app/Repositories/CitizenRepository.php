@@ -12,11 +12,11 @@ class CitizenRepository implements CitizenRepositoryInterface
 
         // Apply filters if provided
         if(!empty($filters['search'])) {
-            $seacrh = $filters['search'];
+            $search = $filters['search'];
 
             $query->where(function($q) use ($seacrh) {
-                $q->where('full_name', 'like', "%{$seacrh}%")
-                  ->orWhere('nik', 'like', "%{$seacrh}%");
+                $q->where('full_name', 'like', "%{$search}%")
+                  ->orWhere('nik', 'like', "%{$search}%");
             });
         }
 
