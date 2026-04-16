@@ -11,6 +11,8 @@ use App\Interfaces\AssetRepositoryInterface;
 use App\Repositories\AssetRepository;
 use App\Interfaces\OfficialRepositoryInterface;
 use App\Repositories\OfficialRepository;
+use App\Interfaces\LetterRepositoryInterface;
+use App\Repositories\LetterRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(\App\Interfaces\NewsRepositoryInterface::class, \App\Repositories\NewsRepository::class);
         $this->app->bind(AssetRepositoryInterface::class, AssetRepository::class);
         $this->app->bind(OfficialRepositoryInterface::class, OfficialRepository::class);
+        $this->app->bind(LetterRepositoryInterface::class, LetterRepository::class);
     }
 
     /**

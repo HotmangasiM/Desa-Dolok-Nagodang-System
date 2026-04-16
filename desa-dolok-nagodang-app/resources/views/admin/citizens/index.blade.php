@@ -103,7 +103,7 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">Gender</label>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Jenis Kelamin</label>
                     <select
                         name="gender"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
@@ -156,8 +156,8 @@
                         <th class="px-5 py-4 text-left font-semibold">No</th>
                         <th class="px-5 py-4 text-left font-semibold">NIK</th>
                         <th class="px-5 py-4 text-left font-semibold">Nama Lengkap</th>
-                        <th class="px-5 py-4 text-left font-semibold">Gender</th>
-                        <th class="px-5 py-4 text-left font-semibold">Phone</th>
+                        <th class="px-5 py-4 text-left font-semibold">Jenis Kelamin</th>
+                        <th class="px-5 py-4 text-left font-semibold">Telepon</th>
                         <th class="px-5 py-4 text-left font-semibold">Email</th>
                         <th class="px-5 py-4 text-left font-semibold">Status</th>
                         <th class="px-5 py-4 text-center font-semibold">Aksi</th>
@@ -185,11 +185,11 @@
                             <td class="px-5 py-4">
                                 @if ($citizen->life_status === 'alive')
                                     <span class="inline-flex rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
-                                        alive
+                                        Hidup
                                     </span>
                                 @else
                                     <span class="inline-flex rounded-full bg-slate-200 px-3 py-1 text-xs font-semibold text-slate-700">
-                                        deceased
+                                        Meninggal
                                     </span>
                                 @endif
                             </td>
@@ -204,7 +204,7 @@
                                         class="rounded-lg bg-rose-50 px-3 py-2 text-rose-700 font-medium hover:bg-rose-100 transition"
                                         onclick="openDeleteModal('{{ $citizen->id }}', '{{ addslashes($citizen->full_name) }}')"
                                     >
-                                        Delete
+                                        Hapus
                                     </button>
                                 </div>
                             </td>
