@@ -1,6 +1,20 @@
 @extends('layouts.admin')
 
 @section('content')
+@php
+    $statusFormValue = old('status');
+
+    if (!$statusFormValue) {
+        $statusFormValue = match($letter->status) {
+            'SUBMITTED' => 'submitted',
+            'PROCESSING' => 'processed',
+            'COMPLETED' => 'approved',
+            'REJECTED' => 'rejected',
+            default => '',
+        };
+    }
+@endphp
+
 <div class="space-y-6">
     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div>
@@ -46,8 +60,8 @@
                         type="text"
                         name="letter_number"
                         value="{{ old('letter_number', $letter->letter_number) }}"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                        placeholder="Masukkan nomor surat"
+                        readonly
+                        class="w-full rounded-xl border border-slate-200 bg-slate-100 px-4 py-3 text-sm text-slate-500"
                     >
                 </div>
 
@@ -61,7 +75,7 @@
                     >
                         <option value="">Pilih Jenis Surat</option>
                         @foreach ($letterTypes as $type)
-                            <option value="{{ $type->id }}" {{ (string)old('letter_type_id', $letter->letter_type_id) === (string)$type->id ? 'selected' : '' }}>
+                            <option value="{{ $type->id }}" {{ (string) old('letter_type_id', $letter->letter_type_id) === (string) $type->id ? 'selected' : '' }}>
                                 {{ $type->name }}
                             </option>
                         @endforeach
@@ -78,7 +92,7 @@
                     >
                         <option value="">Pilih Penduduk</option>
                         @foreach ($citizens as $citizen)
-                            <option value="{{ $citizen->id }}" {{ (string)old('citizen_id', $letter->citizen_id) === (string)$citizen->id ? 'selected' : '' }}>
+                            <option value="{{ $citizen->id }}" {{ (string) old('citizen_id', optional($letter->citizen)->id) === (string) $citizen->id ? 'selected' : '' }}>
                                 {{ $citizen->full_name }} - {{ $citizen->nik }}
                             </option>
                         @endforeach
@@ -107,10 +121,10 @@
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     >
                         <option value="">Pilih Status</option>
-                        <option value="submitted" {{ old('status', $letter->status) === 'submitted' ? 'selected' : '' }}>submitted</option>
-                        <option value="processed" {{ old('status', $letter->status) === 'processed' ? 'selected' : '' }}>processed</option>
-                        <option value="approved" {{ old('status', $letter->status) === 'approved' ? 'selected' : '' }}>approved</option>
-                        <option value="rejected" {{ old('status', $letter->status) === 'rejected' ? 'selected' : '' }}>rejected</option>
+                        <option value="submitted" {{ $statusFormValue === 'submitted' ? 'selected' : '' }}>submitted</option>
+                        <option value="processed" {{ $statusFormValue === 'processed' ? 'selected' : '' }}>processed</option>
+                        <option value="approved" {{ $statusFormValue === 'approved' ? 'selected' : '' }}>approved</option>
+                        <option value="rejected" {{ $statusFormValue === 'rejected' ? 'selected' : '' }}>rejected</option>
                     </select>
                 </div>
 
@@ -125,11 +139,11 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">Tanggal Disetujui</label>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Tanggal Persetujuan</label>
                     <input
                         type="date"
-                        name="approved_date"
-                        value="{{ old('approved_date', $letter->approved_date ? $letter->approved_date->format('Y-m-d') : '') }}"
+                        name="approval_date"
+                        value="{{ old('approval_date', $letter->approval_date ? $letter->approval_date->format('Y-m-d') : '') }}"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     >
                 </div>
