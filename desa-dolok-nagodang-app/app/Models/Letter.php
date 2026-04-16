@@ -4,31 +4,35 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
+// use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Letter extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    // use SoftDeletes;
 
     protected $table = 'letters';
 
     protected $fillable = [
         'letter_number',
         'letter_type_id',
-        'citizen_id',
+        'applicant_national_id',
         'subject',
         'description',
-        'status',
         'submission_date',
-        'approved_date',
-        'approved_by',
-        'result_file',
+        'verification_date',
+        'approval_date',
+        'status',
         'notes',
+        'result_file',
+        'created_by',
+        'approved_by',
     ];
-
+    
     protected $casts = [
-        'submission_date' => 'date',
-        'approved_date' => 'date',
+        'submission_date' => 'datetime',
+        'verification_date' => 'datetime',
+        'approval_date' => 'datetime',
     ];
 
     public function letterType()
@@ -38,6 +42,16 @@ class Letter extends Model
 
     public function citizen()
     {
-        return $this->belongsTo(Citizen::class, 'citizen_id');
+        return $this->belongsTo(Citizen::class, 'applicant_national_id', 'nik');
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function approver()
+    {
+        return $this->belongsTo(User::class, 'approved_by');
     }
 }

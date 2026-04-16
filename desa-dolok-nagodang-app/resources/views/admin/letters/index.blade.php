@@ -213,6 +213,33 @@
                                     </button>
                                 </div>
                             </td>
+                            <td class="px-5 py-4">
+                                <div class="flex items-center justify-center gap-2 flex-wrap">
+                                    <a href="{{ route('admin.letters.edit', $letter->id) }}"
+                                    class="rounded-lg bg-sky-50 px-3 py-2 text-sky-700 font-medium hover:bg-sky-100 transition">
+                                        Edit
+                                    </a>
+
+                                    <a href="{{ route('admin.letters.preview-pdf', $letter->id) }}"
+                                    target="_blank"
+                                    class="rounded-lg bg-violet-50 px-3 py-2 text-violet-700 font-medium hover:bg-violet-100 transition">
+                                        Preview PDF
+                                    </a>
+
+                                    <a href="{{ route('admin.letters.download-pdf', $letter->id) }}"
+                                    class="rounded-lg bg-emerald-50 px-3 py-2 text-emerald-700 font-medium hover:bg-emerald-100 transition">
+                                        Download PDF
+                                    </a>
+
+                                    <button
+                                        type="button"
+                                        class="rounded-lg bg-rose-50 px-3 py-2 text-rose-700 font-medium hover:bg-rose-100 transition"
+                                        onclick="openDeleteModal('{{ $letter->id }}', '{{ addslashes($letter->letter_number) }}')"
+                                    >
+                                        Delete
+                                    </button>
+                                </div>
+                            </td>
                         </tr>
                     @empty
                         <tr>
