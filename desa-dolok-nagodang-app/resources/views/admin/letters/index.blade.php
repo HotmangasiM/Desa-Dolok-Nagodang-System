@@ -167,29 +167,41 @@
                             </td>
 
                             <td class="px-5 py-4 text-slate-600">
-                                {{ $letter->letterType->name ?? '-' }}
+                                {{ optional($letter->letterType)->name ?? '-' }}
                             </td>
 
                             <td class="px-5 py-4">
                                 <div>
-                                    <p class="font-semibold text-slate-800">{{ $letter->citizen->full_name ?? '-' }}</p>
-                                    <p class="text-xs text-slate-500 mt-1">{{ $letter->citizen->nik ?? '-' }}</p>
+                                    <p class="font-semibold text-slate-800">{{ optional($letter->citizen)->full_name ?? '-' }}</p>
+                                    <p class="text-xs text-slate-500 mt-1">{{ optional($letter->citizen)->nik ?? '-' }}</p>
                                 </div>
                             </td>
 
                             <td class="px-5 py-4 text-slate-600">
-                                {{ $letter->subject }}
+                                {{ $letter->subject ?? '-' }}
                             </td>
 
                             <td class="px-5 py-4">
-                                @if ($letter->status === 'approved')
-                                    <span class="inline-flex rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">approved</span>
-                                @elseif ($letter->status === 'submitted')
-                                    <span class="inline-flex rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700">submitted</span>
-                                @elseif ($letter->status === 'processed')
-                                    <span class="inline-flex rounded-full bg-sky-100 px-3 py-1 text-xs font-semibold text-sky-700">processed</span>
+                                @if ($letter->status === 'COMPLETED')
+                                    <span class="inline-flex rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
+                                        COMPLETED
+                                    </span>
+                                @elseif ($letter->status === 'SUBMITTED')
+                                    <span class="inline-flex rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700">
+                                        SUBMITTED
+                                    </span>
+                                @elseif ($letter->status === 'PROCESSING')
+                                    <span class="inline-flex rounded-full bg-sky-100 px-3 py-1 text-xs font-semibold text-sky-700">
+                                        PROCESSING
+                                    </span>
+                                @elseif ($letter->status === 'REJECTED')
+                                    <span class="inline-flex rounded-full bg-rose-100 px-3 py-1 text-xs font-semibold text-rose-700">
+                                        REJECTED
+                                    </span>
                                 @else
-                                    <span class="inline-flex rounded-full bg-rose-100 px-3 py-1 text-xs font-semibold text-rose-700">rejected</span>
+                                    <span class="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
+                                        {{ $letter->status ?? '-' }}
+                                    </span>
                                 @endif
                             </td>
 
@@ -198,42 +210,39 @@
                             </td>
 
                             <td class="px-5 py-4">
-                                <div class="flex items-center justify-center gap-2">
-                                    <a href="{{ route('admin.letters.edit', $letter->id) }}"
-                                       class="rounded-lg bg-sky-50 px-3 py-2 text-sky-700 font-medium hover:bg-sky-100 transition">
-                                        Edit
-                                    </a>
-
-                                    <button
-                                        type="button"
-                                        class="rounded-lg bg-rose-50 px-3 py-2 text-rose-700 font-medium hover:bg-rose-100 transition"
-                                        onclick="openDeleteModal('{{ $letter->id }}', '{{ addslashes($letter->letter_number) }}')"
-                                    >
-                                        Delete
-                                    </button>
-                                </div>
-                            </td>
-                            <td class="px-5 py-4">
                                 <div class="flex items-center justify-center gap-2 flex-wrap">
                                     <a href="{{ route('admin.letters.edit', $letter->id) }}"
-                                    class="rounded-lg bg-sky-50 px-3 py-2 text-sky-700 font-medium hover:bg-sky-100 transition">
+                                       class="rounded-lg bg-sky-50 px-3 py-2 text-sky-700 font-medium hover:bg-sky-100 transition text-xs">
                                         Edit
                                     </a>
 
                                     <a href="{{ route('admin.letters.preview-pdf', $letter->id) }}"
-                                    target="_blank"
-                                    class="rounded-lg bg-violet-50 px-3 py-2 text-violet-700 font-medium hover:bg-violet-100 transition">
-                                        Preview PDF
+                                       target="_blank"
+                                       class="rounded-lg bg-violet-50 px-3 py-2 text-violet-700 font-medium hover:bg-violet-100 transition text-xs">
+                                        Preview
                                     </a>
 
-                                    <a href="{{ route('admin.letters.download-pdf', $letter->id) }}"
-                                    class="rounded-lg bg-emerald-50 px-3 py-2 text-emerald-700 font-medium hover:bg-emerald-100 transition">
-                                        Download PDF
-                                    </a>
+                                    @if($letter->result_file)
+                                        <a href="{{ asset('storage/' . $letter->result_file) }}"
+                                           target="_blank"
+                                           class="rounded-lg bg-green-50 px-3 py-2 text-green-700 font-medium hover:bg-green-100 transition text-xs">
+                                            Download File
+                                        </a>
+
+                                        <a href="{{ route('admin.letters.download-pdf', $letter->id) }}"
+                                           class="rounded-lg bg-amber-50 px-3 py-2 text-amber-700 font-medium hover:bg-amber-100 transition text-xs">
+                                            Regenerate
+                                        </a>
+                                    @else
+                                        <a href="{{ route('admin.letters.download-pdf', $letter->id) }}"
+                                           class="rounded-lg bg-emerald-50 px-3 py-2 text-emerald-700 font-medium hover:bg-emerald-100 transition text-xs">
+                                            Generate PDF
+                                        </a>
+                                    @endif
 
                                     <button
                                         type="button"
-                                        class="rounded-lg bg-rose-50 px-3 py-2 text-rose-700 font-medium hover:bg-rose-100 transition"
+                                        class="rounded-lg bg-rose-50 px-3 py-2 text-rose-700 font-medium hover:bg-rose-100 transition text-xs"
                                         onclick="openDeleteModal('{{ $letter->id }}', '{{ addslashes($letter->letter_number) }}')"
                                     >
                                         Delete
@@ -315,6 +324,7 @@
     function openDeleteModal(id, number) {
         document.getElementById('letterNumber').textContent = number;
         document.getElementById('deleteLetterForm').action = `/admin/letters/${id}`;
+
         const modal = document.getElementById('deleteModal');
         modal.classList.remove('hidden');
         modal.classList.add('flex');

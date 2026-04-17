@@ -19,6 +19,7 @@ class StoreLetterRequest extends FormRequest
             'citizen_id' => 'required|exists:citizens,id',
             'subject' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'paload' => 'nullable|array',
             'status' => 'required|in:submitted,processed,approved,rejected',
             'submission_date' => 'nullable|date',
             'approval_date' => 'nullable|date',
