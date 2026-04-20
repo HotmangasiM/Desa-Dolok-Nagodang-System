@@ -30,8 +30,6 @@ class UpdateLetterRequest extends FormRequest
             'payload' => 'nullable|array',
             'status' => 'required|in:submitted,processed,approved,rejected',
             'submission_date' => 'nullable|date',
-            'approval_date' => 'nullable|date',
-            'approved_by' => 'nullable|integer',
             'result_file' => 'nullable|string|max:255',
             'notes' => 'nullable|string',
         ];

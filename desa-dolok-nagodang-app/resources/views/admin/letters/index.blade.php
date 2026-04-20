@@ -17,7 +17,9 @@
         </div>
 
         <div class="flex flex-wrap items-center gap-3">
-            <button class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 shadow-sm transition">
+            <button
+                type="button"
+                class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 shadow-sm transition">
                 ⬇ Export
             </button>
 
@@ -28,6 +30,7 @@
         </div>
     </div>
 
+    {{-- Summary Cards --}}
     <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
         <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm">
             <div class="flex items-start justify-between">
@@ -58,17 +61,18 @@
         <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm">
             <div class="flex items-start justify-between">
                 <div>
-                    <p class="text-sm font-medium text-slate-500">Approved</p>
+                    <p class="text-sm font-medium text-slate-500">Completed</p>
                     <h3 class="mt-3 text-3xl font-bold text-slate-800">{{ number_format($approvedLetters) }}</h3>
                 </div>
                 <div class="w-12 h-12 rounded-2xl bg-sky-100 flex items-center justify-center text-2xl">
                     ✅
                 </div>
             </div>
-            <p class="mt-4 text-sm text-slate-500">Surat yang sudah disetujui</p>
+            <p class="mt-4 text-sm text-slate-500">Surat yang sudah selesai dibuat</p>
         </div>
     </div>
 
+    {{-- Filter --}}
     <div class="rounded-2xl bg-white border border-slate-200 shadow-sm p-5">
         <div class="flex items-center justify-between mb-5">
             <div>
@@ -97,7 +101,7 @@
                 >
                     <option value="">Semua</option>
                     @foreach ($letterTypes as $type)
-                        <option value="{{ $type->id }}" {{ (string)($filters['letter_type_id'] ?? '') === (string)$type->id ? 'selected' : '' }}>
+                        <option value="{{ $type->id }}" {{ (string) ($filters['letter_type_id'] ?? '') === (string) $type->id ? 'selected' : '' }}>
                             {{ $type->name }}
                         </option>
                     @endforeach
@@ -113,8 +117,7 @@
                     <option value="">Semua</option>
                     <option value="submitted" {{ ($filters['status'] ?? '') === 'submitted' ? 'selected' : '' }}>submitted</option>
                     <option value="processed" {{ ($filters['status'] ?? '') === 'processed' ? 'selected' : '' }}>processed</option>
-                    <option value="approved" {{ ($filters['status'] ?? '') === 'approved' ? 'selected' : '' }}>approved</option>
-                    <option value="rejected" {{ ($filters['status'] ?? '') === 'rejected' ? 'selected' : '' }}>rejected</option>
+                    <option value="completed" {{ ($filters['status'] ?? '') === 'completed' ? 'selected' : '' }}>completed</option>
                 </select>
             </div>
 
@@ -126,6 +129,7 @@
         </form>
     </div>
 
+    {{-- Table --}}
     <div class="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
         <div class="px-5 py-4 border-b border-slate-200 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
             <div>
@@ -193,10 +197,6 @@
                                 @elseif ($letter->status === 'PROCESSING')
                                     <span class="inline-flex rounded-full bg-sky-100 px-3 py-1 text-xs font-semibold text-sky-700">
                                         PROCESSING
-                                    </span>
-                                @elseif ($letter->status === 'REJECTED')
-                                    <span class="inline-flex rounded-full bg-rose-100 px-3 py-1 text-xs font-semibold text-rose-700">
-                                        REJECTED
                                     </span>
                                 @else
                                     <span class="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
@@ -282,7 +282,7 @@
                 </div>
                 <div>
                     <h3 class="text-lg font-bold text-slate-800">Konfirmasi Hapus</h3>
-                    <p class="text-sm text-slate-500">Tindakan ini akan melakukan soft delete data surat.</p>
+                    <p class="text-sm text-slate-500">Tindakan ini akan menghapus data surat.</p>
                 </div>
             </div>
         </div>

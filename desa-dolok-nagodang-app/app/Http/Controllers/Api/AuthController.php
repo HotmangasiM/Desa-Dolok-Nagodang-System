@@ -39,7 +39,7 @@ class AuthController extends Controller
                 'token_type' => 'Bearer',
                 'user' => $user,
             ],
-        ]);
+        ], 200);
     }
 
     public function me(Request $request): JsonResponse
@@ -48,7 +48,7 @@ class AuthController extends Controller
             'success' => true,
             'message' => 'Data user berhasil diambil.',
             'data' => $request->user(),
-        ]);
+        ], 200);
     }
 
     public function logout(Request $request): JsonResponse
@@ -59,6 +59,6 @@ class AuthController extends Controller
             'success' => true,
             'message' => 'Logout berhasil.',
             'data' => null,
-        ]);
+        ], 200);
     }
 }

@@ -26,6 +26,8 @@ class AdminLetterPageController extends Controller
             'search' => $request->query('search'),
             'status' => $request->query('status'),
             'letter_type_id' => $request->query('letter_type_id'),
+            'submission_date_from' => $request->query('submission_date_from'),
+            'submission_date_to' => $request->query('submission_date_to'),
         ];
 
         $perPage = (int) $request->query('per_page', 10);
@@ -33,8 +35,9 @@ class AdminLetterPageController extends Controller
         $letters = $this->letterService->getAll($filters, $perPage);
 
         $allLetters = Letter::count();
-        $submittedLetters = Letter::where('status', 'submitted')->count();
-        $approvedLetters = Letter::where('status', 'approved')->count();
+        $submittedLetters = Letter::where('status', 'SUBMITTED')->count();
+        $completedLetters = Letter::where('status', 'COMPLETED')->count();
+
         $letterTypes = LetterType::orderBy('name')->get();
 
         return view('admin.letters.index', [
@@ -44,7 +47,7 @@ class AdminLetterPageController extends Controller
             'letters' => $letters,
             'allLetters' => $allLetters,
             'submittedLetters' => $submittedLetters,
-            'approvedLetters' => $approvedLetters,
+            'approvedLetters' => $completedLetters,
             'letterTypes' => $letterTypes,
             'filters' => $filters,
         ]);

@@ -55,6 +55,28 @@
                         Jenis Surat <span class="text-rose-500">*</span>
                     </label>
                     <select
+                        id="letter_type_id"
+                        name="letter_type_id"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    >
+                        <option value="">Pilih Jenis Surat</option>
+                        @foreach ($letterTypes as $type)
+                            <option
+                                value="{{ $type->id }}"
+                                data-code="{{ strtoupper($type->code ?? '') }}"
+                                {{ (string) old('letter_type_id') === (string) $type->id ? 'selected' : '' }}
+                            >
+                                {{ $type->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">
+                        Pemohon <span class="text-rose-500">*</span>
+                    </label>
+                    <select
                         id="citizen_id"
                         name="citizen_id"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
@@ -76,23 +98,6 @@
                                 data-province="{{ $citizen->province }}"
                                 {{ (string) old('citizen_id') === (string) $citizen->id ? 'selected' : '' }}
                             >
-                                {{ $citizen->full_name }} - {{ $citizen->nik }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">
-                        Pemohon <span class="text-rose-500">*</span>
-                    </label>
-                    <select
-                        name="citizen_id"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    >
-                        <option value="">Pilih Penduduk</option>
-                        @foreach ($citizens as $citizen)
-                            <option value="{{ $citizen->id }}" {{ (string) old('citizen_id') === (string) $citizen->id ? 'selected' : '' }}>
                                 {{ $citizen->full_name }} - {{ $citizen->nik }}
                             </option>
                         @endforeach
@@ -123,8 +128,7 @@
                         <option value="">Pilih Status</option>
                         <option value="submitted" {{ old('status') === 'submitted' ? 'selected' : '' }}>submitted</option>
                         <option value="processed" {{ old('status') === 'processed' ? 'selected' : '' }}>processed</option>
-                        <option value="approved" {{ old('status') === 'approved' ? 'selected' : '' }}>approved</option>
-                        <option value="rejected" {{ old('status') === 'rejected' ? 'selected' : '' }}>rejected</option>
+                        <option value="completed" {{ old('status') === 'completed' ? 'selected' : '' }}>completed</option>
                     </select>
                 </div>
 
@@ -138,28 +142,7 @@
                     >
                 </div>
 
-                <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">Tanggal Persetujuan</label>
-                    <input
-                        type="date"
-                        name="approval_date"
-                        value="{{ old('approval_date') }}"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    >
-                </div>
-
-                <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">Approved By</label>
-                    <input
-                        type="number"
-                        name="approved_by"
-                        value="{{ old('approved_by') }}"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                        placeholder="Masukkan ID approver"
-                    >
-                </div>
-
-                <div class="md:col-span-2 xl:col-span-2">
+                <div class="md:col-span-2 xl:col-span-1">
                     <label class="block text-sm font-semibold text-slate-700 mb-2">File Hasil</label>
                     <input
                         type="text"
@@ -208,38 +191,62 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 mb-2">Nama Ayah</label>
-                            <input type="text" name="payload[father_name]" value="{{ old('payload.father_name') }}"
-                                   class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                            <input
+                                type="text"
+                                name="payload[father_name]"
+                                value="{{ old('payload.father_name') }}"
+                                class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                            >
                         </div>
 
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 mb-2">Tempat/Tgl Lahir Ayah</label>
-                            <input type="text" name="payload[father_birth]" value="{{ old('payload.father_birth') }}"
-                                   class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                            <input
+                                type="text"
+                                name="payload[father_birth]"
+                                value="{{ old('payload.father_birth') }}"
+                                class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                            >
                         </div>
 
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 mb-2">Agama Ayah</label>
-                            <input type="text" name="payload[father_religion]" value="{{ old('payload.father_religion') }}"
-                                   class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                            <input
+                                type="text"
+                                name="payload[father_religion]"
+                                value="{{ old('payload.father_religion') }}"
+                                class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                            >
                         </div>
 
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 mb-2">Pekerjaan Ayah</label>
-                            <input type="text" name="payload[father_job]" value="{{ old('payload.father_job') }}"
-                                   class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                            <input
+                                type="text"
+                                name="payload[father_job]"
+                                value="{{ old('payload.father_job') }}"
+                                class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                            >
                         </div>
 
                         <div class="md:col-span-2">
                             <label class="block text-sm font-semibold text-slate-700 mb-2">Alamat Ayah</label>
-                            <input type="text" name="payload[father_address]" value="{{ old('payload.father_address') }}"
-                                   class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                            <input
+                                type="text"
+                                name="payload[father_address]"
+                                value="{{ old('payload.father_address') }}"
+                                class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                            >
                         </div>
 
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 mb-2">Penghasilan Ayah</label>
-                            <input type="text" name="payload[father_income]" value="{{ old('payload.father_income') }}"
-                                   class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                            <input
+                                type="text"
+                                name="payload[father_income]"
+                                value="{{ old('payload.father_income') }}"
+                                class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                            >
                         </div>
                     </div>
                 </div>
@@ -250,32 +257,52 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 mb-2">Nama Ibu</label>
-                            <input type="text" name="payload[mother_name]" value="{{ old('payload.mother_name') }}"
-                                   class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                            <input
+                                type="text"
+                                name="payload[mother_name]"
+                                value="{{ old('payload.mother_name') }}"
+                                class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                            >
                         </div>
 
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 mb-2">Tempat/Tgl Lahir Ibu</label>
-                            <input type="text" name="payload[mother_birth]" value="{{ old('payload.mother_birth') }}"
-                                   class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                            <input
+                                type="text"
+                                name="payload[mother_birth]"
+                                value="{{ old('payload.mother_birth') }}"
+                                class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                            >
                         </div>
 
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 mb-2">Jenis Kelamin Ibu</label>
-                            <input type="text" name="payload[mother_gender]" value="{{ old('payload.mother_gender') }}"
-                                   class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                            <input
+                                type="text"
+                                name="payload[mother_gender]"
+                                value="{{ old('payload.mother_gender') }}"
+                                class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                            >
                         </div>
 
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 mb-2">Pekerjaan Ibu</label>
-                            <input type="text" name="payload[mother_job]" value="{{ old('payload.mother_job') }}"
-                                   class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                            <input
+                                type="text"
+                                name="payload[mother_job]"
+                                value="{{ old('payload.mother_job') }}"
+                                class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                            >
                         </div>
 
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 mb-2">Penghasilan Ibu</label>
-                            <input type="text" name="payload[mother_income]" value="{{ old('payload.mother_income') }}"
-                                   class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                            <input
+                                type="text"
+                                name="payload[mother_income]"
+                                value="{{ old('payload.mother_income') }}"
+                                class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                            >
                         </div>
                     </div>
                 </div>
@@ -286,38 +313,68 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 mb-2">Nama Anak</label>
-                            <input id="payload_child_name" type="text" name="payload[child_name]" value="{{ old('payload.child_name') }}"
-                                   class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                            <input
+                                id="payload_child_name"
+                                type="text"
+                                name="payload[child_name]"
+                                value="{{ old('payload.child_name') }}"
+                                class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                            >
                         </div>
 
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 mb-2">Tempat/Tgl Lahir Anak</label>
-                            <input id="payload_child_birth" type="text" name="payload[child_birth]" value="{{ old('payload.child_birth') }}"
-                                   class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                            <input
+                                id="payload_child_birth"
+                                type="text"
+                                name="payload[child_birth]"
+                                value="{{ old('payload.child_birth') }}"
+                                class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                            >
                         </div>
 
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 mb-2">Jenis Kelamin Anak</label>
-                            <input id="payload_child_gender" type="text" name="payload[child_gender]" value="{{ old('payload.child_gender') }}"
-                                   class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                            <input
+                                id="payload_child_gender"
+                                type="text"
+                                name="payload[child_gender]"
+                                value="{{ old('payload.child_gender') }}"
+                                class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                            >
                         </div>
 
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 mb-2">Pekerjaan Anak</label>
-                            <input id="payload_child_job" type="text" name="payload[child_job]" value="{{ old('payload.child_job') }}"
-                                   class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                            <input
+                                id="payload_child_job"
+                                type="text"
+                                name="payload[child_job]"
+                                value="{{ old('payload.child_job') }}"
+                                class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                            >
                         </div>
 
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 mb-2">Agama Anak</label>
-                            <input id="payload_child_religion" type="text" name="payload[child_religion]" value="{{ old('payload.child_religion') }}"
-                                   class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                            <input
+                                id="payload_child_religion"
+                                type="text"
+                                name="payload[child_religion]"
+                                value="{{ old('payload.child_religion') }}"
+                                class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                            >
                         </div>
 
                         <div class="md:col-span-2 xl:col-span-2">
                             <label class="block text-sm font-semibold text-slate-700 mb-2">Alamat Anak</label>
-                            <input id="payload_child_address" type="text" name="payload[child_address]" value="{{ old('payload.child_address') }}"
-                                   class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                            <input
+                                id="payload_child_address"
+                                type="text"
+                                name="payload[child_address]"
+                                value="{{ old('payload.child_address') }}"
+                                class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                            >
                         </div>
                     </div>
                 </div>
@@ -392,7 +449,6 @@
             const regency = selectedOption.dataset.regency || '';
             const province = selectedOption.dataset.province || '';
 
-            // isi otomatis hanya jika field masih kosong
             if (childNameInput && !childNameInput.value.trim()) {
                 childNameInput.value = fullName;
             }
