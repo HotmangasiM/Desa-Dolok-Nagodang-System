@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,25 +10,45 @@
     <div class="min-h-screen grid lg:grid-cols-2">
 
         {{-- Left Section --}}
-        <div class="hidden lg:flex bg-slate-900 text-white p-12 flex-col justify-between">
-            <div>
-                <div class="w-14 h-14 rounded-2xl bg-emerald-500/20 flex items-center justify-center text-2xl mb-6">
-                    🏡
-                </div>
-                <h1 class="text-4xl font-bold leading-tight">
-                    Sistem Informasi Desa Dolok Nagodang
-                </h1>
-                <p class="mt-4 text-slate-300 text-base leading-7 max-w-md">
-                    Kelola data penduduk, surat elektronik, aparat desa, berita, dan inventaris desa
-                    dalam satu panel administrasi yang rapi dan terpusat.
-                </p>
-            </div>
+        <div class="relative hidden lg:flex overflow-hidden">
+            {{-- Background Image --}}
+            <img
+                src="{{ asset('images/farmer-login.png') }}"
+                alt="Petani desa"
+                class="absolute inset-0 h-full w-full object-cover"
+            >
 
-            <div class="rounded-3xl bg-slate-800 p-6 border border-slate-700">
-                <p class="text-sm text-slate-300 leading-6">
-                    “Panel admin ini dirancang untuk membantu operasional desa menjadi lebih tertib,
-                    cepat, dan terdokumentasi dengan baik.”
-                </p>
+            {{-- Dark Overlay --}}
+            <div class="absolute inset-0 bg-slate-950/55"></div>
+
+            {{-- Soft Gradient Overlay --}}
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/30 to-slate-900/40"></div>
+
+            {{-- Content --}}
+            <div class="relative z-10 flex h-full w-full flex-col justify-between p-12 text-white">
+                <div class="max-w-lg">
+                    <!-- <div class="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-500/20 text-2xl backdrop-blur-sm border border-white/10">
+                        🌾
+                    </div> -->
+
+                    <h1 class="text-4xl xl:text-5xl font-bold leading-tight drop-shadow-lg align-center">
+                        Sistem Informasi
+                        <br>
+                        Desa Dolok Nagodang
+                    </h1>
+
+                    <p class="mt-5 max-w-md text-base leading-7 text-slate-100/90">
+                        Kelola data penduduk, surat, berita, aparat desa, dan inventaris
+                        dalam satu panel administrasi yang rapi dan terpusat.
+                    </p>
+                </div>
+
+                <div class="max-w-md rounded-3xl border border-white/15 bg-white/10 p-6 backdrop-blur-md shadow-xl">
+                    <p class="text-sm leading-6 text-slate-100/90">
+                        “Panel admin ini dirancang untuk membantu operasional desa menjadi lebih tertib,
+                        cepat, dan terdokumentasi dengan baik.”
+                    </p>
+                </div>
             </div>
         </div>
 
@@ -106,6 +126,12 @@
                                 >
                                 <span>Remember me</span>
                             </label>
+
+                            @if (Route::has('password.request'))
+                                <a href="{{ route('password.request') }}" class="text-sm font-medium text-emerald-600 hover:text-emerald-700">
+                                    Lupa password?
+                                </a>
+                            @endif
                         </div>
 
                         <button

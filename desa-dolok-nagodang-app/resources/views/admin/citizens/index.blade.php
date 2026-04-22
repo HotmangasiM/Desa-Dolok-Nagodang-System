@@ -8,24 +8,24 @@
 @endif
 <div class="space-y-6">
     <!-- Header actions -->
-    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-        <div>
-            <h1 class="text-3xl font-bold tracking-tight text-slate-800">Data Penduduk</h1>
-            <p class="text-sm text-slate-500 mt-2">
-                Kelola data penduduk desa secara terpusat, rapi, dan mudah dipantau.
-            </p>
-        </div>
+        <div class="flex flex-wrap items-center justify-between gap-3">
+            <div class="text-sm text-slate-500">
+                Aksi cepat data penduduk
+            </div>
 
-        <div class="flex flex-wrap items-center gap-3">
-            <button class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 shadow-sm transition">
-                ⬇ Export
-            </button>
+            <div class="flex flex-wrap items-center gap-3">
+                <button
+                    type="button"
+                    class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 shadow-sm transition">
+                    ⬇ Export
+                </button>
 
-            <a href="{{ route('admin.citizens.create') }}" class="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-700 shadow-lg shadow-emerald-600/20 transition">
-                ＋ Tambah Penduduk
-            </a>
+                <a href="{{ route('admin.citizens.create') }}"
+                class="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-700 shadow-lg shadow-emerald-600/20 transition">
+                    ＋ Tambah Penduduk
+                </a>
+            </div>
         </div>
-    </div>
 
     <!-- Stats -->
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
@@ -104,13 +104,14 @@
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Jenis Kelamin</label>
-                    <select
-                        name="gender"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                    >
+                    <select name="gender" class="...">
                         <option value="">Semua</option>
-                        <option value="L" {{ ($filters['gender'] ?? '') === 'L' ? 'selected' : '' }}>L</option>
-                        <option value="P" {{ ($filters['gender'] ?? '') === 'P' ? 'selected' : '' }}>P</option>
+                        <option value="Laki-laki" {{ ($filters['gender'] ?? '') === 'Laki-laki' ? 'selected' : '' }}>
+                            Laki-laki
+                        </option>
+                        <option value="Perempuan" {{ ($filters['gender'] ?? '') === 'Perempuan' ? 'selected' : '' }}>
+                            Perempuan
+                        </option>
                     </select>
                 </div>
 

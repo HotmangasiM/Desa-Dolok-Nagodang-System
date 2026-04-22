@@ -55,12 +55,18 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">Gender <span class="text-rose-500">*</span></label>
-                    <select name="gender"
-                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
-                        <option value="">Pilih Gender</option>
-                        <option value="L" {{ old('gender', $citizen->gender) === 'L' ? 'selected' : '' }}>L</option>
-                        <option value="P" {{ old('gender', $citizen->gender) === 'P' ? 'selected' : '' }}>P</option>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Jenis Kelamin</label>
+                    <select
+                        name="gender"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    >
+                        <option value="">Pilih Jenis Kelamin</option>
+                        <option value="Laki-laki" {{ old('gender', $citizen->gender) === 'Laki-laki' ? 'selected' : '' }}>
+                            Laki-laki
+                        </option>
+                        <option value="Perempuan" {{ old('gender', $citizen->gender) === 'Perempuan' ? 'selected' : '' }}>
+                            Perempuan
+                        </option>
                     </select>
                 </div>
 
@@ -69,8 +75,8 @@
                     <select name="life_status"
                             class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
                         <option value="">Pilih Status</option>
-                        <option value="alive" {{ old('life_status', $citizen->life_status) === 'alive' ? 'selected' : '' }}>alive</option>
-                        <option value="deceased" {{ old('life_status', $citizen->life_status) === 'deceased' ? 'selected' : '' }}>deceased</option>
+                        <option value="alive" {{ old('life_status', $citizen->life_status) === 'alive' ? 'selected' : '' }}>Hidup</option>
+                        <option value="deceased" {{ old('life_status', $citizen->life_status) === 'deceased' ? 'selected' : '' }}>Meninggal</option>
                     </select>
                 </div>
 
@@ -104,9 +110,28 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">Agama</label>
-                    <input type="text" name="religion" value="{{ old('religion', $citizen->religion) }}"
-                           class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Agama</label>
+                        <select 
+                            name="religion"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        >
+                            <option value="">Pilih Agama</option>
+                            @foreach ([
+                                'Islam',
+                                'Kristen',
+                                'Katolik',
+                                'Hindu',
+                                'Buddha',
+                                'Konghucu'
+                            ] as $religion)
+                                <option value="{{ $religion }}" 
+                                    {{ old('religion', $citizen->religion ?? '') == $religion ? 'selected' : '' }}>
+                                    {{ $religion }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
 
                 <div>
@@ -122,9 +147,36 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">Status Perkawinan</label>
-                    <input type="text" name="marital_status" value="{{ old('marital_status', $citizen->marital_status) }}"
-                           class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Status Perkawinan</label>
+                        <select 
+                            name="marital_status"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        >
+                            <option value="">Pilih Status</option>
+
+                            @php
+                                $statuses = [
+                                    'belum_kawin' => 'Belum Kawin',
+                                    'kawin' => 'Kawin',
+                                    'cerai_hidup' => 'Cerai Hidup',
+                                    'cerai_mati' => 'Cerai Mati',
+                                ];
+                                $current = old('marital_status', $citizen->marital_status ?? '');
+                            @endphp
+
+                            {{-- fallback kalau data lama tidak sesuai --}}
+                            @if($current && !array_key_exists($current, $statuses))
+                                <option value="{{ $current }}" selected hidden>{{ $current }}</option>
+                            @endif
+
+                            @foreach ($statuses as $value => $label)
+                                <option value="{{ $value }}" {{ $current == $value ? 'selected' : '' }}>
+                                    {{ $label }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
             </div>
         </div>

@@ -8,12 +8,9 @@
 @endif
 
 <div class="space-y-6">
-    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-        <div>
-            <h1 class="text-3xl font-bold tracking-tight text-slate-800">Surat Elektronik</h1>
-            <p class="text-sm text-slate-500 mt-2">
-                Kelola pengajuan dan administrasi surat elektronik desa secara terpusat.
-            </p>
+    <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="text-sm text-slate-500">
+            Aksi cepat surat elektronik
         </div>
 
         <div class="flex flex-wrap items-center gap-3">
@@ -24,7 +21,7 @@
             </button>
 
             <a href="{{ route('admin.letters.create') }}"
-               class="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-700 shadow-lg shadow-emerald-600/20 transition">
+            class="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-700 shadow-lg shadow-emerald-600/20 transition">
                 ＋ Tambah Surat
             </a>
         </div>
@@ -62,7 +59,7 @@
             <div class="flex items-start justify-between">
                 <div>
                     <p class="text-sm font-medium text-slate-500">Completed</p>
-                    <h3 class="mt-3 text-3xl font-bold text-slate-800">{{ number_format($approvedLetters) }}</h3>
+                    <h3 class="mt-3 text-3xl font-bold text-slate-800">{{ number_format($completedLetters) }}</h3>
                 </div>
                 <div class="w-12 h-12 rounded-2xl bg-sky-100 flex items-center justify-center text-2xl">
                     ✅

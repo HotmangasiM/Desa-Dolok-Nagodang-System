@@ -24,7 +24,7 @@ class UpdateCitizenRequest extends FormRequest
                 Rule::unique('citizens', 'nik')->ignore($id),
             ],
             'full_name' => 'required|string|max:255',
-            'gender' => 'required|in:L,P',
+            'gender' => 'required|string|in:Laki-laki,Perempuan',
             'birth_place' => 'nullable|string|max:100',
             'birth_date' => 'nullable|date',
             'religion' => 'nullable|string|max:100',

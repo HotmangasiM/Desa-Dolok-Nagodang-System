@@ -87,23 +87,80 @@
         {{-- Main --}}
         <div class="flex-1 min-w-0">
             {{-- Topbar --}}
-            <header class="sticky top-0 z-30 bg-white/90 backdrop-blur border-b border-slate-200">
-                <div class="px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-                    <div>
-                        <h2 class="text-lg font-bold text-slate-800">{{ $pageTitle ?? 'Dashboard' }}</h2>
-                        @isset($pageDescription)
-                            <p class="text-xs text-slate-500 mt-0.5">{{ $pageDescription }}</p>
-                        @endisset
-                    </div>
+            <header class="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-slate-200">
+                <div class="px-4 sm:px-6 lg:px-8 py-4">
+                    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                        <div class="min-w-0">
+                            {{-- Breadcrumb --}}
+                            <nav class="flex items-center gap-2 text-sm text-slate-500 mb-2">
+                                <a href="{{ route('admin.dashboard') }}" class="hover:text-slate-700 transition">
+                                    Admin
+                                </a>
 
-                    <div class="flex items-center gap-3">
-                        <div class="hidden sm:block text-right">
-                            <p class="text-sm font-semibold text-slate-800">{{ auth()->user()->name ?? 'Admin' }}</p>
-                            <p class="text-xs text-slate-500">Administrator</p>
+                                @isset($breadcrumbs)
+                                    @foreach ($breadcrumbs as $breadcrumb)
+                                        <span>/</span>
+
+                                        @if (!empty($breadcrumb['url']))
+                                            <a href="{{ $breadcrumb['url'] }}" class="hover:text-slate-700 transition">
+                                                {{ $breadcrumb['label'] }}
+                                            </a>
+                                        @else
+                                            <span class="text-slate-700 font-medium">
+                                                {{ $breadcrumb['label'] }}
+                                            </span>
+                                        @endif
+                                    @endforeach
+                                @else
+                                    <span>/</span>
+                                    <span class="text-slate-700 font-medium">
+                                        {{ $pageTitle ?? 'Dashboard' }}
+                                    </span>
+                                @endisset
+                            </nav>
+
+                            {{-- Title --}}
+                            <h2 class="text-2xl font-bold text-slate-800 truncate">
+                                {{ $pageTitle ?? 'Dashboard' }}
+                            </h2>
+
+                            {{-- Description --}}
+                            @isset($pageDescription)
+                                <p class="text-sm text-slate-500 mt-1">
+                                    {{ $pageDescription }}
+                                </p>
+                            @endisset
                         </div>
 
-                        <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-slate-700 font-bold">
-                            {{ strtoupper(substr(auth()->user()->name ?? 'A', 0, 1)) }}
+                        {{-- Right Actions --}}
+                        <div class="flex items-center gap-3">
+                            <div class="hidden sm:flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2.5">
+                                <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-slate-700 font-bold">
+                                    {{ strtoupper(substr(auth()->user()->name ?? 'A', 0, 1)) }}
+                                </div>
+
+                                <div class="text-left">
+                                    <p class="text-sm font-semibold text-slate-800 leading-5">
+                                        {{ auth()->user()->name ?? 'Admin' }}
+                                    </p>
+                                    <p class="text-xs text-slate-500">
+                                        {{ auth()->user()->email ?? 'admin@desa.test' }}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <a href="{{ route('profile.edit') }}"
+                               class="hidden sm:inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 transition">
+                                Profile
+                            </a>
+
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit"
+                                    class="inline-flex items-center justify-center rounded-xl bg-rose-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-rose-700 transition shadow-lg shadow-rose-600/20">
+                                    Logout
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
