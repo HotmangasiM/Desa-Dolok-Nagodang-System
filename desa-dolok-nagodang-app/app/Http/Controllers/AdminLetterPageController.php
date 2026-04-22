@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreLetterRequest;
 use App\Http\Requests\UpdateLetterRequest;
 use App\Models\Citizen;
@@ -26,6 +25,8 @@ class AdminLetterPageController extends Controller
             'search' => $request->query('search'),
             'status' => $request->query('status'),
             'letter_type_id' => $request->query('letter_type_id'),
+            'submission_date_from' => $request->query('submission_date_from'),
+            'submission_date_to' => $request->query('submission_date_to'),
         ];
 
         $perPage = (int) $request->query('per_page', 10);
@@ -33,18 +34,22 @@ class AdminLetterPageController extends Controller
         $letters = $this->letterService->getAll($filters, $perPage);
 
         $allLetters = Letter::count();
-        $submittedLetters = Letter::where('status', 'submitted')->count();
-        $approvedLetters = Letter::where('status', 'approved')->count();
+        $submittedLetters = Letter::where('status', 'SUBMITTED')->count();
+        $completedLetters = Letter::where('status', 'COMPLETED')->count();
+
         $letterTypes = LetterType::orderBy('name')->get();
 
         return view('admin.letters.index', [
             'title' => 'Admin Desa - Surat Elektronik',
-            'pageTitle' => 'Manajemen Surat Elektronik',
-            'pageDescription' => 'Kelola surat elektronik desa dan proses administrasinya.',
+            'pageTitle' => 'Surat Elektronik',
+            'pageDescription' => 'Kelola pengajuan dan administrasi surat elektronik desa secara terpusat.',
+            'breadcrumbs' => [
+                ['label' => 'Surat Elektronik', 'url' => null],
+            ],
             'letters' => $letters,
             'allLetters' => $allLetters,
             'submittedLetters' => $submittedLetters,
-            'approvedLetters' => $approvedLetters,
+            'completedLetters' => $completedLetters,
             'letterTypes' => $letterTypes,
             'filters' => $filters,
         ]);
@@ -55,7 +60,11 @@ class AdminLetterPageController extends Controller
         return view('admin.letters.create', [
             'title' => 'Admin Desa - Tambah Surat',
             'pageTitle' => 'Tambah Surat Elektronik',
-            'pageDescription' => 'Tambahkan data surat elektronik baru.',
+            'pageDescription' => 'Lengkapi form untuk menambahkan surat elektronik baru.',
+            'breadcrumbs' => [
+                ['label' => 'Surat Elektronik', 'url' => route('admin.letters.index')],
+                ['label' => 'Tambah Surat', 'url' => null],
+            ],
             'letterTypes' => LetterType::orderBy('name')->get(),
             'citizens' => Citizen::orderBy('full_name')->get(),
         ]);
@@ -75,7 +84,11 @@ class AdminLetterPageController extends Controller
         return view('admin.letters.edit', [
             'title' => 'Admin Desa - Edit Surat',
             'pageTitle' => 'Edit Surat Elektronik',
-            'pageDescription' => 'Perbarui data surat elektronik.',
+            'pageDescription' => 'Perbarui data surat elektronik yang sudah tersimpan.',
+            'breadcrumbs' => [
+                ['label' => 'Surat Elektronik', 'url' => route('admin.letters.index')],
+                ['label' => 'Edit Surat', 'url' => null],
+            ],
             'letter' => $this->letterService->getById($letter),
             'letterTypes' => LetterType::orderBy('name')->get(),
             'citizens' => Citizen::orderBy('full_name')->get(),
