@@ -27,7 +27,7 @@
         </div>
     @endif
 
-    <form action="{{ route('admin.news.store') }}" method="POST" class="space-y-6">
+    <form method="POST" action="{{ route('admin.news.store') }}" enctype="multipart/form-data">
         @csrf
 
         <div class="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
@@ -65,14 +65,27 @@
                 </div>
 
                 <div class="xl:col-span-3">
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">Thumbnail / Image</label>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">
+                        Thumbnail / Image
+                    </label>
+
                     <input
-                        type="text"
+                        type="file"
                         name="image"
-                        value="{{ old('image') }}"
+                        accept="image/*"
+                        onchange="previewImage(event)"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                        placeholder="Contoh: news/gotong-royong.jpg"
                     >
+
+                    <p class="text-xs text-slate-500 mt-2">
+                        Format: JPG, PNG, JPEG (max 2MB)
+                    </p>
+
+                    <!-- Preview -->
+                    <div class="mt-4">
+                        <img id="imagePreview"
+                            class="hidden w-40 h-28 object-cover rounded-xl border border-slate-200 shadow-sm">
+                    </div>
                 </div>
 
                 <div class="xl:col-span-3">
@@ -114,3 +127,22 @@
     </form>
 </div>
 @endsection
+@push('scripts')
+<script>
+function previewImage(event) {
+    const input = event.target;
+    const preview = document.getElementById('imagePreview');
+
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+            preview.classList.remove('hidden');
+        };
+
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+</script>
+@endpush

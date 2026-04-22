@@ -19,6 +19,7 @@ class Letter extends Model
         'applicant_national_id',
         'subject',
         'description',
+        'payload',
         'submission_date',
         'verification_date',
         'approval_date',
@@ -30,6 +31,7 @@ class Letter extends Model
     ];
     
     protected $casts = [
+        'payload' => 'array',
         'submission_date' => 'datetime',
         'verification_date' => 'datetime',
         'approval_date' => 'datetime',

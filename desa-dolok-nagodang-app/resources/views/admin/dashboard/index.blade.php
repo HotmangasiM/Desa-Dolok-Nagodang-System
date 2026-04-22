@@ -4,12 +4,12 @@
 <div class="space-y-6">
 
     {{-- HEADER --}}
-    <div>
+    <!-- <div>
         <h1 class="text-3xl font-bold text-slate-800">Dashboard</h1>
         <p class="text-sm text-slate-500 mt-2">
             Ringkasan data sistem informasi desa.
         </p>
-    </div>
+    </div> -->
 
     {{-- STATISTICS --}}
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
@@ -19,7 +19,7 @@
             <p class="text-sm text-slate-500">Penduduk</p>
             <h3 class="text-3xl font-bold mt-2 text-slate-800">{{ $totalCitizens }}</h3>
             <p class="text-xs text-slate-500 mt-2">
-                L: {{ $maleCitizens }} | P: {{ $femaleCitizens }}
+                Laki-laki: {{ $maleCitizens }} | Perempuan: {{ $femaleCitizens }}
             </p>
         </div>
 
@@ -91,7 +91,7 @@
 
         <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm">
             <p class="text-sm text-slate-500">Approved</p>
-            <h3 class="text-3xl font-bold mt-2 text-slate-800">{{ $approvedLetters }}</h3>
+            <h3 class="text-3xl font-bold mt-2 text-slate-800">{{ $completedLetters }}</h3>
         </div>
     </div>
 

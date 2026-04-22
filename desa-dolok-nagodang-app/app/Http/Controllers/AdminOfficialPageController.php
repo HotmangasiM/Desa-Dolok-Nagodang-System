@@ -2,22 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreOfficialRequest;
 use App\Http\Requests\UpdateOfficialRequest;
 use App\Models\Official;
-use App\Services\OfficialService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class AdminOfficialPageController extends Controller
 {
-    public function __construct(
-        protected OfficialService $officialService
-    ) {
-    }
-
     public function index(Request $request): View
     {
         $filters = [
@@ -25,9 +18,21 @@ class AdminOfficialPageController extends Controller
             'position' => $request->query('position'),
         ];
 
-        $perPage = (int) $request->query('per_page', 10);
-
-        $officials = $this->officialService->getAll($filters, $perPage);
+        $officials = Official::query()
+            ->when($filters['search'], function ($query) use ($filters) {
+                $query->where(function ($q) use ($filters) {
+                    $q->where('name', 'like', '%' . $filters['search'] . '%')
+                        ->orWhere('position', 'like', '%' . $filters['search'] . '%')
+                        ->orWhere('phone', 'like', '%' . $filters['search'] . '%')
+                        ->orWhere('email', 'like', '%' . $filters['search'] . '%');
+                });
+            })
+            ->when($filters['position'], function ($query) use ($filters) {
+                $query->where('position', $filters['position']);
+            })
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
 
         $allOfficials = Official::count();
         $officialWithPosition = Official::whereNotNull('position')->count();
@@ -35,58 +40,84 @@ class AdminOfficialPageController extends Controller
 
         return view('admin.officials.index', [
             'title' => 'Admin Desa - Aparat Desa',
-            'pageTitle' => 'Manajemen Aparat Desa',
+            'pageTitle' => 'Aparat Desa',
             'pageDescription' => 'Kelola profil aparat desa dan struktur jabatan.',
+            'breadcrumbs' => [
+                ['label' => 'Aparat Desa', 'url' => null],
+            ],
+
             'officials' => $officials,
+            'filters' => $filters,
+
+            // statistik untuk card di blade
             'allOfficials' => $allOfficials,
             'officialWithPosition' => $officialWithPosition,
             'officialWithPhone' => $officialWithPhone,
-            'filters' => $filters,
         ]);
     }
 
     public function create(): View
     {
         return view('admin.officials.create', [
-            'title' => 'Admin Desa - Tambah Aparat',
+            'title' => 'Admin Desa - Tambah Aparat Desa',
             'pageTitle' => 'Tambah Aparat Desa',
             'pageDescription' => 'Tambahkan profil aparat desa baru.',
+            'breadcrumbs' => [
+                ['label' => 'Aparat Desa', 'url' => route('admin.officials.index')],
+                ['label' => 'Tambah Aparat Desa', 'url' => null],
+            ],
         ]);
     }
 
     public function store(StoreOfficialRequest $request): RedirectResponse
     {
-        $this->officialService->create($request->validated());
+        $data = $request->validated();
+
+        if ($request->hasFile('photo')) {
+            $path = $request->file('photo')->store('officials', 'public');
+            $data['photo'] = $path;
+        }
+
+        Official::create($data);
 
         return redirect()
             ->route('admin.officials.index')
             ->with('success', 'Data aparat desa berhasil ditambahkan.');
     }
 
-    public function edit(int $official): View
+    public function edit(Official $official): View
     {
-        $officialData = $this->officialService->getById($official);
-
         return view('admin.officials.edit', [
-            'title' => 'Admin Desa - Edit Aparat',
+            'title' => 'Admin Desa - Edit Aparat Desa',
             'pageTitle' => 'Edit Aparat Desa',
-            'pageDescription' => 'Perbarui profil aparat desa.',
-            'official' => $officialData,
+            'pageDescription' => 'Perbarui profil aparat desa yang sudah tersimpan.',
+            'breadcrumbs' => [
+                ['label' => 'Aparat Desa', 'url' => route('admin.officials.index')],
+                ['label' => 'Edit Aparat Desa', 'url' => null],
+            ],
+            'official' => $official,
         ]);
     }
 
-    public function update(UpdateOfficialRequest $request, int $official): RedirectResponse
+    public function update(UpdateOfficialRequest $request, Official $official): RedirectResponse
     {
-        $this->officialService->update($official, $request->validated());
+        $data = $request->validated();
+
+        if ($request->hasFile('photo')) {
+            $path = $request->file('photo')->store('officials', 'public');
+            $data['photo'] = $path;
+        }
+
+        $official->update($data);
 
         return redirect()
             ->route('admin.officials.index')
             ->with('success', 'Data aparat desa berhasil diperbarui.');
     }
 
-    public function destroy(int $official): RedirectResponse
+    public function destroy(Official $official): RedirectResponse
     {
-        $this->officialService->delete($official);
+        $official->delete();
 
         return redirect()
             ->route('admin.officials.index')

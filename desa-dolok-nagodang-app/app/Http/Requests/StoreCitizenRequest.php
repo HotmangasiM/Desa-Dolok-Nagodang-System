@@ -25,7 +25,7 @@ class StoreCitizenRequest extends FormRequest
         return [
             'nik' => 'required|string|size:16|unique:citizens,nik',
             'full_name' => 'required|string|max:255',
-            'gender' => 'required|string|in:L,P',
+            'gender' => 'required|string|in:Laki-laki,Perempuan',
             'birth_place' => 'nullable|string|max:100',
             'birth_date' => 'nullable|date',
             'religion'  => 'nullable|string|max:100',
