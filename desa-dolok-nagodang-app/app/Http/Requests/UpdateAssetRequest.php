@@ -31,7 +31,7 @@ class UpdateAssetRequest extends FormRequest
             'acquisition_date' => 'nullable|date',
             'source' => 'nullable|string|max:255',
             'asset_value' => 'nullable|numeric',
-            'asset_photo' => 'nullable|string|max:255',
+            'asset_photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'notes' => 'nullable|string',
             'description' => 'nullable|string',
         ];

@@ -32,10 +32,10 @@ class LetterService
             $data['submission_date'] = now()->toDateString();
         }
 
-        if(!empty($data['citizen_id'])) {
+        if (!empty($data['citizen_id'])) {
             $citizen = Citizen::find($data['citizen_id']);
 
-            if(!$citizen){
+            if(!$citizen) {
                 throw ValidationException::withMessages([
                     'citizen_id' => 'Data warga tidak ditemukan.',
                 ]);
@@ -44,7 +44,7 @@ class LetterService
             $data['applicant_national_id'] = $citizen->nik;
         }
 
-        if(empty($data['letter_number'])) {
+        if (empty($data['letter_number'])) {
             $data['letter_number'] = $this->generateLetterNumber(
                 (int) $data['letter_type_id'],
                 $data['submission_date']
@@ -54,14 +54,13 @@ class LetterService
         $statusMap = [
             'submitted' => 'SUBMITTED',
             'processed' => 'PROCESSING',
-            'approved' => 'COMPLETED',
-            'rejected' => 'REJECTED',
+            'completed' => 'COMPLETED',
         ];
 
         $data['status'] = $statusMap[$data['status'] ?? 'submitted'] ?? 'SUBMITTED';
 
         //Hardcode sementar untuk field created_by oleh admin
-        $data['created_by'] = 1;
+        $data['created_by'] = auth()->id();
 
 
         unset($data['citizen_id']);
@@ -88,16 +87,11 @@ class LetterService
         $statusMap = [
             'submitted' => 'SUBMITTED',
             'processed' => 'PROCESSING',
-            'approved' => 'COMPLETED',
-            'rejected' => 'REJECTED',
+            'completed' => 'COMPLETED',
         ];
 
         if (!empty($data['status'])) {
             $data['status'] = $statusMap[$data['status']] ?? $data['status'];
-        }
-
-        if (($data['status'] ?? null) === 'COMPLETED' && empty($data['approval_date'])) {
-            $data['approval_date'] = now()->toDateString();
         }
 
         unset($data['citizen_id']);

@@ -17,7 +17,7 @@ class UpdateOfficialRequest extends FormRequest
             'name' => 'required|string|max:255',
             'position' => 'required|string|max:255',
             'photo' => 'nullable|string|max:255',
-            'phone' => 'nullable|string|max:50',
+            'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'email' => 'nullable|email|max:255',
             'address' => 'nullable|string',
             'term_start' => 'nullable|date',

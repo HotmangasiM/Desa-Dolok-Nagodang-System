@@ -2,23 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCitizenRequest;
 use App\Http\Requests\UpdateCitizenRequest;
 use App\Models\Citizen;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Illuminate\Http\RedirectResponse;
-use App\Services\CitizenService;
 
 class AdminCitizenPageController extends Controller
 {
-    public function __construct(
-        protected CitizenService $citizenService
-    ){
-
-    }
-
     public function index(Request $request): View
     {
         $filters = [
@@ -27,25 +19,48 @@ class AdminCitizenPageController extends Controller
             'life_status' => $request->query('life_status'),
         ];
 
-        $perPage = (int) $request->query('per_page', 10);
+        $citizens = Citizen::query()
+            ->when($filters['search'], function ($query) use ($filters) {
+                $query->where(function ($q) use ($filters) {
+                    $q->where('full_name', 'like', '%' . $filters['search'] . '%')
+                        ->orWhere('nik', 'like', '%' . $filters['search'] . '%')
+                        ->orWhere('address', 'like', '%' . $filters['search'] . '%');
+                });
+            })
+            ->when($filters['gender'], function ($query) use ($filters) {
+                $query->where('gender', $filters['gender']);
+            })
+            ->when($filters['life_status'], function ($query) use ($filters) {
+                $query->where('life_status', $filters['life_status']);
+            })
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
 
-        $citizens = $this->citizenService->getAll($filters, $perPage);
-
-        $allCitizens = \App\Models\Citizen::query()->count();
-        $maleCitizens = \App\Models\Citizen::query()->where('gender', 'L')->count();
-        $femaleCitizens = \App\Models\Citizen::query()->where('gender', 'P')->count();
-        $activeCitizens = \App\Models\Citizen::query()->where('life_status', 'alive')->count();
+        $allCitizens = Citizen::count();
+        $maleCitizens = Citizen::where('gender', 'Laki-laki')->count();
+        $femaleCitizens = Citizen::where('gender', 'Perempuan')->count();
+        $activeCitizens = Citizen::where('life_status', 'alive')->count();
 
         return view('admin.citizens.index', [
             'title' => 'Admin Desa - Data Penduduk',
-            'pageTitle' => 'Manajemen Penduduk',
-            'pageDescription' => 'Kelola data penduduk untuk kebutuhan administrasi desa.',
+            'pageTitle' => 'Data Penduduk',
+            'pageDescription' => 'Kelola data penduduk desa secara terpusat.',
+            'breadcrumbs' => [
+                ['label' => 'Data Penduduk', 'url' => null],
+            ],
+
             'citizens' => $citizens,
+            'filters' => $filters,
+
+            // statistik untuk cards
             'allCitizens' => $allCitizens,
             'maleCitizens' => $maleCitizens,
             'femaleCitizens' => $femaleCitizens,
             'activeCitizens' => $activeCitizens,
-            'filters' => $filters,
+
+            // alias jika ada blade lama yang pakai nama ini
+            'totalCitizens' => $allCitizens,
         ]);
     }
 
@@ -54,46 +69,52 @@ class AdminCitizenPageController extends Controller
         return view('admin.citizens.create', [
             'title' => 'Admin Desa - Tambah Penduduk',
             'pageTitle' => 'Tambah Penduduk',
-            'pageDescription' => 'Tambahkan data penduduk baru ke dalam sistem.'
+            'pageDescription' => 'Tambahkan data penduduk baru ke dalam sistem.',
+            'breadcrumbs' => [
+                ['label' => 'Data Penduduk', 'url' => route('admin.citizens.index')],
+                ['label' => 'Tambah Penduduk', 'url' => null],
+            ],
         ]);
     }
 
     public function store(StoreCitizenRequest $request): RedirectResponse
     {
-        $this->citizenService->create($request->validated());
+        Citizen::create($request->validated());
 
         return redirect()
             ->route('admin.citizens.index')
             ->with('success', 'Data penduduk berhasil ditambahkan.');
     }
 
-    public function edit(int $citizen): View
+    public function edit(Citizen $citizen): View
     {
-        $citizenData = $this->citizenService->getById($citizen);
-
         return view('admin.citizens.edit', [
             'title' => 'Admin Desa - Edit Penduduk',
             'pageTitle' => 'Edit Penduduk',
-            'pageDescription' => 'Perbarui data penduduk yang sudah terdaftar.',
-            'citizen' => $citizenData,
+            'pageDescription' => 'Perbarui data penduduk yang sudah tersimpan.',
+            'breadcrumbs' => [
+                ['label' => 'Data Penduduk', 'url' => route('admin.citizens.index')],
+                ['label' => 'Edit Penduduk', 'url' => null],
+            ],
+            'citizen' => $citizen,
         ]);
     }
 
-    public function update(UpdateCitizenRequest $request, int $citizen): RedirectResponse
+    public function update(UpdateCitizenRequest $request, Citizen $citizen): RedirectResponse
     {
-        $this->citizenService->update($citizen, $request->validated());
+        $citizen->update($request->validated());
 
         return redirect()
             ->route('admin.citizens.index')
-            ->with('success', 'Data penduduk berhasil diperbaharui.');
+            ->with('success', 'Data penduduk berhasil diperbarui.');
     }
 
-    public function destroy(int $citizen)
+    public function destroy(Citizen $citizen): RedirectResponse
     {
-        $this->citizenService->delete($citizen);
+        $citizen->delete();
 
         return redirect()
             ->route('admin.citizens.index')
-            ->with('success', 'Data Penduduk berhasil dihapus.');
+            ->with('success', 'Data penduduk berhasil dihapus.');
     }
 }

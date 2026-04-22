@@ -8,22 +8,21 @@
 @endif
 
 <div class="space-y-6">
-    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-        <div>
-            <h1 class="text-3xl font-bold tracking-tight text-slate-800">Aparat Desa</h1>
-            <p class="text-sm text-slate-500 mt-2">
-                Kelola profil aparat desa dan struktur jabatan secara terpusat.
-            </p>
+    <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="text-sm text-slate-500">
+            Aksi cepat data aparat desa
         </div>
 
         <div class="flex flex-wrap items-center gap-3">
-            <button class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 shadow-sm transition">
+            <button
+                type="button"
+                class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 shadow-sm transition">
                 ⬇ Export
             </button>
 
             <a href="{{ route('admin.officials.create') }}"
-               class="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-700 shadow-lg shadow-emerald-600/20 transition">
-                ＋ Tambah Aparat
+            class="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-700 shadow-lg shadow-emerald-600/20 transition">
+                ＋ Tambah Aparat Desa
             </a>
         </div>
     </div>
@@ -145,14 +144,16 @@
 
                             <td class="px-5 py-4">
                                 <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
-                                        {{ strtoupper(substr($official->name, 0, 1)) }}
-                                    </div>
-                                    <div>
-                                        <p class="font-semibold text-slate-800">{{ $official->name }}</p>
-                                        <p class="text-xs text-slate-500 mt-1">
-                                            {{ $official->photo ?? 'Tanpa foto' }}
-                                        </p>
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
+                                            {{ strtoupper(substr($official->name, 0, 1)) }}
+                                        </div>
+                                        <div>
+                                            <p class="font-semibold text-slate-800">{{ $official->name }}</p>
+                                            <p class="text-xs text-slate-500 mt-1">
+                                                {{ $official->photo ?? 'Tanpa foto' }}
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             </td>

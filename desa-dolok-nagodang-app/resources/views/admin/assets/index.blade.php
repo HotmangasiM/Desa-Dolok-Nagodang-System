@@ -8,16 +8,15 @@
 @endif
 
 <div class="space-y-6">
-    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-        <div>
-            <h1 class="text-3xl font-bold tracking-tight text-slate-800">Inventaris Desa</h1>
-            <p class="text-sm text-slate-500 mt-2">
-                Kelola data aset dan inventaris desa secara terpusat.
-            </p>
+    <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="text-sm text-slate-500">
+            Aksi cepat inventaris desa
         </div>
 
         <div class="flex flex-wrap items-center gap-3">
-            <button class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 shadow-sm transition">
+            <button
+                type="button"
+                class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 shadow-sm transition">
                 ⬇ Export
             </button>
 
@@ -139,6 +138,7 @@
                 <thead class="bg-slate-50 text-slate-600">
                     <tr>
                         <th class="px-5 py-4 text-left font-semibold">No</th>
+                        <th class="px-5 py-4 text-left font-semibold">Foto</th>
                         <th class="px-5 py-4 text-left font-semibold">Kode</th>
                         <th class="px-5 py-4 text-left font-semibold">Nama Barang</th>
                         <th class="px-5 py-4 text-left font-semibold">Kategori</th>
@@ -154,6 +154,16 @@
                         <tr class="hover:bg-slate-50/80 transition">
                             <td class="px-5 py-4">
                                 {{ ($assets->firstItem() ?? 0) + $index }}
+                            </td>
+
+                            <td class="px-5 py-4">
+                                @if($asset->asset_photo)
+                                    <img src="{{ asset('storage/' . $asset->asset_photo) }}"
+                                         alt="{{ $asset->item_name }}"
+                                         class="w-16 h-12 object-cover rounded-lg border border-slate-200 shadow-sm">
+                                @else
+                                    <span class="text-slate-400 text-xs">No Image</span>
+                                @endif
                             </td>
 
                             <td class="px-5 py-4 font-medium text-slate-700">
@@ -212,7 +222,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="px-5 py-8 text-center text-slate-500">
+                            <td colspan="9" class="px-5 py-8 text-center text-slate-500">
                                 Data inventaris belum tersedia.
                             </td>
                         </tr>

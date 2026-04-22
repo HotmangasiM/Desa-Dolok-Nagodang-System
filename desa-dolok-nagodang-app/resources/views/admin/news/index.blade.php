@@ -8,22 +8,20 @@
 @endif
 
 <div class="space-y-6">
-    <!-- Header actions -->
-    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-        <div>
-            <h1 class="text-3xl font-bold tracking-tight text-slate-800">Berita Desa</h1>
-            <p class="text-sm text-slate-500 mt-2">
-                Kelola berita dan informasi desa untuk dipublikasikan kepada masyarakat.
-            </p>
+    <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="text-sm text-slate-500">
+            Aksi cepat berita desa
         </div>
 
         <div class="flex flex-wrap items-center gap-3">
-            <button class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 shadow-sm transition">
+            <button
+                type="button"
+                class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 shadow-sm transition">
                 ⬇ Export
             </button>
 
             <a href="{{ route('admin.news.create') }}"
-               class="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-700 shadow-lg shadow-emerald-600/20 transition">
+            class="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-700 shadow-lg shadow-emerald-600/20 transition">
                 ＋ Tambah Berita
             </a>
         </div>
@@ -132,6 +130,7 @@
                 <thead class="bg-slate-50 text-slate-600">
                     <tr>
                         <th class="px-5 py-4 text-left font-semibold">No</th>
+                        <th class="px-5 py-4 text-left font-semibold">Thumbnail</th>
                         <th class="px-5 py-4 text-left font-semibold">Judul</th>
                         <th class="px-5 py-4 text-left font-semibold">Slug</th>
                         <th class="px-5 py-4 text-left font-semibold">Status</th>
@@ -145,6 +144,16 @@
                         <tr class="hover:bg-slate-50/80 transition">
                             <td class="px-5 py-4">
                                 {{ ($news->firstItem() ?? 0) + $index }}
+                            </td>
+
+                            <td class="px-5 py-4">
+                                @if($item->image)
+                                    <img src="{{ asset('storage/' . $item->image) }}"
+                                        alt="{{ $item->title }}"
+                                        class="w-20 h-12 object-cover rounded-lg border border-slate-200 shadow-sm">
+                                @else
+                                    <span class="text-slate-400 text-xs">No Image</span>
+                                @endif
                             </td>
 
                             <td class="px-5 py-4">
@@ -195,7 +204,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-5 py-8 text-center text-slate-500">
+                            <td colspan="7" class="px-5 py-8 text-center text-slate-500">
                                 Data berita belum tersedia.
                             </td>
                         </tr>

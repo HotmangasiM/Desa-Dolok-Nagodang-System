@@ -27,7 +27,7 @@
         </div>
     @endif
 
-    <form action="{{ route('admin.officials.store') }}" method="POST" class="space-y-6">
+    <form action="{{ route('admin.officials.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
         @csrf
 
         <div class="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
@@ -65,13 +65,16 @@
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Foto</label>
+
                     <input
-                        type="text"
+                        type="file"
                         name="photo"
-                        value="{{ old('photo') }}"
+                        accept="image/*"
+                        onchange="previewImage(event)"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                        placeholder="Contoh: officials/kepala-desa.jpg"
                     >
+
+                    <img id="photoPreview" class="mt-3 w-32 h-32 object-cover rounded-xl hidden" />
                 </div>
 
                 <div>

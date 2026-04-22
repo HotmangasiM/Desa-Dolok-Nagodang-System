@@ -1,24 +1,16 @@
 <?php
 
-namespace  App\Http\Controllers;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreNewsRequest;
 use App\Http\Requests\UpdateNewsRequest;
 use App\Models\News;
-use App\Services\NewsService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-class AdminNewsPageController extends Controller 
+class AdminNewsPageController extends Controller
 {
-    public function __construct(
-        protected NewsService $newsService
-    ){
-
-    }
-
     public function index(Request $request): View
     {
         $filters = [
@@ -26,23 +18,37 @@ class AdminNewsPageController extends Controller
             'status' => $request->query('status'),
         ];
 
-        $perPage = (int) $request->query('per_page', 10);
+        $news = News::query()
+            ->when($filters['search'], function ($query) use ($filters) {
+                $query->where('title', 'like', '%' . $filters['search'] . '%')
+                    ->orWhere('content', 'like', '%' . $filters['search'] . '%');
+            })
+            ->when($filters['status'], function ($query) use ($filters) {
+                $query->where('status', $filters['status']);
+            })
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
 
-        $news = $this->newsService->getAll($filters, $perPage);
-
-        $allNews = News::query()->count();
-        $draftNews = News::query()->where('status', 'draft')->count();
-        $publishedNews = News::query()->where('status', 'published')->count();
+        $allNews = News::count();
+        $draftNews = News::where('status', 'draft')->count();
+        $publishedNews = News::where('status', 'published')->count();
 
         return view('admin.news.index', [
             'title' => 'Admin Desa - Berita Desa',
-            'pageTitle' => 'Manajemen Berita Desa',
-            'pageDescription' => 'Kelola berita dan informasi desa untuk dipublikasikan.',
+            'pageTitle' => 'Berita Desa',
+            'pageDescription' => 'Kelola informasi dan berita yang ditampilkan di sistem desa.',
+            'breadcrumbs' => [
+                ['label' => 'Berita Desa', 'url' => null],
+            ],
+
             'news' => $news,
+            'filters' => $filters,
+
+            // statistik untuk card di blade
             'allNews' => $allNews,
             'draftNews' => $draftNews,
             'publishedNews' => $publishedNews,
-            'filters' => $filters,
         ]);
     }
 
@@ -50,50 +56,64 @@ class AdminNewsPageController extends Controller
     {
         return view('admin.news.create', [
             'title' => 'Admin Desa - Tambah Berita',
-            'pageTitle' => 'Tambah Berita Desa',
-            'pageDescription' => 'Tambahkan berita baru untuk publikasi data.',
+            'pageTitle' => 'Tambah Berita',
+            'pageDescription' => 'Tambahkan berita baru untuk dipublikasikan.',
+            'breadcrumbs' => [
+                ['label' => 'Berita Desa', 'url' => route('admin.news.index')],
+                ['label' => 'Tambah Berita', 'url' => null],
+            ],
         ]);
     }
 
     public function store(StoreNewsRequest $request): RedirectResponse
     {
         $data = $request->validated();
-        $data['author_id'] = 1;
+        
+        if (auth()->check()) {
+            $data['author_id'] = auth()->id();
+        }
 
-        $this->newsService->create($data);
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('news', 'public');
+            $data['image'] = $path;
+        }
+
+        News::create($data);
 
         return redirect()
             ->route('admin.news.index')
-            ->with('success', 'Berita berhasil ditambahkan');
+            ->with('success', 'Berita berhasil ditambahkan.');
     }
 
-    public function edit(int $news): View
+    public function edit(News $news): View
     {
-        $newsData = $this->newsService->getById($news);
-
         return view('admin.news.edit', [
             'title' => 'Admin Desa - Edit Berita',
-            'pageTitle' => 'Edit Berita Desa',
-            'pageDescription' => 'Perbaharui konten berita desa',
-            'newsItem' => $newsData,
+            'pageTitle' => 'Edit Berita',
+            'pageDescription' => 'Perbarui berita yang sudah tersimpan.',
+            'breadcrumbs' => [
+                ['label' => 'Berita Desa', 'url' => route('admin.news.index')],
+                ['label' => 'Edit Berita', 'url' => null],
+            ],
+            'news' => $news,
         ]);
     }
 
-    public function update(UpdateNewsRequest $request, int $news): RedirectResponse
+    public function update(UpdateNewsRequest $request, News $news): RedirectResponse
     {
-        $this->newsService->update($news, $request->validated());
+        $news->update($request->validated());
 
         return redirect()
             ->route('admin.news.index')
-            ->with('success', 'Berita berhasil diperbaharui.');
+            ->with('success', 'Berita berhasil diperbarui.');
     }
 
-    public function destroy(int $news): RedirectResponse
+    public function destroy(News $news): RedirectResponse
     {
-        $this->newsService->delete($news);
+        $news->delete();
 
         return redirect()
             ->route('admin.news.index')
-            ->with('success', 'Berita berhasil dihapus');
+            ->with('success', 'Berita berhasil dihapus.');
     }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Letter;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Storage;
 
 class AdminLetterPdfController extends Controller
 {
@@ -20,6 +21,16 @@ class AdminLetterPdfController extends Controller
         return $pdf->stream('surat-keterangan-penghasilan-orang-tua.pdf');
     }
 
+    // public function download(int $letter)
+    // {
+    //     $letter = Letter::with(['letterType', 'citizen'])->findOrFail($letter);
+
+    //     $data = $this->buildTemplateData($letter);
+
+    //     $pdf = Pdf::loadView('admin.letters.pdf.parent-income-certificate', $data);
+
+    //     return $pdf->download('surat-keterangan-penghasilan-orang-tua.pdf');
+    // }
     public function download(int $letter)
     {
         $letter = Letter::with(['letterType', 'citizen'])->findOrFail($letter);
@@ -28,53 +39,64 @@ class AdminLetterPdfController extends Controller
 
         $pdf = Pdf::loadView('admin.letters.pdf.parent-income-certificate', $data);
 
-        return $pdf->download('surat-keterangan-penghasilan-orang-tua.pdf');
+        $filename = 'letters/' . str_replace('/', '-', $letter->letter_number) . '.pdf';
+
+        // Simpan file
+        Storage::disk('public')->put($filename, $pdf->output());
+
+        // Update database
+        $letter->update([
+            'result_file' => $filename
+        ]);
+
+        return response()->download(storage_path('app/public/' . $filename));
     }
 
     protected function buildTemplateData(Letter $letter): array
     {
+        $payload = $letter->payload ?? [];
+
         return [
             'letter' => $letter,
 
-            // Header instansi
             'government_name' => 'PEMERINTAH KABUPATEN TOBA',
             'district_name' => 'KECAMATAN ULUAN',
             'village_name' => 'DESA DOLOK NAGODANG',
 
-            // Pejabat penandatangan
             'signer_name' => 'BANGKIT MANURUNG',
             'signer_position' => 'Kepala Desa',
             'signer_address' => 'Desa Dolok Nagodang, Kec. Uluan, Kab. Toba',
 
-            // Data dummy sementara untuk template awal
             'father' => [
-                'name' => 'PAHOTAN SITORUS',
-                'birth' => 'Lumban Gala-Gala, 08-08-1961',
-                'religion' => 'Kristen',
-                'job' => 'Petani',
-                'address' => 'Desa Dolok Nagodang, Kec. Uluan, Kab. Toba, Prov. Sumut',
-                'income' => 'Rp.1.000.000/Bulan',
+                'name' => $payload['father_name'] ?? '-',
+                'birth' => $payload['father_birth'] ?? '-',
+                'religion' => $payload['father_religion'] ?? '-',
+                'job' => $payload['father_job'] ?? '-',
+                'address' => $payload['father_address'] ?? '-',
+                'income' => $payload['father_income'] ?? '-',
             ],
 
             'mother' => [
-                'name' => 'DERITA MANURUNG',
-                'birth' => 'Dolok Nagodang, 03-09-1970',
-                'gender' => 'Perempuan',
-                'job' => 'Petani',
-                'income' => 'Rp.500.000/Bulan',
+                'name' => $payload['mother_name'] ?? '-',
+                'birth' => $payload['mother_birth'] ?? '-',
+                'gender' => $payload['mother_gender'] ?? '-',
+                'job' => $payload['mother_job'] ?? '-',
+                'income' => $payload['mother_income'] ?? '-',
             ],
 
             'child' => [
-                'name' => optional($letter->citizen)->full_name ?? 'NAMA PEMOHON',
-                'birth' => 'Dolok Nagodang, 09-10-2006',
-                'gender' => 'Perempuan',
-                'job' => 'Mahasiswa Poli Teknik Negeri Lampung',
-                'religion' => 'Kristen',
-                'address' => 'Desa Dolok Nagodang, Kec. Uluan, Kab. Toba, Prov. Sumut',
+                'name' => $payload['child_name'] ?? optional($letter->citizen)->full_name ?? '-',
+                'birth' => $payload['child_birth'] ?? '-',
+                'gender' => $payload['child_gender'] ?? '-',
+                'job' => $payload['child_job'] ?? '-',
+                'religion' => $payload['child_religion'] ?? '-',
+                'address' => $payload['child_address'] ?? '-',
             ],
 
             'issued_location' => 'Dolok Nagodang',
-            'issued_date' => now()->translatedFormat('d F Y'),
+            'issued_date' => $letter->approval_date
+                ? $letter->approval_date->translatedFormat('d F Y')
+                : now()->translatedFormat('d F Y'),
         ];
     }
 }

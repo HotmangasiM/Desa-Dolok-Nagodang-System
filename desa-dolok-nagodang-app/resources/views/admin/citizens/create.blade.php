@@ -54,12 +54,27 @@
                 </div>
 
                 <div>
+<<<<<<< HEAD
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Jenis Kelamin <span class="text-rose-500">*</span></label>
                     <select name="gender"
                             class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
                         <option value="">Pilih Jenis Kelamin</option>
                         <option value="L" {{ old('gender') === 'L' ? 'selected' : '' }}>L</option>
                         <option value="P" {{ old('gender') === 'P' ? 'selected' : '' }}>P</option>
+=======
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Jenis Kelamin</label>
+                    <select
+                        name="gender"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    >
+                        <option value="">Pilih Jenis Kelamin</option>
+                        <option value="Laki-laki" {{ old('gender') === 'Laki-laki' ? 'selected' : '' }}>
+                            Laki-laki
+                        </option>
+                        <option value="Perempuan" {{ old('gender') === 'Perempuan' ? 'selected' : '' }}>
+                            Perempuan
+                        </option>
+>>>>>>> 595b8aaefe64cc84c33aaf8355f155426160421f
                     </select>
                 </div>
 
@@ -104,8 +119,24 @@
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Agama</label>
-                    <input type="text" name="religion" value="{{ old('religion') }}"
-                           class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    <select 
+                        name="religion"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    >
+                        <option value="">Pilih Agama</option>
+                        @foreach ([
+                            'Islam',
+                            'Kristen',
+                            'Katolik',
+                            'Hindu',
+                            'Buddha',
+                            'Konghucu'
+                        ] as $religion)
+                            <option value="{{ $religion }}" {{ old('religion') == $religion ? 'selected' : '' }}>
+                                {{ $religion }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
 
                 <div>
@@ -122,8 +153,22 @@
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Status Perkawinan</label>
-                    <input type="text" name="marital_status" value="{{ old('marital_status') }}"
-                           class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    <select 
+                        name="marital_status"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    >
+                        <option value="">Pilih Status</option>
+                        @foreach ([
+                            'belum_kawin' => 'Belum Kawin',
+                            'kawin' => 'Kawin',
+                            'cerai_hidup' => 'Cerai Hidup',
+                            'cerai_mati' => 'Cerai Mati'
+                        ] as $value => $label)
+                            <option value="{{ $value }}" {{ old('marital_status') == $value ? 'selected' : '' }}>
+                                {{ $label }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
         </div>
