@@ -8,6 +8,7 @@ use App\Models\News;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\Support\Str;
 
 class AdminNewsPageController extends Controller
 {
@@ -68,7 +69,18 @@ class AdminNewsPageController extends Controller
     public function store(StoreNewsRequest $request): RedirectResponse
     {
         $data = $request->validated();
-        
+
+        $baseSlug = Str::slug($data['title']);
+        $slug = $baseSlug;
+        $counter = 1;
+
+        while (News::where('slug', $slug)->exists()) {
+            $slug = $baseSlug . '-' . $counter;
+            $counter++;
+        }
+
+        $data['slug'] = $slug;
+
         if (auth()->check()) {
             $data['author_id'] = auth()->id();
         }
@@ -101,7 +113,25 @@ class AdminNewsPageController extends Controller
 
     public function update(UpdateNewsRequest $request, News $news): RedirectResponse
     {
-        $news->update($request->validated());
+        $data = $request->validated();
+
+        $baseSlug = Str::slug($data['title']);
+        $slug = $baseSlug;
+        $counter = 1;
+
+        while (News::where('slug', $slug)->where('id', '!=', $news->id)->exists()) {
+            $slug = $baseSlug . '-' . $counter;
+            $counter++;
+        }
+
+        $data['slug'] = $slug;
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('news', 'public');
+            $data['image'] = $path;
+        }
+
+        $news->update($data);
 
         return redirect()
             ->route('admin.news.index')
