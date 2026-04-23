@@ -37,44 +37,30 @@ class AdminDashboardController extends Controller
             ->take(5)
             ->get();
 
+        $currentYear = now()->year;
+
         $lettersByMonth = Letter::selectRaw('MONTH(submission_date) as month, COUNT(*) as total')
+            ->whereYear('submission_date', $currentYear)
             ->whereNotNull('submission_date')
             ->groupBy(DB::raw('MONTH(submission_date)'))
             ->orderBy(DB::raw('MONTH(submission_date)'))
-            ->get();
+            ->pluck('total', 'month');
 
-        $monthNames = [
-            1 => 'Jan',
-            2 => 'Feb',
-            3 => 'Mar',
-            4 => 'Apr',
-            5 => 'Mei',
-            6 => 'Jun',
-            7 => 'Jul',
-            8 => 'Agu',
-            9 => 'Sep',
-            10 => 'Okt',
-            11 => 'Nov',
-            12 => 'Des',
-        ];
-
-        $monthlyLabels = [];
+        $monthlyLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
         $monthlyData = [];
 
-        foreach ($lettersByMonth as $item) {
-            $monthlyLabels[] = $monthNames[(int) $item->month] ?? (string) $item->month;
-            $monthlyData[] = (int) $item->total;
+        for ($i = 1; $i <= 12; $i++) {
+            $monthlyData[] = (int) ($lettersByMonth[$i] ?? 0);
         }
 
         return view('admin.dashboard.index', [
             'title' => 'Admin Desa - Dashboard',
-            'pageTitle' => 'Dashboard Admin',
-            'pageDescription' => 'Ringkasan data dan aktivitas utama sistem informasi desa.',
+            'pageTitle' => 'Dashboard',
+            'pageDescription' => 'Ringkasan data sistem informasi desa.',
             'breadcrumbs' => [
                 ['label' => 'Dashboard', 'url' => null],
             ],
 
-            // Variabel utama
             'totalCitizens' => $totalCitizens,
             'maleCitizens' => $maleCitizens,
             'femaleCitizens' => $femaleCitizens,
@@ -96,7 +82,7 @@ class AdminDashboardController extends Controller
             'monthlyLabels' => $monthlyLabels,
             'monthlyData' => $monthlyData,
 
-            // Alias untuk kompatibilitas Blade lama
+            // alias kompatibilitas blade lama
             'allCitizens' => $totalCitizens,
             'allOfficials' => $totalOfficials,
             'allNews' => $totalNews,
