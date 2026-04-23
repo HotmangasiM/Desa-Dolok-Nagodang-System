@@ -3,14 +3,6 @@
 @section('content')
 <div class="space-y-6">
 
-    {{-- HEADER --}}
-    <!-- <div>
-        <h1 class="text-3xl font-bold text-slate-800">Dashboard</h1>
-        <p class="text-sm text-slate-500 mt-2">
-            Ringkasan data sistem informasi desa.
-        </p>
-    </div> -->
-
     {{-- STATISTICS --}}
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
 
@@ -90,7 +82,7 @@
         </div>
 
         <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm">
-            <p class="text-sm text-slate-500">Approved</p>
+            <p class="text-sm text-slate-500">Completed</p>
             <h3 class="text-3xl font-bold mt-2 text-slate-800">{{ $completedLetters }}</h3>
         </div>
     </div>
@@ -125,21 +117,21 @@
                                 {{ optional($letter->citizen)->full_name ?? '-' }}
                             </td>
                             <td class="px-5 py-3">
-                                @if ($letter->status === 'approved')
+                                @if ($letter->status === 'COMPLETED')
                                     <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700">
-                                        approved
+                                        completed
                                     </span>
-                                @elseif ($letter->status === 'submitted')
+                                @elseif ($letter->status === 'SUBMITTED')
                                     <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-700">
                                         submitted
                                     </span>
-                                @elseif ($letter->status === 'processed')
+                                @elseif ($letter->status === 'PROCESSING')
                                     <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-medium bg-sky-100 text-sky-700">
-                                        processed
+                                        processing
                                     </span>
                                 @else
-                                    <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-medium bg-rose-100 text-rose-700">
-                                        rejected
+                                    <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-700">
+                                        {{ strtolower($letter->status ?? '-') }}
                                     </span>
                                 @endif
                             </td>
@@ -160,6 +152,7 @@
 @endsection
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         // ===== CHART SURAT =====
@@ -167,21 +160,17 @@
 
         if (lettersCtx) {
             new Chart(lettersCtx, {
-                type: 'line',
+                type: 'bar',
                 data: {
-                    labels: @json($monthlyLabels),
+                    labels: @json($monthlyLabels ?? []),
                     datasets: [{
                         label: 'Jumlah Surat',
-                        data: @json($monthlyData),
-                        tension: 0.4,
-                        fill: true,
+                        data: @json($monthlyData ?? []),
+                        backgroundColor: 'rgba(16, 185, 129, 0.75)',
                         borderColor: '#10b981',
-                        backgroundColor: 'rgba(16, 185, 129, 0.10)',
-                        pointBackgroundColor: '#10b981',
-                        pointBorderColor: '#10b981',
-                        pointRadius: 4,
-                        pointHoverRadius: 6,
-                        borderWidth: 2
+                        borderWidth: 1,
+                        borderRadius: 8,
+                        maxBarThickness: 42
                     }]
                 },
                 options: {
@@ -196,7 +185,8 @@
                         y: {
                             beginAtZero: true,
                             ticks: {
-                                precision: 0
+                                precision: 0,
+                                stepSize: 1
                             },
                             grid: {
                                 color: 'rgba(148, 163, 184, 0.15)'
@@ -222,8 +212,8 @@
                     labels: ['Laki-laki', 'Perempuan'],
                     datasets: [{
                         data: [
-                            {{ $genderData['L'] ?? 0 }},
-                            {{ $genderData['P'] ?? 0 }}
+                            {{ $maleCitizens ?? 0 }},
+                            {{ $femaleCitizens ?? 0 }}
                         ],
                         backgroundColor: [
                             '#3b82f6',
