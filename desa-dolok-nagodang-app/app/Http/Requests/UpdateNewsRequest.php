@@ -13,13 +13,11 @@ class UpdateNewsRequest extends FormRequest
 
     public function rules(): array
     {
-        $id = $this->route('citizen');
-
         return [
             'title' => 'required|string|max:255',
             'content' => 'required|string',
-            'image' => 'nullable|string|max:255',
-            'status' => 'required|in:draft, published',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'status' => 'required|in:draft,published',
             'published_at' => 'nullable|date',
         ];
     }
