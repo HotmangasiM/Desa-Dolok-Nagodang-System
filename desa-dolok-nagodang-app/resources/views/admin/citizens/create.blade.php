@@ -54,14 +54,14 @@
                 </div>
 
                 <div>
-<<<<<<< HEAD
+<!-- <<<<<<< HEAD
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Jenis Kelamin <span class="text-rose-500">*</span></label>
                     <select name="gender"
                             class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
                         <option value="">Pilih Jenis Kelamin</option>
                         <option value="L" {{ old('gender') === 'L' ? 'selected' : '' }}>L</option>
                         <option value="P" {{ old('gender') === 'P' ? 'selected' : '' }}>P</option>
-=======
+======= -->
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Jenis Kelamin</label>
                     <select
                         name="gender"
@@ -74,7 +74,6 @@
                         <option value="Perempuan" {{ old('gender') === 'Perempuan' ? 'selected' : '' }}>
                             Perempuan
                         </option>
->>>>>>> 595b8aaefe64cc84c33aaf8355f155426160421f
                     </select>
                 </div>
 
@@ -251,7 +250,7 @@
                 Batal
             </a>
 
-            <button type="submit"
+            <button type="button" onclick="confirmSubmit()"
                     class="w-full sm:w-auto inline-flex items-center justify-center rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-700 shadow-lg shadow-emerald-600/20 transition">
                 Simpan Data Penduduk
             </button>
@@ -259,3 +258,24 @@
     </form>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+function confirmSubmit() {
+    Swal.fire({
+        title: 'Simpan Data?',
+        text: "Pastikan data sudah benar",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#10b981',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: 'Ya, simpan!',
+        cancelButtonText: 'Batal'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.querySelector('form[action="{{ route('admin.citizens.store') }}"]').submit();
+        }
+    });
+}
+</script>
+@endpush

@@ -172,7 +172,41 @@
             </main>
         </div>
     </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    @stack('scripts')
+{{-- SweetAlert Global --}}
+@if(session('success'))
+<script>
+Swal.fire({
+    icon: 'success',
+    title: 'Berhasil',
+    text: '{{ session('success') }}',
+    confirmButtonColor: '#10b981'
+});
+</script>
+@endif
+
+@if(session('error'))
+<script>
+Swal.fire({
+    icon: 'error',
+    title: 'Gagal',
+    text: '{{ session('error') }}',
+    confirmButtonColor: '#ef4444'
+});
+</script>
+@endif
+
+@if(session('warning'))
+<script>
+Swal.fire({
+    icon: 'warning',
+    title: 'Peringatan',
+    text: '{{ session('warning') }}'
+});
+</script>
+@endif
+
+@stack('scripts')
 </body>
 </html>
