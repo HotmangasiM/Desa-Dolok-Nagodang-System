@@ -97,17 +97,9 @@
                                     Admin
                                 </a>
 
-<<<<<<< HEAD
-                <div class="flex items-center gap-4">
-                    <button class="hidden md:inline-flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50 transition">
-                        🔔
-                        <span>Pemberitahuan</span>
-                    </button>
-=======
                                 @isset($breadcrumbs)
                                     @foreach ($breadcrumbs as $breadcrumb)
                                         <span>/</span>
->>>>>>> 595b8aaefe64cc84c33aaf8355f155426160421f
 
                                         @if (!empty($breadcrumb['url']))
                                             <a href="{{ $breadcrumb['url'] }}" class="hover:text-slate-700 transition">
