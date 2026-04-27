@@ -130,7 +130,7 @@
                         <th class="px-5 py-4 text-left font-semibold">Jabatan</th>
                         <th class="px-5 py-4 text-left font-semibold">No. Telepon</th>
                         <th class="px-5 py-4 text-left font-semibold">Email</th>
-                        <th class="px-5 py-4 text-left font-semibold">Masa Jabatan</th>
+                        <th class="px-5 py-4 text-left font-semibold">Alamat</th>
                         <th class="px-5 py-4 text-center font-semibold">Aksi</th>
                     </tr>
                 </thead>
@@ -150,9 +150,9 @@
                                         </div>
                                         <div>
                                             <p class="font-semibold text-slate-800">{{ $official->name }}</p>
-                                            <p class="text-xs text-slate-500 mt-1">
+                                            <!-- <p class="text-xs text-slate-500 mt-1">
                                                 {{ $official->photo ?? 'Tanpa foto' }}
-                                            </p>
+                                            </p> -->
                                         </div>
                                     </div>
                                 </div>
@@ -171,13 +171,14 @@
                             </td>
 
                             <td class="px-5 py-4 text-slate-600">
-                                @if ($official->term_start || $official->term_end)
+                                <!-- @if ($official->term_start || $official->term_end)
                                     {{ $official->term_start ? $official->term_start->format('d M Y') : '-' }}
                                     s/d
                                     {{ $official->term_end ? $official->term_end->format('d M Y') : '-' }}
                                 @else
                                     -
-                                @endif
+                                @endif -->
+                                {{ $official->address ?? '-' }}
                             </td>
 
                             <td class="px-5 py-4">
