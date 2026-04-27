@@ -3,7 +3,7 @@
 @section('content')
 <div class="space-y-6">
     <!-- Back + Header -->
-    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+    <!-- <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div>
             <a href="{{ route('admin.citizens.index') }}"
                class="inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-slate-700 mb-3">
@@ -15,7 +15,7 @@
                 Lengkapi form berikut untuk menambahkan data penduduk baru.
             </p>
         </div>
-    </div>
+    </div> -->
 
     @if ($errors->any())
         <div class="rounded-2xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-700">

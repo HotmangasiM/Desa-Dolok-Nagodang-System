@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="space-y-6">
-    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+    <!-- <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div>
             <a href="{{ route('admin.officials.index') }}"
                class="inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-slate-700 mb-3">
@@ -14,7 +14,7 @@
                 Lengkapi form berikut untuk menambahkan profil aparat desa baru.
             </p>
         </div>
-    </div>
+    </div> -->
 
     @if ($errors->any())
         <div class="rounded-2xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-700">
@@ -130,7 +130,7 @@
                     >
                 </div>
 
-                <div class="xl:col-span-3">
+                <!-- <div class="xl:col-span-3">
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Deskripsi</label>
                     <textarea
                         name="description"
@@ -138,7 +138,7 @@
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm leading-6 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         placeholder="Deskripsi singkat aparat desa..."
                     >{{ old('description') }}</textarea>
-                </div>
+                </div> -->
             </div>
         </div>
 
