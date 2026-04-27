@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="space-y-6">
-    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+    <!-- <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div>
             <a href="{{ route('admin.assets.index') }}"
                class="inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-slate-700 mb-3">
@@ -14,7 +14,7 @@
                 Perbarui informasi inventaris yang sudah tersimpan di sistem.
             </p>
         </div>
-    </div>
+    </div> -->
 
     @if ($errors->any())
         <div class="rounded-2xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-700">
@@ -27,7 +27,7 @@
         </div>
     @endif
 
-    <form action="{{ route('admin.assets.update', $asset->id) }}" method="POST" class="space-y-6">
+    <form action="{{ route('admin.assets.update', $asset->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
         @csrf
         @method('PUT')
 
@@ -148,12 +148,40 @@
 
                 <div class="md:col-span-2 xl:col-span-2">
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Foto Aset</label>
+
+                    {{-- Preview lama --}}
+                    <div class="mb-3">
+                        @if($asset->asset_photo)
+                            <img
+                                src="{{ asset('storage/' . $asset->asset_photo) }}"
+                                alt="{{ $asset->item_name }}"
+                                class="w-40 h-28 rounded-xl object-cover border border-slate-200 shadow-sm"
+                            >
+                            <p class="mt-2 text-xs text-slate-500">Foto saat ini</p>
+                        @else
+                            <div class="w-40 h-28 rounded-xl bg-slate-100 text-slate-400 flex items-center justify-center text-sm border border-slate-200">
+                                No Image
+                            </div>
+                        @endif
+                    </div>
+
+                    {{-- Upload --}}
                     <input
-                        type="text"
+                        type="file"
                         name="asset_photo"
-                        value="{{ old('asset_photo', $asset->asset_photo) }}"
+                        accept="image/*"
+                        onchange="previewAssetImage(event)"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                        placeholder="Contoh: assets/laptop-desa.jpg"
+                    >
+
+                    <p class="text-xs text-slate-500 mt-2">
+                        Kosongkan jika tidak ingin mengganti foto. Format: JPG, PNG, JPEG max 2MB.
+                    </p>
+
+                    {{-- Preview baru --}}
+                    <img
+                        id="assetImagePreview"
+                        class="hidden mt-3 w-40 h-28 rounded-xl object-cover border border-slate-200 shadow-sm"
                     >
                 </div>
 
@@ -194,3 +222,22 @@
     </form>
 </div>
 @endsection
+@push('scripts')
+<script>
+    function previewAssetImage(event) {
+        const input = event.target;
+        const preview = document.getElementById('assetImagePreview');
+
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.classList.remove('hidden');
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+@endpush

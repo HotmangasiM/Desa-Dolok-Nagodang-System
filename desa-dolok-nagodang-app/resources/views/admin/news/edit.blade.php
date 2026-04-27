@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="space-y-6">
-    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+    <!-- <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div>
             <a href="{{ route('admin.news.index') }}"
                class="inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-slate-700 mb-3">
@@ -14,7 +14,7 @@
                 Perbarui informasi berita yang sudah tersimpan di sistem.
             </p>
         </div>
-    </div>
+    </div> -->
 
     @if ($errors->any())
         <div class="rounded-2xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-700">
@@ -27,7 +27,7 @@
         </div>
     @endif
 
-    <form action="{{ route('admin.news.update', $newsItem->id) }}" method="POST" class="space-y-6">
+    <form action="{{ route('admin.news.update', $news->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
         @csrf
         @method('PUT')
 
@@ -45,7 +45,7 @@
                     <input
                         type="text"
                         name="title"
-                        value="{{ old('title', $newsItem->title) }}"
+                        value="{{ old('title', $news->title) }}"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         placeholder="Masukkan judul berita"
                     >
@@ -60,19 +60,44 @@
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     >
                         <option value="">Pilih Status</option>
-                        <option value="draft" {{ old('status', $newsItem->status) === 'draft' ? 'selected' : '' }}>draft</option>
-                        <option value="published" {{ old('status', $newsItem->status) === 'published' ? 'selected' : '' }}>published</option>
+                        <option value="draft" {{ old('status', $news->status) === 'draft' ? 'selected' : '' }}>draft</option>
+                        <option value="published" {{ old('status', $news->status) === 'published' ? 'selected' : '' }}>published</option>
                     </select>
                 </div>
 
                 <div class="xl:col-span-3">
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Thumbnail / Image</label>
+
+                    <div class="mb-3">
+                        @if($news->image)
+                            <img
+                                src="{{ asset('storage/' . $news->image) }}"
+                                alt="{{ $news->title }}"
+                                class="w-40 h-28 rounded-xl object-cover border border-slate-200 shadow-sm"
+                            >
+                            <p class="mt-2 text-xs text-slate-500">Thumbnail saat ini</p>
+                        @else
+                            <div class="w-40 h-28 rounded-xl bg-slate-100 text-slate-400 flex items-center justify-center text-sm border border-slate-200">
+                                No Image
+                            </div>
+                        @endif
+                    </div>
+
                     <input
-                        type="text"
+                        type="file"
                         name="image"
-                        value="{{ old('image', $newsItem->image) }}"
+                        accept="image/*"
+                        onchange="previewNewsImage(event)"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                        placeholder="Contoh: news/gotong-royong.jpg"
+                    >
+
+                    <p class="text-xs text-slate-500 mt-2">
+                        Kosongkan jika tidak ingin mengganti gambar. Format: JPG, PNG, JPEG max 2MB.
+                    </p>
+
+                    <img
+                        id="newsImagePreview"
+                        class="hidden mt-3 w-40 h-28 rounded-xl object-cover border border-slate-200 shadow-sm"
                     >
                 </div>
 
@@ -81,7 +106,7 @@
                     <input
                         type="datetime-local"
                         name="published_at"
-                        value="{{ old('published_at', $newsItem->published_at ? $newsItem->published_at->format('Y-m-d\TH:i') : '') }}"
+                        value="{{ old('published_at', $news->published_at ? $news->published_at->format('Y-m-d\TH:i') : '') }}"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     >
                 </div>
@@ -95,7 +120,7 @@
                         rows="12"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm leading-6 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         placeholder="Tulis isi berita desa di sini..."
-                    >{{ old('content', $newsItem->content) }}</textarea>
+                    >{{ old('content', $news->content) }}</textarea>
                 </div>
             </div>
         </div>
@@ -115,3 +140,22 @@
     </form>
 </div>
 @endsection
+@push('scripts')
+<script>
+    function previewNewsImage(event) {
+        const input = event.target;
+        const preview = document.getElementById('newsImagePreview');
+
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.classList.remove('hidden');
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+@endpush
