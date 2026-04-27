@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="space-y-6">
-    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+    <!-- <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div>
             <a href="{{ route('admin.officials.index') }}"
                class="inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-slate-700 mb-3">
@@ -14,7 +14,7 @@
                 Perbarui informasi profil aparat desa yang sudah tersimpan.
             </p>
         </div>
-    </div>
+    </div> -->
 
     @if ($errors->any())
         <div class="rounded-2xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-700">
@@ -27,7 +27,7 @@
         </div>
     @endif
 
-    <form action="{{ route('admin.officials.update', $official->id) }}" method="POST" class="space-y-6">
+    <form action="{{ route('admin.officials.update', $official->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
         @csrf
         @method('PUT')
 
@@ -65,15 +65,45 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">Foto</label>
-                    <input
-                        type="text"
-                        name="photo"
-                        value="{{ old('photo', $official->photo) }}"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                        placeholder="Contoh: officials/kepala-desa.jpg"
-                    >
+    <label class="block text-sm font-semibold text-slate-700 mb-2">Foto</label>
+
+                <div class="mb-3">
+                    @if($official->photo)
+                        <img
+                            src="{{ asset('storage/' . $official->photo) }}"
+                            alt="{{ $official->name }}"
+                            class="w-28 h-28 rounded-2xl object-cover border border-slate-200 shadow-sm"
+                        >
+                        <p class="mt-2 text-xs text-slate-500">
+                            Foto saat ini
+                        </p>
+                    @else
+                        <div class="w-28 h-28 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-3xl font-bold">
+                            {{ strtoupper(substr($official->name, 0, 1)) }}
+                        </div>
+                        <p class="mt-2 text-xs text-slate-500">
+                            Belum ada foto
+                        </p>
+                    @endif
                 </div>
+
+                <input
+                    type="file"
+                    name="photo"
+                    accept="image/*"
+                    onchange="previewOfficialPhoto(event)"
+                    class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                >
+
+                <p class="text-xs text-slate-500 mt-2">
+                    Kosongkan jika tidak ingin mengganti foto. Format: JPG, PNG, JPEG max 2MB.
+                </p>
+
+                <img
+                    id="officialPhotoPreview"
+                    class="hidden mt-3 w-28 h-28 rounded-2xl object-cover border border-slate-200 shadow-sm"
+                >
+            </div>
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">No. HP</label>
@@ -128,7 +158,7 @@
                     >
                 </div>
 
-                <div class="xl:col-span-3">
+                <!-- <div class="xl:col-span-3">
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Deskripsi</label>
                     <textarea
                         name="description"
@@ -136,7 +166,7 @@
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm leading-6 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         placeholder="Deskripsi singkat aparat desa..."
                     >{{ old('description', $official->description) }}</textarea>
-                </div>
+                </div> -->
             </div>
         </div>
 
@@ -155,3 +185,23 @@
     </form>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    function previewOfficialPhoto(event) {
+        const input = event.target;
+        const preview = document.getElementById('officialPhotoPreview');
+
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.classList.remove('hidden');
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+@endpush

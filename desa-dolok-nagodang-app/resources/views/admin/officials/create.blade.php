@@ -130,7 +130,7 @@
                     >
                 </div>
 
-                <div class="xl:col-span-3">
+                <!-- <div class="xl:col-span-3">
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Deskripsi</label>
                     <textarea
                         name="description"
@@ -138,7 +138,7 @@
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm leading-6 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         placeholder="Deskripsi singkat aparat desa..."
                     >{{ old('description') }}</textarea>
-                </div>
+                </div> -->
             </div>
         </div>
 
