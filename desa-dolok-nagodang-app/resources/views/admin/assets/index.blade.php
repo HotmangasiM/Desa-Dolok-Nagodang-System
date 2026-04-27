@@ -173,9 +173,9 @@
                             <td class="px-5 py-4">
                                 <div>
                                     <p class="font-semibold text-slate-800">{{ $asset->item_name }}</p>
-                                    <p class="text-xs text-slate-500 mt-1">
+                                    <!-- <p class="text-xs text-slate-500 mt-1">
                                         {{ $asset->description ? \Illuminate\Support\Str::limit(strip_tags($asset->description), 60) : '-' }}
-                                    </p>
+                                    </p> -->
                                 </div>
                             </td>
 
