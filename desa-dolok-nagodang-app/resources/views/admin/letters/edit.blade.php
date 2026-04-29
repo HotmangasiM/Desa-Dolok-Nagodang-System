@@ -2,6 +2,8 @@
 
 @section('content')
 @php
+    $payload = old('payload', $letter->payload ?? []);
+
     $statusFormValue = old('status');
 
     if (!$statusFormValue) {
@@ -15,20 +17,6 @@
 @endphp
 
 <div class="space-y-6">
-    <!-- <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-        <div>
-            <a href="{{ route('admin.letters.index') }}"
-               class="inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-slate-700 mb-3">
-                ← Kembali ke Surat Elektronik
-            </a>
-
-            <h1 class="text-3xl font-bold tracking-tight text-slate-800">Edit Surat Elektronik</h1>
-            <p class="text-sm text-slate-500 mt-2">
-                Perbarui informasi surat elektronik yang sudah tersimpan.
-            </p>
-        </div>
-    </div> -->
-
     @if ($errors->any())
         <div class="rounded-2xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-700">
             <div class="font-semibold mb-2">Terjadi kesalahan pada input:</div>
@@ -100,6 +88,7 @@
                         @foreach ($citizens as $citizen)
                             <option
                                 value="{{ $citizen->id }}"
+                                data-nik="{{ $citizen->nik }}"
                                 data-full-name="{{ $citizen->full_name }}"
                                 data-birth-place="{{ $citizen->birth_place }}"
                                 data-birth-date="{{ $citizen->birth_date }}"
@@ -164,7 +153,7 @@
                         name="result_file"
                         value="{{ old('result_file', $letter->result_file) }}"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                        placeholder="Contoh: letters/surat-001.pdf"
+                        placeholder="Otomatis setelah PDF dibuat"
                     >
                 </div>
 
@@ -190,207 +179,333 @@
             </div>
         </div>
 
-        {{-- Data Tambahan Surat --}}
+        {{-- Data Tambahan Surat Dinamis --}}
         <div id="payloadSection" class="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden hidden">
             <div class="px-6 py-4 border-b border-slate-200">
                 <h2 class="text-lg font-bold text-slate-800">Data Tambahan Surat</h2>
                 <p id="payloadDescription" class="text-sm text-slate-500 mt-1">
-                    Lengkapi data khusus untuk template surat.
+                    Lengkapi data khusus sesuai jenis surat yang dipilih.
                 </p>
             </div>
 
-            <div class="p-6 space-y-8">
-                {{-- Data Ayah --}}
-                <div>
-                    <h3 class="text-base font-bold text-slate-800 mb-4">Data Ayah</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-2">Nama Ayah</label>
-                            <input
-                                type="text"
-                                name="payload[father_name]"
-                                value="{{ old('payload.father_name', $letter->payload['father_name'] ?? '') }}"
-                                class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                            >
-                        </div>
+            <div class="p-6">
+                {{-- DOM --}}
+                <div data-letter-fields="DOM" class="letter-fields hidden">
+                    <div class="rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-sm text-emerald-700">
+                        Surat Domisili menggunakan data alamat dari data penduduk yang dipilih.
+                    </div>
+                </div>
 
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-2">Tempat/Tgl Lahir Ayah</label>
-                            <input
-                                type="text"
-                                name="payload[father_birth]"
-                                value="{{ old('payload.father_birth', $letter->payload['father_birth'] ?? '') }}"
-                                class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                            >
-                        </div>
+                {{-- SKTM --}}
+                <div data-letter-fields="SKTM" class="letter-fields hidden grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">
+                            Keperluan Surat
+                        </label>
+                        <input
+                            type="text"
+                            name="payload[purpose]"
+                            value="{{ $payload['purpose'] ?? '' }}"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                            placeholder="Contoh: Permohonan bantuan pendidikan"
+                        >
+                    </div>
 
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-2">Agama Ayah</label>
-                            <input
-                                type="text"
-                                name="payload[father_religion]"
-                                value="{{ old('payload.father_religion', $letter->payload['father_religion'] ?? '') }}"
-                                class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                            >
-                        </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">
+                            Keterangan Tambahan
+                        </label>
+                        <textarea
+                            name="payload[additional_notes]"
+                            rows="3"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm leading-6 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                            placeholder="Opsional"
+                        >{{ $payload['additional_notes'] ?? '' }}</textarea>
+                    </div>
+                </div>
 
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-2">Pekerjaan Ayah</label>
-                            <input
-                                type="text"
-                                name="payload[father_job]"
-                                value="{{ old('payload.father_job', $letter->payload['father_job'] ?? '') }}"
-                                class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                            >
-                        </div>
+                {{-- YTM --}}
+                <div data-letter-fields="YTM" class="letter-fields hidden space-y-8">
+                    <div>
+                        <h3 class="text-base font-bold text-slate-800 mb-4">Data Orang Tua</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">Nama Ayah</label>
+                                <input
+                                    type="text"
+                                    name="payload[father_name]"
+                                    value="{{ $payload['father_name'] ?? '' }}"
+                                    class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                                >
+                            </div>
 
-                        <div class="md:col-span-2">
-                            <label class="block text-sm font-semibold text-slate-700 mb-2">Alamat Ayah</label>
-                            <input
-                                type="text"
-                                name="payload[father_address]"
-                                value="{{ old('payload.father_address', $letter->payload['father_address'] ?? '') }}"
-                                class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                            >
-                        </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">Nama Ibu</label>
+                                <input
+                                    type="text"
+                                    name="payload[mother_name]"
+                                    value="{{ $payload['mother_name'] ?? '' }}"
+                                    class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                                >
+                            </div>
 
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-2">Penghasilan Ayah</label>
-                            <input
-                                type="text"
-                                name="payload[father_income]"
-                                value="{{ old('payload.father_income', $letter->payload['father_income'] ?? '') }}"
-                                class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                            >
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">Status Yatim</label>
+                                <select
+                                    name="payload[orphan_status]"
+                                    class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                                >
+                                    <option value="">Pilih Status</option>
+                                    <option value="Yatim" {{ ($payload['orphan_status'] ?? '') === 'Yatim' ? 'selected' : '' }}>Yatim</option>
+                                    <option value="Piatu" {{ ($payload['orphan_status'] ?? '') === 'Piatu' ? 'selected' : '' }}>Piatu</option>
+                                    <option value="Yatim Piatu" {{ ($payload['orphan_status'] ?? '') === 'Yatim Piatu' ? 'selected' : '' }}>Yatim Piatu</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">Tanggal Meninggal Orang Tua</label>
+                                <input
+                                    type="date"
+                                    name="payload[parent_death_date]"
+                                    value="{{ $payload['parent_death_date'] ?? '' }}"
+                                    class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                                >
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">Tinggal Bersama / Nama Orang Tua Wali</label>
+                                <input
+                                    type="text"
+                                    name="payload[guardian_name]"
+                                    value="{{ old('payload.guardian_name') }}"
+                                    class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                                    placeholder="Contoh: Nama ibu / wali"
+                                >
+                            </div>
+
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">Alamat Orang Tua / Wali</label>
+                                <input
+                                    type="text"
+                                    name="payload[guardian_address]"
+                                    value="{{ old('payload.guardian_address') }}"
+                                    class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                                    placeholder="Contoh: Dusun I Dolok Nagodang"
+                                >
+                            </div>
+
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">Keterangan</label>
+                                <textarea
+                                    name="payload[orphan_notes]"
+                                    rows="3"
+                                    class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm leading-6 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                                >{{ $payload['orphan_notes'] ?? '' }}</textarea>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                {{-- Data Ibu --}}
-                <div>
-                    <h3 class="text-base font-bold text-slate-800 mb-4">Data Ibu</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-2">Nama Ibu</label>
-                            <input
-                                type="text"
-                                name="payload[mother_name]"
-                                value="{{ old('payload.mother_name', $letter->payload['mother_name'] ?? '') }}"
-                                class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                            >
-                        </div>
+                {{-- SKOT --}}
+                <div data-letter-fields="SKOT" class="letter-fields hidden space-y-8">
 
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-2">Tempat/Tgl Lahir Ibu</label>
-                            <input
-                                type="text"
-                                name="payload[mother_birth]"
-                                value="{{ old('payload.mother_birth', $letter->payload['mother_birth'] ?? '') }}"
-                                class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                            >
-                        </div>
+                    {{-- Data Ayah --}}
+                    <div>
+                        <h3 class="text-base font-bold text-slate-800 mb-4">Data Ayah</h3>
 
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-2">Jenis Kelamin Ibu</label>
-                            <input
-                                type="text"
-                                name="payload[mother_gender]"
-                                value="{{ old('payload.mother_gender', $letter->payload['mother_gender'] ?? '') }}"
-                                class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                            >
-                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                                    Pilih Ayah <span class="text-rose-500">*</span>
+                                </label>
+                                <select
+                                    name="payload[father_citizen_id]"
+                                    class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                                >
+                                    <option value="">Pilih Data Ayah</option>
+                                    @foreach ($citizens as $citizen)
+                                        <option
+                                            value="{{ $citizen->id }}"
+                                            {{ (string)($payload['father_citizen_id'] ?? '') === (string)$citizen->id ? 'selected' : '' }}
+                                        >
+                                            {{ $citizen->full_name }} - {{ $citizen->nik }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
 
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-2">Pekerjaan Ibu</label>
-                            <input
-                                type="text"
-                                name="payload[mother_job]"
-                                value="{{ old('payload.mother_job', $letter->payload['mother_job'] ?? '') }}"
-                                class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                            >
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                                    Penghasilan Ayah <span class="text-rose-500">*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    name="payload[father_income]"
+                                    value="{{ $payload['father_income'] ?? '' }}"
+                                    class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                                    placeholder="Contoh: Rp. 1.000.000/Bulan"
+                                >
+                            </div>
                         </div>
+                    </div>
 
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-2">Penghasilan Ibu</label>
-                            <input
-                                type="text"
-                                name="payload[mother_income]"
-                                value="{{ old('payload.mother_income', $letter->payload['mother_income'] ?? '') }}"
-                                class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                            >
+                    {{-- Data Ibu --}}
+                    <div>
+                        <h3 class="text-base font-bold text-slate-800 mb-4">Data Ibu</h3>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                                    Pilih Ibu <span class="text-rose-500">*</span>
+                                </label>
+                                <select
+                                    name="payload[mother_citizen_id]"
+                                    class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                                >
+                                    <option value="">Pilih Data Ibu</option>
+                                    @foreach ($citizens as $citizen)
+                                        <option
+                                            value="{{ $citizen->id }}"
+                                            {{ (string)($payload['mother_citizen_id'] ?? '') === (string)$citizen->id ? 'selected' : '' }}
+                                        >
+                                            {{ $citizen->full_name }} - {{ $citizen->nik }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                                    Penghasilan Ibu <span class="text-rose-500">*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    name="payload[mother_income]"
+                                    value="{{ $payload['mother_income'] ?? '' }}"
+                                    class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                                    placeholder="Contoh: Rp. 500.000/Bulan"
+                                >
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Data Anak / Pemohon --}}
+                    <div>
+                        <h3 class="text-base font-bold text-slate-800 mb-4">Data Anak / Pemohon</h3>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">Nama Anak</label>
+                                <input
+                                    id="payload_child_name"
+                                    type="text"
+                                    name="payload[child_name]"
+                                    value="{{ $payload['child_name'] ?? '' }}"
+                                    class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                                >
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">Tempat/Tgl Lahir Anak</label>
+                                <input
+                                    id="payload_child_birth"
+                                    type="text"
+                                    name="payload[child_birth]"
+                                    value="{{ $payload['child_birth'] ?? '' }}"
+                                    class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                                >
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">Jenis Kelamin Anak</label>
+                                <input
+                                    id="payload_child_gender"
+                                    type="text"
+                                    name="payload[child_gender]"
+                                    value="{{ $payload['child_gender'] ?? '' }}"
+                                    class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                                >
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">Pekerjaan Anak</label>
+                                <input
+                                    id="payload_child_job"
+                                    type="text"
+                                    name="payload[child_job]"
+                                    value="{{ $payload['child_job'] ?? '' }}"
+                                    class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                                >
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">Agama Anak</label>
+                                <input
+                                    id="payload_child_religion"
+                                    type="text"
+                                    name="payload[child_religion]"
+                                    value="{{ $payload['child_religion'] ?? '' }}"
+                                    class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                                >
+                            </div>
+
+                            <div class="md:col-span-2 xl:col-span-2">
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">Alamat Anak</label>
+                                <input
+                                    id="payload_child_address"
+                                    type="text"
+                                    name="payload[child_address]"
+                                    value="{{ $payload['child_address'] ?? '' }}"
+                                    class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                                >
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                {{-- Data Anak --}}
-                <div>
-                    <h3 class="text-base font-bold text-slate-800 mb-4">Data Anak</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-2">Nama Anak</label>
-                            <input
-                                id="payload_child_name"
-                                type="text"
-                                name="payload[child_name]"
-                                value="{{ old('payload.child_name', $letter->payload['child_name'] ?? '') }}"
-                                class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                            >
-                        </div>
+                {{-- SKU --}}
+                <div data-letter-fields="SKU" class="letter-fields hidden grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Nama Usaha</label>
+                        <input
+                            type="text"
+                            name="payload[business_name]"
+                            value="{{ $payload['business_name'] ?? '' }}"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                            placeholder="Contoh: Warung Sembako"
+                        >
+                    </div>
 
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-2">Tempat/Tgl Lahir Anak</label>
-                            <input
-                                id="payload_child_birth"
-                                type="text"
-                                name="payload[child_birth]"
-                                value="{{ old('payload.child_birth', $letter->payload['child_birth'] ?? '') }}"
-                                class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                            >
-                        </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Jenis Usaha</label>
+                        <input
+                            type="text"
+                            name="payload[business_type]"
+                            value="{{ $payload['business_type'] ?? '' }}"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                            placeholder="Contoh: Perdagangan"
+                        >
+                    </div>
 
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-2">Jenis Kelamin Anak</label>
-                            <input
-                                id="payload_child_gender"
-                                type="text"
-                                name="payload[child_gender]"
-                                value="{{ old('payload.child_gender', $letter->payload['child_gender'] ?? '') }}"
-                                class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                            >
-                        </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Alamat Usaha</label>
+                        <input
+                            type="text"
+                            name="payload[business_address]"
+                            value="{{ $payload['business_address'] ?? '' }}"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                            placeholder="Contoh: Dusun I Dolok Nagodang"
+                        >
+                    </div>
 
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-2">Pekerjaan Anak</label>
-                            <input
-                                id="payload_child_job"
-                                type="text"
-                                name="payload[child_job]"
-                                value="{{ old('payload.child_job', $letter->payload['child_job'] ?? '') }}"
-                                class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                            >
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-2">Agama Anak</label>
-                            <input
-                                id="payload_child_religion"
-                                type="text"
-                                name="payload[child_religion]"
-                                value="{{ old('payload.child_religion', $letter->payload['child_religion'] ?? '') }}"
-                                class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                            >
-                        </div>
-
-                        <div class="md:col-span-2 xl:col-span-2">
-                            <label class="block text-sm font-semibold text-slate-700 mb-2">Alamat Anak</label>
-                            <input
-                                id="payload_child_address"
-                                type="text"
-                                name="payload[child_address]"
-                                value="{{ old('payload.child_address', $letter->payload['child_address'] ?? '') }}"
-                                class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                            >
-                        </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Keperluan Surat</label>
+                        <input
+                            type="text"
+                            name="payload[business_purpose]"
+                            value="{{ $payload['business_purpose'] ?? '' }}"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                            placeholder="Contoh: Persyaratan administrasi"
+                        >
                     </div>
                 </div>
             </div>
@@ -416,110 +531,124 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const letterTypeSelect = document.getElementById('letter_type_id');
+        const citizenSelect = document.getElementById('citizen_id');
         const payloadSection = document.getElementById('payloadSection');
         const payloadDescription = document.getElementById('payloadDescription');
-        const citizenSelect = document.getElementById('citizen_id');
+        const fieldGroups = document.querySelectorAll('.letter-fields');
 
-        const childNameInput = document.getElementById('payload_child_name');
-        const childBirthInput = document.getElementById('payload_child_birth');
-        const childGenderInput = document.getElementById('payload_child_gender');
-        const childJobInput = document.getElementById('payload_child_job');
-        const childReligionInput = document.getElementById('payload_child_religion');
-        const childAddressInput = document.getElementById('payload_child_address');
+        const descriptionMap = {
+            DOM: 'Surat Domisili menggunakan data alamat dari data penduduk.',
+            SKTM: 'Lengkapi keperluan atau keterangan untuk Surat Keterangan Tidak Mampu.',
+            YTM: 'Lengkapi data pendukung untuk Surat Yatim.',
+            SKOT: 'Lengkapi data orang tua dan data anak untuk Surat Keterangan Orang Tua.',
+            SKU: 'Lengkapi data usaha untuk Surat Keterangan Usaha.'
+        };
 
-        function formatGender(gender) {
-            if (gender === 'L') return 'Laki-laki';
-            if (gender === 'P') return 'Perempuan';
-            return gender || '';
+        function getSelectedLetterCode() {
+            const selectedOption = letterTypeSelect.options[letterTypeSelect.selectedIndex];
+            return selectedOption ? (selectedOption.dataset.code || '').toUpperCase() : '';
         }
 
-        function formatBirth(place, date) {
-            if (place && date) return `${place}, ${date}`;
-            if (place) return place;
-            if (date) return date;
-            return '';
+        function setGroupInputsDisabled(group, disabled) {
+            group.querySelectorAll('input, textarea, select').forEach(function (input) {
+                input.disabled = disabled;
+            });
         }
 
-        function formatAddress(address, village, district, regency, province) {
-            const parts = [address, village, district, regency, province].filter(Boolean);
-            return parts.join(', ');
-        }
+        function toggleLetterFields() {
+            const selectedCode = getSelectedLetterCode();
 
-        function autoFillFromCitizen() {
-            const selectedOption = citizenSelect.options[citizenSelect.selectedIndex];
+            fieldGroups.forEach(function (group) {
+                group.classList.add('hidden');
+                setGroupInputsDisabled(group, true);
+            });
 
-            if (!selectedOption || !selectedOption.value) {
+            if (!selectedCode) {
+                payloadSection.classList.add('hidden');
                 return;
             }
 
-            const fullName = selectedOption.dataset.fullName || '';
-            const birthPlace = selectedOption.dataset.birthPlace || '';
-            const birthDate = selectedOption.dataset.birthDate || '';
-            const gender = selectedOption.dataset.gender || '';
-            const religion = selectedOption.dataset.religion || '';
-            const occupation = selectedOption.dataset.occupation || '';
-            const address = selectedOption.dataset.address || '';
-            const village = selectedOption.dataset.village || '';
-            const district = selectedOption.dataset.district || '';
-            const regency = selectedOption.dataset.regency || '';
-            const province = selectedOption.dataset.province || '';
+            const selectedGroup = document.querySelector('[data-letter-fields="' + selectedCode + '"]');
 
-            if (childNameInput && !childNameInput.value.trim()) {
-                childNameInput.value = fullName;
-            }
-
-            if (childBirthInput && !childBirthInput.value.trim()) {
-                childBirthInput.value = formatBirth(birthPlace, birthDate);
-            }
-
-            if (childGenderInput && !childGenderInput.value.trim()) {
-                childGenderInput.value = formatGender(gender);
-            }
-
-            if (childJobInput && !childJobInput.value.trim()) {
-                childJobInput.value = occupation;
-            }
-
-            if (childReligionInput && !childReligionInput.value.trim()) {
-                childReligionInput.value = religion;
-            }
-
-            if (childAddressInput && !childAddressInput.value.trim()) {
-                childAddressInput.value = formatAddress(address, village, district, regency, province);
-            }
-        }
-
-        function togglePayloadSection() {
-            const selectedOption = letterTypeSelect.options[letterTypeSelect.selectedIndex];
-            const code = selectedOption ? (selectedOption.dataset.code || '').toUpperCase() : '';
-
-            const supportedCodes = ['SKPO', 'SKPOT', 'SKTM', 'SKD', 'SKU'];
-
-            if (code && supportedCodes.includes(code)) {
-                payloadSection.classList.remove('hidden');
-
-                if (code === 'SKPO' || code === 'SKPOT') {
-                    payloadDescription.textContent = 'Lengkapi data penghasilan orang tua untuk kebutuhan template surat.';
-                } else if (code === 'SKTM') {
-                    payloadDescription.textContent = 'Lengkapi data tambahan untuk surat keterangan tidak mampu.';
-                } else if (code === 'SKD') {
-                    payloadDescription.textContent = 'Lengkapi data tambahan untuk surat domisili jika diperlukan.';
-                } else if (code === 'SKU') {
-                    payloadDescription.textContent = 'Lengkapi data tambahan untuk surat keterangan usaha jika diperlukan.';
-                } else {
-                    payloadDescription.textContent = 'Lengkapi data khusus untuk template surat.';
-                }
-            } else {
+            if (!selectedGroup) {
                 payloadSection.classList.add('hidden');
-                payloadDescription.textContent = 'Lengkapi data khusus untuk template surat.';
+                return;
+            }
+
+            payloadSection.classList.remove('hidden');
+            selectedGroup.classList.remove('hidden');
+            setGroupInputsDisabled(selectedGroup, false);
+
+            payloadDescription.textContent = descriptionMap[selectedCode] || 'Lengkapi data tambahan surat.';
+        }
+
+        function selectedCitizenData() {
+            const selectedOption = citizenSelect.options[citizenSelect.selectedIndex];
+
+            if (!selectedOption || !selectedOption.value) {
+                return null;
+            }
+
+            return {
+                fullName: selectedOption.dataset.fullName || '',
+                birthPlace: selectedOption.dataset.birthPlace || '',
+                birthDate: selectedOption.dataset.birthDate || '',
+                gender: selectedOption.dataset.gender || '',
+                religion: selectedOption.dataset.religion || '',
+                occupation: selectedOption.dataset.occupation || '',
+                address: selectedOption.dataset.address || '',
+            };
+        }
+
+        function formatBirth(data) {
+            if (!data) return '';
+
+            const place = data.birthPlace || '';
+            const date = data.birthDate ? data.birthDate.substring(0, 10) : '';
+
+            if (place && date) {
+                return place + ', ' + date;
+            }
+
+            return place || date || '';
+        }
+
+        function setValueIfEmpty(id, value) {
+            const input = document.getElementById(id);
+
+            if (input && !input.value) {
+                input.value = value || '';
             }
         }
 
-        togglePayloadSection();
-        autoFillFromCitizen();
+        function autofillChildPayload() {
+            const data = selectedCitizenData();
 
-        letterTypeSelect.addEventListener('change', togglePayloadSection);
-        citizenSelect.addEventListener('change', autoFillFromCitizen);
+            if (!data) return;
+
+            setValueIfEmpty('payload_child_name', data.fullName);
+            setValueIfEmpty('payload_child_birth', formatBirth(data));
+            setValueIfEmpty('payload_child_gender', data.gender);
+            setValueIfEmpty('payload_child_job', data.occupation);
+            setValueIfEmpty('payload_child_religion', data.religion);
+            setValueIfEmpty('payload_child_address', data.address);
+        }
+
+        if (letterTypeSelect) {
+            letterTypeSelect.addEventListener('change', function () {
+                toggleLetterFields();
+                autofillChildPayload();
+            });
+        }
+
+        if (citizenSelect) {
+            citizenSelect.addEventListener('change', function () {
+                autofillChildPayload();
+            });
+        }
+
+        toggleLetterFields();
+        autofillChildPayload();
     });
 </script>
 @endpush
