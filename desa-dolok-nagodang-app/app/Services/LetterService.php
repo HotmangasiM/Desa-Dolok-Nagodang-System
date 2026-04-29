@@ -62,7 +62,7 @@ class LetterService
         //Hardcode sementar untuk field created_by oleh admin
         $data['created_by'] = auth()->id();
 
-
+        $data['payload'] = $data['payload'] ?? [];
         unset($data['citizen_id']);
 
         Log::debug('Data final sebelum insert letter', $data);
@@ -93,6 +93,8 @@ class LetterService
         if (!empty($data['status'])) {
             $data['status'] = $statusMap[$data['status']] ?? $data['status'];
         }
+
+        $data['payload'] = $data['payload'] ?? [];
 
         unset($data['citizen_id']);
 
