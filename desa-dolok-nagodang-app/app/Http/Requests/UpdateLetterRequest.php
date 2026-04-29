@@ -28,7 +28,7 @@ class UpdateLetterRequest extends FormRequest
             'subject' => 'required|string|max:255',
             'description' => 'nullable|string',
             'payload' => 'nullable|array',
-            'status' => 'required|in:submitted,processed,approved,rejected',
+            'status' => 'required|in:submitted,processed,approved',
             'submission_date' => 'nullable|date',
             'result_file' => 'nullable|string|max:255',
             'notes' => 'nullable|string',
