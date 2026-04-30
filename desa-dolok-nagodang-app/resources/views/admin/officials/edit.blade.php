@@ -187,21 +187,85 @@
 @endsection
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
-    function previewOfficialPhoto(event) {
-        const input = event.target;
-        const preview = document.getElementById('officialPhotoPreview');
+document.addEventListener('DOMContentLoaded', function () {
 
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-
-            reader.onload = function(e) {
-                preview.src = e.target.result;
-                preview.classList.remove('hidden');
-            };
-
-            reader.readAsDataURL(input.files[0]);
-        }
+    if (typeof Swal === 'undefined') {
+        console.error('SweetAlert tidak ter-load!');
+        return;
     }
+
+    // ✅ TOAST SUCCESS (setelah update)
+    @if(session('success'))
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            title: '{{ session('success') }}',
+            showConfirmButton: false,
+            timer: 2500,
+            timerProgressBar: true
+        });
+    @endif
+
+
+    // ✅ CONFIRM EDIT
+    document.addEventListener('submit', function (e) {
+
+        const form = e.target;
+
+        // target hanya form officials
+        if (!form.action.includes('officials')) return;
+
+        // cegah loop
+        if (form.dataset.confirmed === 'true') return;
+
+        e.preventDefault();
+
+        // ambil nama aparat
+        const nama = form.querySelector('input[name="name"]').value || 'data ini';
+
+        Swal.fire({
+            title: 'Simpan Perubahan?',
+            html: `
+                <p class="text-sm text-slate-600">
+                    Perubahan untuk <b>${nama}</b> akan disimpan.
+                </p>
+            `,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, simpan',
+            cancelButtonText: 'Batal',
+            confirmButtonColor: '#10b981',
+            cancelButtonColor: '#6b7280',
+            reverseButtons: true,
+            focusCancel: true
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+
+                form.dataset.confirmed = 'true';
+
+                Swal.fire({
+                    title: 'Menyimpan...',
+                    text: 'Mohon tunggu sebentar',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    showConfirmButton: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                form.submit();
+            }
+
+        });
+
+    });
+
+});
 </script>
 @endpush

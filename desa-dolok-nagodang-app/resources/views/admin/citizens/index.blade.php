@@ -200,13 +200,20 @@
                                         Edit
                                     </a>
 
-                                    <button
-                                        type="button"
-                                        class="rounded-lg bg-rose-50 px-3 py-2 text-rose-700 font-medium hover:bg-rose-100 transition"
-                                        onclick="openDeleteModal('{{ $citizen->id }}', '{{ addslashes($citizen->full_name) }}')"
-                                    >
-                                        Hapus
-                                    </button>
+                            <form action="{{ route('admin.citizens.destroy', $citizen->id) }}" 
+                                method="POST" 
+                                class="inline">
+                                @csrf
+                                @method('DELETE')
+
+                                <button
+                                    type="button"
+                                    class="btn-delete rounded-lg bg-rose-50 px-3 py-2 text-rose-700 font-medium hover:bg-rose-100 transition"
+                                    data-name="{{ $citizen->full_name }}"
+                                >
+                                    Hapus
+                                </button>
+                            </form>
                                 </div>
                             </td>
                         </tr>
@@ -282,26 +289,82 @@
 @endsection
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
-    function openDeleteModal(id, name) {
-        document.getElementById('citizenName').textContent = name;
-        document.getElementById('deleteCitizenForm').action = `/admin/citizens/${id}`;
-        const modal = document.getElementById('deleteModal');
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
+document.addEventListener('DOMContentLoaded', function () {
+
+    if (typeof Swal === 'undefined') {
+        console.error('SweetAlert tidak ter-load!');
+        return;
     }
 
-    function closeDeleteModal() {
-        const modal = document.getElementById('deleteModal');
-        modal.classList.remove('flex');
-        modal.classList.add('hidden');
-    }
+    // ✅ TOAST SUCCESS (sesuai UI hijau kamu)
+    @if(session('success'))
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            title: '{{ session('success') }}',
+            showConfirmButton: false,
+            timer: 2500,
+            timerProgressBar: true
+        });
+    @endif
 
-    window.addEventListener('click', function (e) {
-        const modal = document.getElementById('deleteModal');
-        if (e.target === modal) {
-            closeDeleteModal();
+    // ✅ DELETE CONFIRM
+    document.addEventListener('click', function (e) {
+
+        const button = e.target.closest('.btn-delete');
+        if (!button) return;
+
+        e.preventDefault();
+
+        const form = button.closest('form');
+        const nama = button.dataset.name || 'data ini';
+
+        if (!form) {
+            console.error('Form tidak ditemukan!');
+            return;
         }
+
+        Swal.fire({
+            title: 'Konfirmasi Hapus',
+            html: `
+                <p class="text-sm text-slate-600">
+                    Data <b>${nama}</b> akan dihapus.
+                </p>
+            `,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, hapus',
+            cancelButtonText: 'Batal',
+            confirmButtonColor: '#ef4444', // merah sesuai design
+            cancelButtonColor: '#6b7280',
+            reverseButtons: true,
+            focusCancel: true
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+
+                Swal.fire({
+                    title: 'Menghapus...',
+                    text: 'Mohon tunggu sebentar',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    showConfirmButton: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                form.submit();
+            }
+
+        });
+
     });
+
+});
 </script>
 @endpush

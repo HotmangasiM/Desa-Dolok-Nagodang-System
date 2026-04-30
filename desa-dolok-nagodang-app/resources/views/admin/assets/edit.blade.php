@@ -223,7 +223,6 @@
 </div>
 @endsection
 
-
 @push('scripts')
 <script>
 function previewAssetImage(event) {

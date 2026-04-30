@@ -259,23 +259,55 @@
 </div>
 @endsection
 
+
+
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
 function confirmSubmit() {
+
+    if (typeof Swal === 'undefined') {
+        console.error('SweetAlert tidak ter-load!');
+        return;
+    }
+
+    const form = document.querySelector('form');
+
     Swal.fire({
-        title: 'Simpan Data?',
-        text: "Pastikan data sudah benar",
+        title: 'Konfirmasi Tambah Data',
+        text: 'Apakah Anda yakin ingin menyimpan data penduduk?',
         icon: 'question',
         showCancelButton: true,
+        confirmButtonText: 'Ya, simpan',
+        cancelButtonText: 'Batal',
         confirmButtonColor: '#10b981',
         cancelButtonColor: '#6b7280',
-        confirmButtonText: 'Ya, simpan!',
-        cancelButtonText: 'Batal'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            document.querySelector('form[action="{{ route('admin.citizens.store') }}"]').submit();
+        reverseButtons: true,
+        customClass: {
+            popup: 'rounded-2xl',
+            confirmButton: 'rounded-lg px-4 py-2',
+            cancelButton: 'rounded-lg px-4 py-2'
         }
+    }).then((result) => {
+
+        if (result.isConfirmed) {
+
+            Swal.fire({
+                title: 'Menyimpan...',
+                text: 'Mohon tunggu',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            form.submit();
+        }
+
     });
+
 }
 </script>
 @endpush
