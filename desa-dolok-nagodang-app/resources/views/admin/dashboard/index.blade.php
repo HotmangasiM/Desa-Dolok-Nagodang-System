@@ -44,7 +44,7 @@
     </div>
 
     {{-- CHARTS --}}
-    <div class="grid grid-cols-1 xl:grid-cols-2 gap-5">
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-5">
 
         {{-- CHART SURAT --}}
         <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm">
@@ -63,6 +63,16 @@
             </h3>
             <div class="relative h-[320px]">
                 <canvas id="genderChart"></canvas>
+            </div>
+        </div>
+
+        {{-- CHART DUSUN --}}
+        <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm">
+            <h3 class="text-lg font-bold text-slate-800 mb-4">
+                Penduduk per Dusun
+            </h3>
+            <div class="relative h-[320px]">
+                <canvas id="dusunChart"></canvas>
             </div>
         </div>
 
@@ -229,6 +239,50 @@
                     plugins: {
                         legend: {
                             position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        // ===== CHART DUSUN =====
+        const dusunCtx = document.getElementById('dusunChart');
+
+        if (dusunCtx) {
+            new Chart(dusunCtx, {
+                type: 'bar',
+                data: {
+                    labels: @json($dusunLabels ?? []),
+                    datasets: [{
+                        label: 'Jumlah Penduduk',
+                        data: @json($dusunData ?? []),
+                        backgroundColor: 'rgba(139, 92, 246, 0.7)',
+                        borderColor: '#8b5cf6',
+                        borderWidth: 1,
+                        borderRadius: 8,
+                        maxBarThickness: 40
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0,
+                                stepSize: 1
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
                         }
                     }
                 }

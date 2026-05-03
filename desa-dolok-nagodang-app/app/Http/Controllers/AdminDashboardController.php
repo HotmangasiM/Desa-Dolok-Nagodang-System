@@ -14,18 +14,33 @@ class AdminDashboardController extends Controller
 {
     public function index(): View
     {
+        // =============================
+        // 📊 CITIZENS
+        // =============================
         $totalCitizens = Citizen::count();
         $maleCitizens = Citizen::where('gender', 'Laki-laki')->count();
         $femaleCitizens = Citizen::where('gender', 'Perempuan')->count();
 
+        // =============================
+        // 👨‍💼 OFFICIALS
+        // =============================
         $totalOfficials = Official::count();
 
+        // =============================
+        // 📰 NEWS
+        // =============================
         $totalNews = News::count();
         $publishedNews = News::where('status', 'published')->count();
 
+        // =============================
+        // 📦 ASSETS
+        // =============================
         $totalAssets = Asset::count();
         $goodAssets = Asset::where('condition', 'good')->count();
 
+        // =============================
+        // 📄 LETTERS
+        // =============================
         $totalLetters = Letter::count();
         $submittedLetters = Letter::where('status', 'SUBMITTED')->count();
         $processedLetters = Letter::where('status', 'PROCESSING')->count();
@@ -37,6 +52,9 @@ class AdminDashboardController extends Controller
             ->take(5)
             ->get();
 
+        // =============================
+        // 📊 LETTER PER MONTH
+        // =============================
         $currentYear = now()->year;
 
         $lettersByMonth = Letter::selectRaw('MONTH(submission_date) as month, COUNT(*) as total')
@@ -53,6 +71,22 @@ class AdminDashboardController extends Controller
             $monthlyData[] = (int) ($lettersByMonth[$i] ?? 0);
         }
 
+        // =============================
+        // 🔥 DUSUN STATS (DARI ADDRESS)
+        // =============================
+        $dusunStats = DB::table(function ($query) {
+            $query->selectRaw("SUBSTRING_INDEX(address, ' ', 2) as dusun")
+                  ->from('citizens');
+        }, 't')
+        ->select('dusun', DB::raw('COUNT(*) as total'))
+        ->groupBy('dusun')
+        ->orderBy('dusun')
+        ->get();
+
+        // format untuk chart
+        $dusunLabels = $dusunStats->pluck('dusun');
+        $dusunData = $dusunStats->pluck('total');
+
         return view('admin.dashboard.index', [
             'title' => 'Admin Desa - Dashboard',
             'pageTitle' => 'Dashboard',
@@ -61,18 +95,23 @@ class AdminDashboardController extends Controller
                 ['label' => 'Dashboard', 'url' => null],
             ],
 
+            // citizens
             'totalCitizens' => $totalCitizens,
             'maleCitizens' => $maleCitizens,
             'femaleCitizens' => $femaleCitizens,
 
+            // officials
             'totalOfficials' => $totalOfficials,
 
+            // news
             'totalNews' => $totalNews,
             'publishedNews' => $publishedNews,
 
+            // assets
             'totalAssets' => $totalAssets,
             'goodAssets' => $goodAssets,
 
+            // letters
             'totalLetters' => $totalLetters,
             'submittedLetters' => $submittedLetters,
             'processedLetters' => $processedLetters,
@@ -82,7 +121,12 @@ class AdminDashboardController extends Controller
             'monthlyLabels' => $monthlyLabels,
             'monthlyData' => $monthlyData,
 
-            // alias kompatibilitas blade lama
+            // 🔥 NEW (dusun)
+            'dusunLabels' => $dusunLabels,
+            'dusunData' => $dusunData,
+            'dusunStats' => $dusunStats,
+
+            // alias kompatibilitas
             'allCitizens' => $totalCitizens,
             'allOfficials' => $totalOfficials,
             'allNews' => $totalNews,
