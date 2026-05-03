@@ -82,6 +82,19 @@
         </div>
     </div>
 
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        @foreach ($dusunStats as $dusun)
+            <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm">
+                <p class="text-sm font-medium text-slate-500">
+                    Total Penduduk {{ $dusun->dusun }}
+                </p>
+                <h3 class="mt-2 text-3xl font-bold text-slate-800">
+                    {{ $dusun->total }} 
+                </h3>
+            </div>
+        @endforeach
+    </div>
+
     <!-- Filter Card -->
     <div class="rounded-2xl bg-white border border-slate-200 shadow-sm p-5">
         <div class="flex items-center justify-between mb-5">
@@ -159,7 +172,7 @@
                         <th class="px-5 py-4 text-left font-semibold">Nama Lengkap</th>
                         <th class="px-5 py-4 text-left font-semibold">Jenis Kelamin</th>
                         <th class="px-5 py-4 text-left font-semibold">Telepon</th>
-                        <th class="px-5 py-4 text-left font-semibold">Email</th>
+                        <th class="px-5 py-4 text-left font-semibold">Address</th>
                         <th class="px-5 py-4 text-left font-semibold">Status</th>
                         <th class="px-5 py-4 text-center font-semibold">Aksi</th>
                     </tr>
@@ -182,7 +195,7 @@
                             </td>
                             <td class="px-5 py-4">{{ $citizen->gender }}</td>
                             <td class="px-5 py-4">{{ $citizen->phone ?? '-' }}</td>
-                            <td class="px-5 py-4">{{ $citizen->email ?? '-' }}</td>
+                            <td class="px-5 py-4">{{ $citizen->address ?? '-' }}</td>
                             <td class="px-5 py-4">
                                 @if ($citizen->life_status === 'alive')
                                     <span class="inline-flex rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
