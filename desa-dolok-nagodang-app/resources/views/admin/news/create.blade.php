@@ -127,22 +127,62 @@
     </form>
 </div>
 @endsection
+
 @push('scripts')
 <script>
-function previewImage(event) {
-    const input = event.target;
-    const preview = document.getElementById('imagePreview');
+document.addEventListener('DOMContentLoaded', function () {
 
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
-
-        reader.onload = function(e) {
-            preview.src = e.target.result;
-            preview.classList.remove('hidden');
-        };
-
-        reader.readAsDataURL(input.files[0]);
+    if (typeof Swal === 'undefined') {
+        console.error('SweetAlert tidak ter-load!');
+        return;
     }
-}
+
+    document.addEventListener('submit', function (e) {
+
+        const form = e.target;
+
+        // 🔥 target khusus form tambah berita
+        if (!form.action.includes('news')) return;
+
+        // cegah submit kalau belum konfirmasi
+        if (form.dataset.confirmed === 'true') return;
+
+        e.preventDefault();
+
+        const judul = form.querySelector('input[name="title"]')?.value || 'berita ini';
+
+        Swal.fire({
+            title: 'Konfirmasi Tambah Berita',
+            text: `Apakah Anda yakin ingin menyimpan "${judul}"?`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, simpan',
+            cancelButtonText: 'Batal',
+            confirmButtonColor: '#10b981',
+            cancelButtonColor: '#6b7280',
+            reverseButtons: true
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+
+                form.dataset.confirmed = 'true';
+
+                Swal.fire({
+                    title: 'Menyimpan...',
+                    text: 'Mohon tunggu',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                form.submit();
+            }
+
+        });
+
+    });
+
+});
 </script>
 @endpush

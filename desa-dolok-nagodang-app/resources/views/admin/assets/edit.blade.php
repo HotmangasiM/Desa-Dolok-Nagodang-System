@@ -222,22 +222,81 @@
     </form>
 </div>
 @endsection
+
 @push('scripts')
 <script>
-    function previewAssetImage(event) {
-        const input = event.target;
-        const preview = document.getElementById('assetImagePreview');
+function previewAssetImage(event) {
+    const input = event.target;
+    const preview = document.getElementById('assetImagePreview');
 
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
 
-            reader.onload = function(e) {
-                preview.src = e.target.result;
-                preview.classList.remove('hidden');
-            };
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+            preview.classList.remove('hidden');
+        };
 
-            reader.readAsDataURL(input.files[0]);
-        }
+        reader.readAsDataURL(input.files[0]);
     }
+}
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    if (typeof Swal === 'undefined') {
+        console.error('SweetAlert tidak ter-load!');
+        return;
+    }
+
+    // gunakan EVENT DELEGATION (lebih stabil)
+    document.addEventListener('submit', function (e) {
+
+        const form = e.target;
+
+        // pastikan ini form edit (PUT)
+        if (!form.action.includes('assets')) return;
+
+        // cegah submit dulu
+        if (form.dataset.confirmed === 'true') return;
+
+        e.preventDefault();
+
+        const nama = form.querySelector('input[name="item_name"]').value;
+
+        Swal.fire({
+            title: 'Konfirmasi Perubahan',
+            text: `Simpan perubahan untuk "${nama}"?`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, simpan',
+            cancelButtonText: 'Batal',
+            confirmButtonColor: '#10b981',
+            cancelButtonColor: '#6b7280',
+            reverseButtons: true
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+
+                form.dataset.confirmed = 'true';
+
+                Swal.fire({
+                    title: 'Menyimpan...',
+                    text: 'Mohon tunggu',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                form.submit();
+            }
+
+        });
+
+    });
+
+});
 </script>
 @endpush

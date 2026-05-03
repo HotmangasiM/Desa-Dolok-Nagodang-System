@@ -188,14 +188,19 @@
                                         Edit
                                     </a>
 
-                                    <button
-                                        type="button"
-                                        class="rounded-lg bg-rose-50 px-3 py-2 text-rose-700 font-medium hover:bg-rose-100 transition"
-                                        onclick="openDeleteModal('{{ $official->id }}', '{{ addslashes($official->name) }}')"
-                                    >
-                                        Delete
-                                    </button>
-                                </div>
+                        <form action="{{ route('admin.officials.destroy', $official->id) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+
+                            <button
+                                type="submit"
+                                class="btn-delete rounded-lg bg-rose-50 px-3 py-2 text-rose-700 font-medium hover:bg-rose-100 transition"
+                                data-name="{{ $official->name }}"
+                            >
+                                Hapus
+                            </button>
+                        </form>                               
+         </div>
                             </td>
                         </tr>
                     @empty
@@ -269,25 +274,61 @@
 
 @push('scripts')
 <script>
-    function openDeleteModal(id, name) {
-        document.getElementById('officialName').textContent = name;
-        document.getElementById('deleteOfficialForm').action = `/admin/officials/${id}`;
-        const modal = document.getElementById('deleteModal');
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
+document.addEventListener('DOMContentLoaded', function () {
+
+    // Pastikan SweetAlert ada
+    if (typeof Swal === 'undefined') {
+        console.error('SweetAlert tidak ter-load!');
+        return;
     }
 
-    function closeDeleteModal() {
-        const modal = document.getElementById('deleteModal');
-        modal.classList.remove('flex');
-        modal.classList.add('hidden');
-    }
+    // Tangkap semua klik tombol delete
+    document.addEventListener('click', function (e) {
 
-    window.addEventListener('click', function (e) {
-        const modal = document.getElementById('deleteModal');
-        if (e.target === modal) {
-            closeDeleteModal();
+        const button = e.target.closest('.btn-delete');
+
+        if (!button) return;
+
+        e.preventDefault();
+
+        const form = button.closest('form');
+        const nama = button.dataset.name || 'data ini';
+
+        if (!form) {
+            console.error('Form tidak ditemukan!');
+            return;
         }
+
+        Swal.fire({
+            title: 'Konfirmasi Hapus',
+            text: `Apakah Anda yakin ingin menghapus "${nama}"?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, hapus',
+            cancelButtonText: 'Batal',
+            confirmButtonColor: '#ef4444',
+            cancelButtonColor: '#6b7280',
+            reverseButtons: true
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+
+                Swal.fire({
+                    title: 'Menghapus...',
+                    text: 'Mohon tunggu',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                form.submit();
+            }
+
+        });
+
     });
+
+});
 </script>
 @endpush
