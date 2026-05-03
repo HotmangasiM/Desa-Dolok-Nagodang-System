@@ -8,6 +8,7 @@ use App\Models\Citizen;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\DB;
 
 class AdminCitizenPageController extends Controller
 {
@@ -37,10 +38,25 @@ class AdminCitizenPageController extends Controller
             ->paginate(10)
             ->withQueryString();
 
+        // =============================
+        // 📊 STATISTIK UMUM
+        // =============================
         $allCitizens = Citizen::count();
         $maleCitizens = Citizen::where('gender', 'Laki-laki')->count();
         $femaleCitizens = Citizen::where('gender', 'Perempuan')->count();
         $activeCitizens = Citizen::where('life_status', 'alive')->count();
+
+        // =============================
+        // 🔥 STATISTIK PER DUSUN (DARI ADDRESS)
+        // =============================
+        $dusunStats = DB::table(function ($query) {
+                $query->selectRaw("SUBSTRING_INDEX(address, ' ', 2) as dusun")
+                    ->from('citizens');
+            }, 't')
+            ->select('dusun', DB::raw('COUNT(*) as total'))
+            ->groupBy('dusun')
+            ->orderBy('dusun')
+            ->get();
 
         return view('admin.citizens.index', [
             'title' => 'Admin Desa - Data Penduduk',
@@ -53,13 +69,16 @@ class AdminCitizenPageController extends Controller
             'citizens' => $citizens,
             'filters' => $filters,
 
-            // statistik untuk cards
+            // statistik utama
             'allCitizens' => $allCitizens,
             'maleCitizens' => $maleCitizens,
             'femaleCitizens' => $femaleCitizens,
             'activeCitizens' => $activeCitizens,
 
-            // alias jika ada blade lama yang pakai nama ini
+            // 🔥 tambahan
+            'dusunStats' => $dusunStats,
+
+            // legacy
             'totalCitizens' => $allCitizens,
         ]);
     }
