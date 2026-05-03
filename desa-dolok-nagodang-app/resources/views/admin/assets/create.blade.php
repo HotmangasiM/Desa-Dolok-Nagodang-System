@@ -209,20 +209,59 @@
 
 @push('scripts')
 <script>
-function previewAssetImage(event) {
-    const input = event.target;
-    const preview = document.getElementById('assetPreview');
+document.addEventListener('DOMContentLoaded', function () {
 
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
-
-        reader.onload = function(e) {
-            preview.src = e.target.result;
-            preview.classList.remove('hidden');
-        };
-
-        reader.readAsDataURL(input.files[0]);
+    if (typeof Swal === 'undefined') {
+        console.error('SweetAlert tidak ter-load!');
+        return;
     }
-}
+
+    // Tangkap SEMUA form submit
+    document.addEventListener('submit', function (e) {
+
+        const form = e.target;
+
+        // hanya target form create (optional filter)
+        if (!form.action.includes('assets')) return;
+
+        // cegah submit dulu
+        e.preventDefault();
+
+        // supaya tidak loop
+        if (form.dataset.confirmed === 'true') return;
+
+        Swal.fire({
+            title: 'Konfirmasi Tambah Data',
+            text: 'Apakah Anda yakin ingin menyimpan data inventaris ini?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, simpan',
+            cancelButtonText: 'Batal',
+            confirmButtonColor: '#10b981',
+            cancelButtonColor: '#6b7280',
+            reverseButtons: true
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+
+                form.dataset.confirmed = 'true';
+
+                Swal.fire({
+                    title: 'Menyimpan...',
+                    text: 'Mohon tunggu',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                form.submit();
+            }
+
+        });
+
+    });
+
+});
 </script>
 @endpush

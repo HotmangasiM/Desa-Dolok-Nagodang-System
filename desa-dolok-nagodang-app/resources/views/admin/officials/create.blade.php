@@ -157,3 +157,84 @@
     </form>
 </div>
 @endsection
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    if (typeof Swal === 'undefined') {
+        console.error('SweetAlert tidak ter-load!');
+        return;
+    }
+
+    // ✅ TOAST SUCCESS (setelah redirect dari controller)
+    @if(session('success'))
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            title: '{{ session('success') }}',
+            showConfirmButton: false,
+            timer: 2500,
+            timerProgressBar: true
+        });
+    @endif
+
+
+    // ✅ CONFIRM SUBMIT CREATE (APARAT)
+    document.addEventListener('submit', function (e) {
+
+        const form = e.target;
+
+        // hanya target form officials
+        if (!form.action.includes('officials')) return;
+
+        // cegah submit awal
+        if (form.dataset.confirmed === 'true') return;
+
+        e.preventDefault();
+
+        Swal.fire({
+            title: 'Simpan Data?',
+            html: `
+                <p class="text-sm text-slate-600">
+                    Pastikan data aparat sudah benar sebelum disimpan.
+                </p>
+            `,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, simpan',
+            cancelButtonText: 'Batal',
+            confirmButtonColor: '#10b981',
+            cancelButtonColor: '#6b7280',
+            reverseButtons: true,
+            focusCancel: true
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+
+                form.dataset.confirmed = 'true';
+
+                Swal.fire({
+                    title: 'Menyimpan...',
+                    text: 'Mohon tunggu sebentar',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    showConfirmButton: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                form.submit();
+            }
+
+        });
+
+    });
+
+});
+</script>
+@endpush

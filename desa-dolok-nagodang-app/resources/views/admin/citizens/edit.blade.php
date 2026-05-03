@@ -259,11 +259,93 @@
                 Batal
             </a>
 
-            <button type="submit"
-                    class="w-full sm:w-auto inline-flex items-center justify-center rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-700 shadow-lg shadow-emerald-600/20 transition">
-                Simpan Perubahan
+            <button type="button"
+                class="btn-submit w-full sm:w-auto inline-flex items-center justify-center rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-700 shadow-lg shadow-emerald-600/20 transition">
+             Simpan Perubahan
             </button>
         </div>
     </form>
 </div>
 @endsection
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    // ✅ Pastikan SweetAlert aktif
+    if (typeof Swal === 'undefined') {
+        console.error('SweetAlert tidak ter-load!');
+        return;
+    }
+
+    // ✅ TOAST SUCCESS (setelah redirect dari controller)
+    @if(session('success'))
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            title: '{{ session('success') }}',
+            showConfirmButton: false,
+            timer: 2500,
+            timerProgressBar: true
+        });
+    @endif
+
+
+    // ✅ SUBMIT EDIT (CONFIRMATION)
+    document.addEventListener('click', function (e) {
+
+        const button = e.target.closest('.btn-submit');
+        if (!button) return;
+
+        e.preventDefault();
+
+        const form = button.closest('form');
+
+        if (!form) {
+            console.error('Form tidak ditemukan!');
+            return;
+        }
+
+        Swal.fire({
+            title: 'Simpan Perubahan?',
+            html: `
+                <p class="text-sm text-slate-600">
+                    Pastikan data yang kamu ubah sudah benar.
+                </p>
+            `,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, simpan',
+            cancelButtonText: 'Batal',
+            confirmButtonColor: '#10b981', // emerald sesuai desain
+            cancelButtonColor: '#6b7280',
+            reverseButtons: true,
+            focusCancel: true
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+
+                Swal.fire({
+                    title: 'Menyimpan...',
+                    text: 'Mohon tunggu sebentar',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    showConfirmButton: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                form.submit();
+            }
+
+        });
+
+    });
+
+});
+</script>
+@endpush

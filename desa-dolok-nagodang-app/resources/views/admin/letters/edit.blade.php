@@ -529,126 +529,60 @@
 
 @push('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const letterTypeSelect = document.getElementById('letter_type_id');
-        const citizenSelect = document.getElementById('citizen_id');
-        const payloadSection = document.getElementById('payloadSection');
-        const payloadDescription = document.getElementById('payloadDescription');
-        const fieldGroups = document.querySelectorAll('.letter-fields');
+document.addEventListener('DOMContentLoaded', function () {
 
-        const descriptionMap = {
-            DOM: 'Surat Domisili menggunakan data alamat dari data penduduk.',
-            SKTM: 'Lengkapi keperluan atau keterangan untuk Surat Keterangan Tidak Mampu.',
-            YTM: 'Lengkapi data pendukung untuk Surat Yatim.',
-            SKOT: 'Lengkapi data orang tua dan data anak untuk Surat Keterangan Orang Tua.',
-            SKU: 'Lengkapi data usaha untuk Surat Keterangan Usaha.'
-        };
+    if (typeof Swal === 'undefined') {
+        console.error('SweetAlert tidak ter-load!');
+        return;
+    }
 
-        function getSelectedLetterCode() {
-            const selectedOption = letterTypeSelect.options[letterTypeSelect.selectedIndex];
-            return selectedOption ? (selectedOption.dataset.code || '').toUpperCase() : '';
-        }
+    document.addEventListener('submit', function (e) {
 
-        function setGroupInputsDisabled(group, disabled) {
-            group.querySelectorAll('input, textarea, select').forEach(function (input) {
-                input.disabled = disabled;
-            });
-        }
+        const form = e.target;
 
-        function toggleLetterFields() {
-            const selectedCode = getSelectedLetterCode();
+        // ✅ Target khusus form update surat
+        if (!form.action.includes('letters')) return;
 
-            fieldGroups.forEach(function (group) {
-                group.classList.add('hidden');
-                setGroupInputsDisabled(group, true);
-            });
+        // ✅ Hindari loop submit
+        if (form.dataset.confirmed === 'true') return;
 
-            if (!selectedCode) {
-                payloadSection.classList.add('hidden');
-                return;
+        e.preventDefault();
+
+        // ambil subject sebagai identitas
+        const subject = form.querySelector('input[name="subject"]')?.value || 'surat ini';
+
+        Swal.fire({
+            title: 'Konfirmasi Perubahan',
+            text: `Apakah Anda yakin ingin menyimpan perubahan untuk "${subject}"?`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, simpan',
+            cancelButtonText: 'Batal',
+            confirmButtonColor: '#10b981',
+            cancelButtonColor: '#6b7280',
+            reverseButtons: true
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+
+                form.dataset.confirmed = 'true';
+
+                Swal.fire({
+                    title: 'Menyimpan...',
+                    text: 'Mohon tunggu',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                form.submit();
             }
 
-            const selectedGroup = document.querySelector('[data-letter-fields="' + selectedCode + '"]');
+        });
 
-            if (!selectedGroup) {
-                payloadSection.classList.add('hidden');
-                return;
-            }
-
-            payloadSection.classList.remove('hidden');
-            selectedGroup.classList.remove('hidden');
-            setGroupInputsDisabled(selectedGroup, false);
-
-            payloadDescription.textContent = descriptionMap[selectedCode] || 'Lengkapi data tambahan surat.';
-        }
-
-        function selectedCitizenData() {
-            const selectedOption = citizenSelect.options[citizenSelect.selectedIndex];
-
-            if (!selectedOption || !selectedOption.value) {
-                return null;
-            }
-
-            return {
-                fullName: selectedOption.dataset.fullName || '',
-                birthPlace: selectedOption.dataset.birthPlace || '',
-                birthDate: selectedOption.dataset.birthDate || '',
-                gender: selectedOption.dataset.gender || '',
-                religion: selectedOption.dataset.religion || '',
-                occupation: selectedOption.dataset.occupation || '',
-                address: selectedOption.dataset.address || '',
-            };
-        }
-
-        function formatBirth(data) {
-            if (!data) return '';
-
-            const place = data.birthPlace || '';
-            const date = data.birthDate ? data.birthDate.substring(0, 10) : '';
-
-            if (place && date) {
-                return place + ', ' + date;
-            }
-
-            return place || date || '';
-        }
-
-        function setValueIfEmpty(id, value) {
-            const input = document.getElementById(id);
-
-            if (input && !input.value) {
-                input.value = value || '';
-            }
-        }
-
-        function autofillChildPayload() {
-            const data = selectedCitizenData();
-
-            if (!data) return;
-
-            setValueIfEmpty('payload_child_name', data.fullName);
-            setValueIfEmpty('payload_child_birth', formatBirth(data));
-            setValueIfEmpty('payload_child_gender', data.gender);
-            setValueIfEmpty('payload_child_job', data.occupation);
-            setValueIfEmpty('payload_child_religion', data.religion);
-            setValueIfEmpty('payload_child_address', data.address);
-        }
-
-        if (letterTypeSelect) {
-            letterTypeSelect.addEventListener('change', function () {
-                toggleLetterFields();
-                autofillChildPayload();
-            });
-        }
-
-        if (citizenSelect) {
-            citizenSelect.addEventListener('change', function () {
-                autofillChildPayload();
-            });
-        }
-
-        toggleLetterFields();
-        autofillChildPayload();
     });
+
+});
 </script>
 @endpush
