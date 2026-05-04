@@ -10,6 +10,12 @@ use App\Http\Controllers\AdminOfficialPageController;
 use App\Http\Controllers\AdminLetterPageController;
 use App\Http\Controllers\AdminLetterPdfController;
 
+use App\Http\Controllers\PublicHomeController;
+use App\Http\Controllers\PublicNewsController;
+use App\Http\Controllers\PublicOfficialController;
+use App\Http\Controllers\PublicVillageProfileController;
+use App\Http\Controllers\PublicLetterServiceController;
+
 Route::get('/', function () {
     return redirect()->route('login');
 });
@@ -59,5 +65,14 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::get('/letters/{letter}/preview-pdf', [AdminLetterPdfController::class, 'preview'])->name('admin.letters.preview-pdf');
     Route::get('/letters/{letter}/download-pdf', [AdminLetterPdfController::class, 'download'])->name('admin.letters.download-pdf');
 });
+
+Route::get('/', [PublicHomeController::class, 'index'])->name('public.home');
+
+Route::get('/berita', [PublicNewsController::class, 'index'])->name('public.news.index');
+Route::get('/berita/{slug}', [PublicNewsController::class, 'show'])->name('public.news.show');
+
+Route::get('/profil-desa', [PublicVillageProfileController::class, 'index'])->name('public.profile');
+Route::get('/aparat-desa', [PublicOfficialController::class, 'index'])->name('public.officials');
+Route::get('/layanan-surat', [PublicLetterServiceController::class, 'index'])->name('public.letters');
 
 require __DIR__.'/auth.php';
