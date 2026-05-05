@@ -74,5 +74,16 @@ Route::get('/berita/{slug}', [PublicNewsController::class, 'show'])->name('publi
 Route::get('/profil-desa', [PublicVillageProfileController::class, 'index'])->name('public.profile');
 Route::get('/aparat-desa', [PublicOfficialController::class, 'index'])->name('public.officials');
 Route::get('/layanan-surat', [PublicLetterServiceController::class, 'index'])->name('public.letters');
+Route::get('/layanan-surat', [PublicLetterServiceController::class, 'index'])
+    ->name('public.letters');
+
+Route::get('/layanan-surat/{code}', [PublicLetterServiceController::class, 'show'])
+    ->name('public.letters.show');
+    
+Route::get('/layanan-surat/{code}/ajukan', [PublicLetterServiceController::class, 'apply'])
+    ->name('public.letters.apply');
+    
+Route::post('/layanan-surat/{code}/ajukan', [PublicLetterServiceController::class, 'storeApplication'])
+    ->name('public.letters.storeApplication');
 
 require __DIR__.'/auth.php';

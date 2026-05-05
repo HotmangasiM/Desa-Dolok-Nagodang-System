@@ -133,14 +133,40 @@
                 </div>
             </div>
 
-            <div class="mt-5 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="mt-6 space-y-4">
                 @forelse ($dusunStats as $dusun)
+                    @php
+                        $percentage = $totalCitizens > 0
+                            ? round(($dusun->total / $totalCitizens) * 100, 1)
+                            : 0;
+                    @endphp
+
                     <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-                        <p class="text-sm text-slate-500">{{ $dusun->dusun }}</p>
-                        <h3 class="mt-2 text-2xl font-bold text-slate-800">{{ number_format($dusun->total) }}</h3>
+                        <div class="flex items-center justify-between gap-4">
+                            <div>
+                                <p class="font-semibold text-slate-800">{{ $dusun->dusun }}</p>
+                                <p class="mt-1 text-sm text-slate-500">
+                                    {{ number_format($dusun->total) }} penduduk
+                                </p>
+                            </div>
+
+                            <div class="text-right">
+                                <p class="text-xl font-bold text-emerald-700">
+                                    {{ $percentage }}%
+                                </p>
+                                <p class="text-xs text-slate-500">dari total</p>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 h-3 w-full rounded-full bg-slate-200 overflow-hidden">
+                            <div
+                                class="h-full rounded-full bg-emerald-600"
+                                style="width: {{ $percentage }}%">
+                            </div>
+                        </div>
                     </div>
                 @empty
-                    <div class="md:col-span-3 rounded-2xl border bg-slate-50 p-5 text-sm text-slate-500">
+                    <div class="rounded-2xl border bg-slate-50 p-5 text-sm text-slate-500">
                         Statistik dusun belum tersedia.
                     </div>
                 @endforelse

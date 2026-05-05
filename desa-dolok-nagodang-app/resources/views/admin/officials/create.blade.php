@@ -130,15 +130,18 @@
                     >
                 </div>
 
-                <!-- <div class="xl:col-span-3">
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">Deskripsi</label>
-                    <textarea
-                        name="description"
-                        rows="5"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm leading-6 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                        placeholder="Deskripsi singkat aparat desa..."
-                    >{{ old('description') }}</textarea>
-                </div> -->
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">
+                        Urutan Tampil
+                    </label>
+                    <input
+                        type="number"
+                        name="sort_order"
+                        value="{{ old('sort_order', $official->sort_order ?? 0) }}"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        placeholder="Semakin kecil, tampil lebih atas"
+                    >
+                </div>
             </div>
         </div>
 
