@@ -11,6 +11,7 @@ class PublicNewsController extends Controller
     {
         $news = News::where('status', 'published')
             ->latest('published_at')
+            ->latest('id')
             ->paginate(9);
 
         return view('public.news.index', [
@@ -25,9 +26,17 @@ class PublicNewsController extends Controller
             ->where('slug', $slug)
             ->firstOrFail();
 
+        $relatedNews = News::where('status', 'published')
+            ->where('id', '!=', $newsItem->id)
+            ->latest('published_at')
+            ->latest('id')
+            ->take(3)
+            ->get();
+
         return view('public.news.show', [
             'title' => $newsItem->title,
             'newsItem' => $newsItem,
+            'relatedNews' => $relatedNews,
         ]);
     }
 }

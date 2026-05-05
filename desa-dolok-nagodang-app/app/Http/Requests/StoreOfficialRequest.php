@@ -23,6 +23,7 @@ class StoreOfficialRequest extends FormRequest
             'term_start' => 'nullable|date',
             'term_end' => 'nullable|date',
             'description' => 'nullable|string',
+            'sort_order' => ['nullable', 'integer'],
         ];
     }
 }

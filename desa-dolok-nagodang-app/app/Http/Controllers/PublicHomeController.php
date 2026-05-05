@@ -40,8 +40,12 @@ class PublicHomeController extends Controller
         $totalPublishedNews = News::where('status', 'published')->count();
 
         // Aparat desa
-        $officials = Official::latest()
-            ->take(4)
+        // $officials = Official::latest()
+        //     ->take(4)
+        //     ->get();
+
+        $officials = Official::orderBy('sort_order')
+            ->orderBy('created_at')
             ->get();
 
         $villageHead = Official::where('position', 'like', '%Kepala Desa%')
