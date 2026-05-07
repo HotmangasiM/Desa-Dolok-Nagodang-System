@@ -17,6 +17,33 @@
     </div>
 </section>
 
+<section class="max-w-7xl mx-auto px-4 -mt-8 relative z-10">
+    <div class="rounded-3xl bg-white border border-slate-200 p-5 shadow-sm">
+        <form method="GET" action="{{ route('public.news.index') }}" class="flex flex-col md:flex-row gap-3">
+            <input
+                type="text"
+                name="search"
+                value="{{ $search ?? '' }}"
+                placeholder="Cari berita desa..."
+                class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            >
+
+            <button
+                type="submit"
+                class="rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-700 transition">
+                Cari
+            </button>
+
+            @if(!empty($search))
+                <a href="{{ route('public.news.index') }}"
+                   class="rounded-xl border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700 text-center hover:bg-slate-50 transition">
+                    Reset
+                </a>
+            @endif
+        </form>
+    </div>
+</section>
+
 <section class="max-w-7xl mx-auto px-4 py-16">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         @forelse ($news as $item)
@@ -54,7 +81,20 @@
             </a>
         @empty
             <div class="md:col-span-3 rounded-3xl bg-white border border-slate-200 p-10 text-center text-slate-500">
-                Belum ada berita yang dipublikasikan.
+                <div class="text-5xl mb-4">🔎</div>
+
+                @if(!empty($search))
+                    <p class="font-semibold text-slate-700">
+                        Tidak ada berita yang cocok.
+                    </p>
+                    <p class="mt-2 text-sm">
+                        Pencarian "{{ $search }}" belum menemukan hasil.
+                    </p>
+                @else
+                    <p class="font-semibold text-slate-700">
+                        Belum ada berita yang dipublikasikan.
+                    </p>
+                @endif
             </div>
         @endforelse
     </div>
