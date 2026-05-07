@@ -44,15 +44,6 @@ Copy file .env:
 
 cp .env.example .env
 
-Sesuaikan database:
-
-DB_CONNECTION=mysql
-DB_HOST=db
-DB_PORT=3306
-DB_DATABASE=desa
-DB_USERNAME=root
-DB_PASSWORD=root
-
 4. Install Dependency
 docker exec -it desa_app composer install
 
@@ -61,11 +52,3 @@ docker exec -it desa_app php artisan key:generate
 
 6. Run Migration
 docker exec -it desa_app php artisan migrate
-
-DBeaver (External)
-Field	Value
-Host	localhost
-Port	3307
-Database	desa
-Username	root
-Password	root
