@@ -2,44 +2,113 @@
 
 @section('content')
 {{-- HERO --}}
-<section class="relative overflow-hidden bg-emerald-950 text-white">
-    <div class="absolute inset-0">
-        <img src="{{ asset('images/desa-bg.jpg') }}"
-             alt="Desa Dolok Nagodang"
-             class="h-full w-full object-cover opacity-35">
-    </div>
+{{-- HERO SLIDER --}}
+<section class="relative">
 
-    <div class="absolute inset-0 bg-gradient-to-r from-emerald-950 via-emerald-950/90 to-emerald-900/40"></div>
+    <div class="swiper heroSwiper h-[700px]">
 
-    <div class="relative max-w-7xl mx-auto px-4 py-24 lg:py-32">
-        <div class="max-w-3xl">
-            <div class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm text-emerald-100 border border-white/10">
-                <span>🏡</span>
-                <span>Website Resmi Desa Dolok Nagodang</span>
+        <div class="swiper-wrapper">
+
+            {{-- SLIDE 1 --}}
+            <div class="swiper-slide relative">
+                <img
+                    src="{{ asset('storage/sliders/dusun1.jpg') }}"
+                    class="absolute inset-0 w-full h-full object-cover"
+                >
+
+                <div class="absolute inset-0 bg-black/50"></div>
+
+                <div class="relative z-10 max-w-7xl mx-auto px-4 h-full flex items-center">
+                    <div class="max-w-3xl text-white fade-up">
+                        <p class="inline-flex rounded-full bg-white/10 border border-white/20 px-4 py-2 text-sm">
+                            Website Resmi Desa
+                        </p>
+
+                        <h1 class="mt-6 text-5xl md:text-6xl font-bold leading-tight">
+                            Desa Dolok Nagodang
+                        </h1>
+
+                        <p class="mt-6 text-lg text-slate-200 leading-8">
+                            Portal informasi pemerintahan desa, layanan masyarakat,
+                            berita terbaru, dan transparansi pembangunan desa.
+                        </p>
+
+                        <div class="mt-8 flex flex-wrap gap-4">
+                            <a href="{{ route('public.news.index') }}"
+                               class="rounded-2xl bg-emerald-600 px-6 py-4 text-sm font-semibold text-white hover:bg-emerald-700 transition">
+                                Lihat Berita
+                            </a>
+
+                            <a href="{{ route('public.profile') }}"
+                               class="rounded-2xl border border-white/30 bg-white/10 backdrop-blur px-6 py-4 text-sm font-semibold text-white hover:bg-white/20 transition">
+                                Profil Desa
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <h1 class="mt-6 text-4xl md:text-6xl font-bold leading-tight">
-                Informasi Desa Lebih Mudah, Cepat, dan Terbuka
-            </h1>
+            {{-- SLIDE 2 --}}
+            <div class="swiper-slide relative">
+                <img
+                    src="{{ asset('storage/sliders/dusun2.jpg') }}"
+                    class="absolute inset-0 w-full h-full object-cover"
+                >
 
-            <p class="mt-6 max-w-2xl text-lg text-emerald-100 leading-8">
-                Portal resmi untuk informasi pemerintahan desa, berita terbaru, layanan administrasi,
-                dan data publik Desa Dolok Nagodang.
-            </p>
+                <div class="absolute inset-0 bg-black/50"></div>
 
-            <div class="mt-8 flex flex-wrap gap-3">
-                <a href="{{ route('public.letters') }}"
-                   class="rounded-xl bg-white px-6 py-3 text-sm font-semibold text-emerald-800 hover:bg-emerald-50 transition">
-                    📄 Layanan Surat
-                </a>
+                <div class="relative z-10 max-w-7xl mx-auto px-4 h-full flex items-center">
+                    <div class="max-w-3xl text-white">
+                        <p class="inline-flex rounded-full bg-white/10 border border-white/20 px-4 py-2 text-sm">
+                            Transparansi Desa
+                        </p>
 
-                <a href="{{ route('public.news.index') }}"
-                   class="rounded-xl border border-white/30 px-6 py-3 text-sm font-semibold text-white hover:bg-white/10 transition">
-                    📰 Lihat Berita
-                </a>
+                        <h1 class="mt-6 text-5xl md:text-6xl font-bold leading-tight">
+                            Informasi Desa Lebih Terbuka
+                        </h1>
+
+                        <p class="mt-6 text-lg text-slate-200 leading-8">
+                            Menyediakan informasi terbaru mengenai pembangunan,
+                            kegiatan masyarakat, dan layanan administrasi desa.
+                        </p>
+                    </div>
+                </div>
             </div>
+
+            {{-- SLIDE 3 --}}
+            <div class="swiper-slide relative">
+                <img
+                    src="{{ asset('storage/sliders/dusun3.jpg') }}"
+                    class="absolute inset-0 w-full h-full object-cover"
+                >
+
+                <div class="absolute inset-0 bg-black/50"></div>
+
+                <div class="relative z-10 max-w-7xl mx-auto px-4 h-full flex items-center">
+                    <div class="max-w-3xl text-white">
+                        <p class="inline-flex rounded-full bg-white/10 border border-white/20 px-4 py-2 text-sm">
+                            Pelayanan Masyarakat
+                        </p>
+
+                        <h1 class="mt-6 text-5xl md:text-6xl font-bold leading-tight">
+                            Cepat, Modern, dan Informatif
+                        </h1>
+
+                        <p class="mt-6 text-lg text-slate-200 leading-8">
+                            Website desa modern untuk mendukung pelayanan publik
+                            dan keterbukaan informasi kepada masyarakat.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
         </div>
+
+        {{-- PAGINATION --}}
+        <div class="swiper-pagination"></div>
+
     </div>
+
 </section>
 
 {{-- QUICK MENU --}}
@@ -64,6 +133,55 @@
                 <p class="mt-1 text-xs text-slate-500">{{ $menu['desc'] }}</p>
             </a>
         @endforeach
+    </div>
+</section>
+
+{{-- INFORMASI CEPAT --}}
+<section class="max-w-7xl mx-auto px-4 py-12">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
+        <div class="rounded-3xl bg-white border border-slate-200 p-6 shadow-sm">
+            <div class="w-12 h-12 rounded-2xl bg-emerald-100 flex items-center justify-center text-2xl">
+                🕘
+            </div>
+            <p class="mt-4 text-sm text-slate-500">Jam Layanan</p>
+            <h3 class="mt-1 font-bold text-slate-800">Senin - Jumat</h3>
+            <p class="mt-1 text-sm text-slate-500">08.00 - 15.00 WIB</p>
+        </div>
+
+        <div class="rounded-3xl bg-white border border-slate-200 p-6 shadow-sm">
+            <div class="w-12 h-12 rounded-2xl bg-sky-100 flex items-center justify-center text-2xl">
+                📍
+            </div>
+            <p class="mt-4 text-sm text-slate-500">Lokasi</p>
+            <h3 class="mt-1 font-bold text-slate-800">Dolok Nagodang</h3>
+            <p class="mt-1 text-sm text-slate-500">Kec. Uluan, Kab. Toba</p>
+        </div>
+
+        <div class="rounded-3xl bg-white border border-slate-200 p-6 shadow-sm">
+            <div class="w-12 h-12 rounded-2xl bg-amber-100 flex items-center justify-center text-2xl">
+                📰
+            </div>
+            <p class="mt-4 text-sm text-slate-500">Berita Tayang</p>
+            <h3 class="mt-1 font-bold text-slate-800">
+                {{ number_format($totalPublishedNews ?? 0) }} Berita
+            </h3>
+            <a href="{{ route('public.news.index') }}" class="mt-2 inline-flex text-sm font-semibold text-emerald-700">
+                Lihat berita →
+            </a>
+        </div>
+
+        <div class="rounded-3xl bg-white border border-slate-200 p-6 shadow-sm">
+            <div class="w-12 h-12 rounded-2xl bg-violet-100 flex items-center justify-center text-2xl">
+                📄
+            </div>
+            <p class="mt-4 text-sm text-slate-500">Layanan Surat</p>
+            <h3 class="mt-1 font-bold text-slate-800">
+                {{ number_format($totalLetterTypes ?? 0) }} Jenis Layanan
+            </h3>
+            <a href="{{ route('public.letters') }}" class="mt-2 inline-flex text-sm font-semibold text-emerald-700">
+                Lihat layanan →
+            </a>
+        </div>
     </div>
 </section>
 
@@ -301,3 +419,30 @@
     </div>
 </section>
 @endsection
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    new Swiper('.heroSwiper', {
+        modules: [
+            window.SwiperModules.Navigation,
+            window.SwiperModules.Pagination,
+            window.SwiperModules.Autoplay
+        ],
+
+        loop: true,
+
+        autoplay: {
+            delay: 5000,
+            disableOnInteraction: false,
+        },
+
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+    });
+
+});
+</script>
+@endpush
