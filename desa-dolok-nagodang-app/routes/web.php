@@ -15,6 +15,7 @@ use App\Http\Controllers\PublicNewsController;
 use App\Http\Controllers\PublicOfficialController;
 use App\Http\Controllers\PublicVillageProfileController;
 use App\Http\Controllers\PublicLetterServiceController;
+use App\Http\Controllers\PublicComplaintController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -66,24 +67,31 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::get('/letters/{letter}/download-pdf', [AdminLetterPdfController::class, 'download'])->name('admin.letters.download-pdf');
 });
 
-Route::get('/', [PublicHomeController::class, 'index'])->name('public.home');
 
-Route::get('/berita', [PublicNewsController::class, 'index'])->name('public.news.index');
-Route::get('/berita/{slug}', [PublicNewsController::class, 'show'])->name('public.news.show');
+Route::middleware('track.visitor')->group(function () {
+    Route::get('/', [PublicHomeController::class, 'index'])->name('public.home');
 
-Route::get('/profil-desa', [PublicVillageProfileController::class, 'index'])->name('public.profile');
-Route::get('/aparat-desa', [PublicOfficialController::class, 'index'])->name('public.officials');
-Route::get('/layanan-surat', [PublicLetterServiceController::class, 'index'])->name('public.letters');
-Route::get('/layanan-surat', [PublicLetterServiceController::class, 'index'])
-    ->name('public.letters');
+    Route::get('/berita', [PublicNewsController::class, 'index'])->name('public.news.index');
+    Route::get('/berita/{slug}', [PublicNewsController::class, 'show'])->name('public.news.show');
 
-Route::get('/layanan-surat/{code}', [PublicLetterServiceController::class, 'show'])
-    ->name('public.letters.show');
+    Route::get('/profil-desa', [PublicVillageProfileController::class, 'index'])->name('public.profile');
+    Route::get('/aparat-desa', [PublicOfficialController::class, 'index'])->name('public.officials');
+    Route::get('/layanan-surat', [PublicLetterServiceController::class, 'index'])->name('public.letters');
+    Route::get('/layanan-surat', [PublicLetterServiceController::class, 'index'])
+        ->name('public.letters');
+
+    Route::get('/layanan-surat/{code}', [PublicLetterServiceController::class, 'show'])
+        ->name('public.letters.show');
+        
+    Route::get('/layanan-surat/{code}/ajukan', [PublicLetterServiceController::class, 'apply'])
+        ->name('public.letters.apply');
+        
+    Route::post('/layanan-surat/{code}/ajukan', [PublicLetterServiceController::class, 'storeApplication'])
+        ->name('public.letters.storeApplication');
+
+    Route::post('/pengaduan', [PublicComplaintController::class, 'store'])
+    ->name('public.complaints.store');
     
-Route::get('/layanan-surat/{code}/ajukan', [PublicLetterServiceController::class, 'apply'])
-    ->name('public.letters.apply');
-    
-Route::post('/layanan-surat/{code}/ajukan', [PublicLetterServiceController::class, 'storeApplication'])
-    ->name('public.letters.storeApplication');
+});
 
 require __DIR__.'/auth.php';
