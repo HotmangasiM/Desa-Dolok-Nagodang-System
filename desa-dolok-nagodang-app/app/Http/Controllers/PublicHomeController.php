@@ -8,6 +8,8 @@ use App\Models\News;
 use App\Models\Official;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
+use App\Models\VisitorLog;
+use Carbon\Carbon;
 
 class PublicHomeController extends Controller
 {
@@ -15,7 +17,9 @@ class PublicHomeController extends Controller
     {
         // Statistik penduduk
         $totalCitizens = Citizen::count();
+
         $maleCitizens = Citizen::where('gender', 'Laki-laki')->count();
+
         $femaleCitizens = Citizen::where('gender', 'Perempuan')->count();
 
         // Statistik dusun dari field address
@@ -40,10 +44,6 @@ class PublicHomeController extends Controller
         $totalPublishedNews = News::where('status', 'published')->count();
 
         // Aparat desa
-        // $officials = Official::latest()
-        //     ->take(4)
-        //     ->get();
-
         $officials = Official::orderBy('sort_order')
             ->orderBy('created_at')
             ->get();
@@ -58,6 +58,53 @@ class PublicHomeController extends Controller
             ->get();
 
         $totalLetterTypes = $letterTypes->count();
+
+        /**
+         * Statistik pengunjung
+         */
+        $today = now()->toDateString();
+
+        $yesterday = now()->subDay()->toDateString();
+
+        $startOfWeek = now()->startOfWeek();
+        $endOfWeek = now()->endOfWeek();
+
+        $startOfLastWeek = now()->subWeek()->startOfWeek();
+        $endOfLastWeek = now()->subWeek()->endOfWeek();
+
+        $startOfMonth = now()->startOfMonth();
+        $endOfMonth = now()->endOfMonth();
+
+        $startOfLastMonth = now()->subMonth()->startOfMonth();
+        $endOfLastMonth = now()->subMonth()->endOfMonth();
+
+        $visitorStats = [
+            'today' => VisitorLog::whereDate('visited_date', $today)->count(),
+
+            'yesterday' => VisitorLog::whereDate('visited_date', $yesterday)->count(),
+
+            'this_week' => VisitorLog::whereBetween('visited_date', [
+                $startOfWeek,
+                $endOfWeek
+            ])->count(),
+
+            'last_week' => VisitorLog::whereBetween('visited_date', [
+                $startOfLastWeek,
+                $endOfLastWeek
+            ])->count(),
+
+            'this_month' => VisitorLog::whereBetween('visited_date', [
+                $startOfMonth,
+                $endOfMonth
+            ])->count(),
+
+            'last_month' => VisitorLog::whereBetween('visited_date', [
+                $startOfLastMonth,
+                $endOfLastMonth
+            ])->count(),
+
+            'total' => VisitorLog::count(),
+        ];
 
         return view('public.home', [
             'title' => 'Website Resmi Desa Dolok Nagodang',
@@ -75,6 +122,8 @@ class PublicHomeController extends Controller
 
             'letterTypes' => $letterTypes,
             'totalLetterTypes' => $totalLetterTypes,
+
+            'visitorStats' => $visitorStats,
         ]);
     }
 }

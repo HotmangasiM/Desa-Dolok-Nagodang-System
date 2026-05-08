@@ -194,6 +194,224 @@
         </div>
     </footer>
 
+    @if(isset($visitorStats))
+        <div class="fixed left-5 bottom-6 z-50 hidden lg:block group">
+            {{-- Detail --}}
+            <div class="absolute bottom-20 left-0 w-80 rounded-2xl bg-slate-900/90 text-white border border-white/20 shadow-2xl backdrop-blur p-5
+                        opacity-0 translate-y-3 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300">
+                <h3 class="text-lg font-bold mb-4">Jumlah Kunjungan</h3>
+
+                <div class="space-y-3 text-sm">
+                    <div class="flex justify-between border-b border-white/20 pb-2">
+                        <span>Hari Ini</span>
+                        <strong>{{ number_format($visitorStats['today'] ?? 0) }}</strong>
+                    </div>
+
+                    <div class="flex justify-between border-b border-white/20 pb-2">
+                        <span>Kemarin</span>
+                        <strong>{{ number_format($visitorStats['yesterday'] ?? 0) }}</strong>
+                    </div>
+
+                    <div class="flex justify-between border-b border-white/20 pb-2">
+                        <span>Minggu Ini</span>
+                        <strong>{{ number_format($visitorStats['this_week'] ?? 0) }}</strong>
+                    </div>
+
+                    <div class="flex justify-between border-b border-white/20 pb-2">
+                        <span>Minggu Lalu</span>
+                        <strong>{{ number_format($visitorStats['last_week'] ?? 0) }}</strong>
+                    </div>
+
+                    <div class="flex justify-between border-b border-white/20 pb-2">
+                        <span>Bulan Ini</span>
+                        <strong>{{ number_format($visitorStats['this_month'] ?? 0) }}</strong>
+                    </div>
+
+                    <div class="flex justify-between border-b border-white/20 pb-2">
+                        <span>Bulan Lalu</span>
+                        <strong>{{ number_format($visitorStats['last_month'] ?? 0) }}</strong>
+                    </div>
+
+                    <div class="flex justify-between pt-1">
+                        <span>Total Kunjungan</span>
+                        <strong>{{ number_format($visitorStats['total'] ?? 0) }}</strong>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Ringkas --}}
+            <div class="w-64 rounded-2xl bg-emerald-500/85 text-white border border-white/30 shadow-2xl backdrop-blur px-5 py-4 cursor-pointer">
+                <div class="flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center text-xl">
+                            👥
+                        </div>
+
+                        <div>
+                            <p class="font-bold">Kunjungan</p>
+                            <p class="text-sm text-emerald-50">Hari Ini</p>
+                        </div>
+                    </div>
+
+                    <div class="text-right">
+                        <p class="text-xl font-bold">{{ number_format($visitorStats['today'] ?? 0) }}</p>
+                        <p class="text-xs text-emerald-50">visitor</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    {{-- FLOATING PENGADUAN --}}
+<div class="fixed right-5 bottom-6 z-50">
+    <button
+        type="button"
+        onclick="toggleComplaintPanel()"
+        class="rounded-2xl bg-rose-500/90 text-white border border-white/30 shadow-2xl backdrop-blur px-5 py-4 hover:bg-rose-600 transition">
+        <div class="flex items-center gap-3">
+            <span class="text-2xl">🎧</span>
+            <span class="font-bold">Pengaduan</span>
+        </div>
+    </button>
+</div>
+
+    {{-- PANEL PENGADUAN --}}
+    <div id="complaintPanel"
+        class="fixed right-5 bottom-24 z-50 hidden w-[360px] max-w-[calc(100vw-2rem)] rounded-3xl bg-white border border-slate-200 shadow-2xl overflow-hidden">
+
+        <div class="bg-emerald-700 text-white px-5 py-4 flex items-center justify-between">
+            <div>
+                <h3 class="font-bold">Form Pengaduan</h3>
+                <p class="text-xs text-emerald-100">Sampaikan aspirasi atau laporan Anda.</p>
+            </div>
+
+            <button type="button" onclick="toggleComplaintPanel()" class="text-white text-xl">
+                ×
+            </button>
+        </div>
+
+        <form method="POST"
+            action="{{ route('public.complaints.store') }}"
+            enctype="multipart/form-data"
+            class="p-5 space-y-4">
+            @csrf
+
+            @if(session('complaint_success'))
+                <div class="rounded-xl bg-emerald-50 border border-emerald-200 px-4 py-3 text-sm text-emerald-700">
+                    {{ session('complaint_success') }}
+                </div>
+            @endif
+
+            @if ($errors->any())
+                <div class="rounded-xl bg-rose-50 border border-rose-200 px-4 py-3 text-sm text-rose-700">
+                    <p class="font-semibold">Pengaduan belum bisa dikirim.</p>
+                    <ul class="mt-2 list-disc list-inside space-y-1">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                    Nama <span class="text-rose-500">*</span>
+                </label>
+                <input
+                    type="text"
+                    name="name"
+                    value="{{ old('name') }}"
+                    class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    placeholder="Masukkan nama Anda"
+                >
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                    Nomor Telepon/WA <span class="text-rose-500">*</span>
+                </label>
+                <input
+                    type="text"
+                    name="phone"
+                    value="{{ old('phone') }}"
+                    class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    placeholder="Masukkan nomor HP/WhatsApp"
+                >
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                    Kategori Pengaduan <span class="text-rose-500">*</span>
+                </label>
+                <select
+                    name="category"
+                    class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                >
+                    <option value="">Pilih kategori pengaduan</option>
+                    @foreach (['Umum', 'Sosial', 'Keamanan', 'Kesehatan', 'Kebersihan', 'Permintaan'] as $category)
+                        <option value="{{ $category }}" {{ old('category') === $category ? 'selected' : '' }}>
+                            {{ $category }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                    Pengaduan <span class="text-rose-500">*</span>
+                </label>
+                <textarea
+                    name="message"
+                    rows="4"
+                    class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm leading-6 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    placeholder="Masukkan pesan, informasi, atau detail aduan Anda"
+                >{{ old('message') }}</textarea>
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                    Lampiran
+                </label>
+                <input
+                    type="file"
+                    name="attachment"
+                    accept=".jpg,.jpeg,.png,.pdf"
+                    class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm"
+                >
+                <p class="mt-1 text-xs text-slate-500">Format: JPG, PNG, PDF. Maksimal 2MB.</p>
+            </div>
+
+            <div class="flex justify-end pt-2">
+                <button
+                    type="submit"
+                    class="rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-700 transition">
+                    Kirim
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function toggleComplaintPanel() {
+            const panel = document.getElementById('complaintPanel');
+            if (!panel) return;
+
+            panel.classList.toggle('hidden');
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const hasComplaintFeedback =
+                @json(session()->has('complaint_success') || $errors->any());
+
+            if (hasComplaintFeedback) {
+                const panel = document.getElementById('complaintPanel');
+                if (panel) {
+                    panel.classList.remove('hidden');
+                }
+            }
+        });
+    </script>
+
     {{-- ================= SCRIPT ================= --}}
     <script>
         // MOBILE MENU
