@@ -110,7 +110,6 @@
     </div>
 
 </section>
-
 {{-- QUICK MENU --}}
 <section class="max-w-7xl mx-auto px-4 -mt-12 relative z-10">
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
