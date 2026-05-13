@@ -14,7 +14,7 @@ class CitizenRepository implements CitizenRepositoryInterface
         if(!empty($filters['search'])) {
             $search = $filters['search'];
 
-            $query->where(function($q) use ($seacrh) {
+            $query->where(function($q) use ($search) {
                 $q->where('full_name', 'like', "%{$search}%")
                   ->orWhere('nik', 'like', "%{$search}%");
             });
