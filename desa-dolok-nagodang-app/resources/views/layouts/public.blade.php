@@ -21,7 +21,12 @@
         }
     </style>
 </head>
-
+        <script src="https://unpkg.com/lucide@latest"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        lucide.createIcons();
+    });
+</script>
 <body class="bg-slate-50 text-slate-800">
 
     {{-- ================= HEADER ================= --}}
@@ -178,14 +183,44 @@
                 </ul>
             </div>
 
-            <div>
-                <h3 class="text-white font-semibold">Kontak Desa</h3>
-                <div class="mt-3 space-y-2 text-sm leading-6">
-                    <p>📍 Desa Dolok Nagodang, Kec. Uluan, Kab. Toba</p>
-                    <p>🕘 Senin - Jumat, 08.00 - 15.00</p>
-                    <p>📞 08xxxxxxxxxx</p>
-                    <p>✉ desa@email.com</p>
+            <div class="mt-3 space-y-3 text-sm">
+
+    <div class="flex items-start gap-3 group">
+        <div class="p-2 rounded-xl bg-emerald-500/10 group-hover:bg-emerald-500/20 transition">
+            <i data-lucide="map-pin" class="w-4 h-4 text-emerald-400"></i>
+        </div>
+        <p class="leading-relaxed">
+            Desa Dolok Nagodang, Kec. Uluan, Kab. Toba
+        </p>
+    </div>
+
+    <div class="flex items-start gap-3 group">
+        <div class="p-2 rounded-xl bg-emerald-500/10 group-hover:bg-emerald-500/20 transition">
+            <i data-lucide="clock" class="w-4 h-4 text-emerald-400"></i>
+        </div>
+        <p>
+            Senin - Jumat, 08.00 - 15.00
+        </p>
+    </div>
+
+        <div class="flex items-start gap-3 group">
+            <div class="p-2 rounded-xl bg-emerald-500/10 group-hover:bg-emerald-500/20 transition">
+                        <i data-lucide="phone" class="w-4 h-4 text-emerald-400"></i>
+                    </div>
+                    <p>
+                        08xxxxxxxxxx
+                    </p>
                 </div>
+
+                <div class="flex items-start gap-3 group">
+                    <div class="p-2 rounded-xl bg-emerald-500/10 group-hover:bg-emerald-500/20 transition">
+                        <i data-lucide="mail" class="w-4 h-4 text-emerald-400"></i>
+                    </div>
+                    <p>
+                        desa@email.com
+                    </p>
+                </div>
+
             </div>
         </div>
 

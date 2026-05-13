@@ -6,143 +6,159 @@
     <title>Sistem Informasi Desa</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="min-h-screen bg-slate-100">
-    <div class="min-h-screen grid lg:grid-cols-2">
 
-        {{-- Left Section --}}
-        <div class="relative hidden lg:flex overflow-hidden">
-            {{-- Background Image --}}
-            <img
-                src="{{ asset('images/farmer-login.png') }}"
-                alt="Petani desa"
-                class="absolute inset-0 h-full w-full object-cover"
-            >
+<body class="min-h-screen bg-gradient-to-br from-slate-50 via-white to-emerald-50">
 
-            {{-- Dark Overlay --}}
-            <div class="absolute inset-0 bg-slate-950/55"></div>
+<div class="min-h-screen grid lg:grid-cols-2">
 
-            {{-- Soft Gradient Overlay --}}
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/30 to-slate-900/40"></div>
+    {{-- LEFT --}}
+    <div class="relative hidden lg:flex overflow-hidden">
 
-            {{-- Content --}}
-            <div class="relative z-10 flex h-full w-full flex-col justify-between p-12 text-white">
-                <div class="max-w-lg">
-                    <!-- <div class="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-500/20 text-2xl backdrop-blur-sm border border-white/10">
-                        🌾
-                    </div> -->
+        <!-- IMAGE -->
+        <img src="{{ asset('images/login1.jpg') }}"
+             class="absolute inset-0 w-full h-full object-cover scale-105 brightness-110 contrast-110" />
 
-                    <h1 class="text-4xl xl:text-5xl font-bold leading-tight drop-shadow-lg align-center">
-                        Sistem Informasi
-                        <br>
-                        Desa Dolok Nagodang
-                    </h1>
+        <!-- LIGHT OVERLAY -->
+        <div class="absolute inset-0 bg-gradient-to-br from-white/40 via-white/10 to-transparent"></div>
 
-                    <p class="mt-5 max-w-md text-base leading-7 text-slate-100/90">
-                        Kelola data penduduk, surat, berita, aparat desa, dan inventaris
-                        dalam satu panel administrasi yang rapi dan terpusat.
-                    </p>
-                </div>
+        <!-- SMOOTH TRANSITION -->
+        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-white"></div>
 
-                <div class="max-w-md rounded-3xl border border-white/15 bg-white/10 p-6 backdrop-blur-md shadow-xl">
-                    <p class="text-sm leading-6 text-slate-100/90">
-                        “Panel admin ini dirancang untuk membantu operasional desa menjadi lebih tertib,
-                        cepat, dan terdokumentasi dengan baik.”
-                    </p>
-                </div>
+        <!-- CONTENT -->
+        <div class="relative z-10 p-12 flex flex-col justify-between text-slate-800">
+
+            <div>
+                <h1 class="text-5xl font-extrabold leading-tight tracking-tight">
+                    Desa Digital
+                    <span class="block text-emerald-600">Dolok Nagodang</span>
+                </h1>
+
+                <p class="mt-6 text-slate-600 max-w-md leading-relaxed">
+                    Platform terintegrasi untuk mengelola data desa secara modern,
+                    cepat, dan efisien.
+                </p>
             </div>
-        </div>
 
-        {{-- Right Section --}}
-        <div class="flex items-center justify-center px-4 py-10 sm:px-6 lg:px-12">
-            <div class="w-full max-w-md">
-                <div class="rounded-3xl bg-white shadow-xl border border-slate-200 p-8 sm:p-10">
-                    <div class="text-center mb-8">
-                        <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-100 text-3xl">
-                            🔐
+            <div class="bg-white/60 backdrop-blur-md border border-white/50 rounded-2xl p-6 shadow-lg">
+                <p class="text-sm text-slate-600">
+                    “Transformasi digital desa dimulai dari sistem yang rapi,
+                    aman, dan mudah digunakan.”
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+    {{-- RIGHT --}}
+    <div class="relative flex items-center justify-center px-6 py-12">
+
+        <!-- SOFT GLOW -->
+        <div class="absolute right-10 top-1/2 w-[400px] h-[400px] 
+                    bg-emerald-300/30 blur-[120px] rounded-full"></div>
+
+        <div class="relative w-full max-w-md">
+
+            <!-- CARD -->
+            <div class="bg-white/80 backdrop-blur-xl border border-slate-200 
+                        shadow-xl rounded-3xl p-8">
+
+                <!-- HEADER -->
+                <div class="text-center mb-8">
+                        <div class="flex justify-center mb-6">
+                        <div class="bg-white p-4 rounded-2xl shadow-md border">
+                            <img src="{{ asset('images/logo.jpg') }}" 
+                                class="h-16 object-contain">
                         </div>
-                        <h2 class="text-2xl font-bold text-slate-800">Masuk ke Panel Admin</h2>
-                        <p class="mt-2 text-sm text-slate-500">
-                            Gunakan akun admin untuk mengakses sistem informasi desa.
-                        </p>
                     </div>
 
-                    @if (session('status'))
-                        <div class="mb-4 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-                            {{ session('status') }}
-                        </div>
-                    @endif
+                    <h2 class="text-2xl font-bold text-slate-800">
+                        Login Admin
+                    </h2>
 
-                    @if ($errors->any())
-                        <div class="mb-4 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
-                            <ul class="list-disc list-inside space-y-1">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
-
-                    <form method="POST" action="{{ route('login') }}" class="space-y-5">
-                        @csrf
-
-                        <div>
-                            <label for="email" class="block text-sm font-semibold text-slate-700 mb-2">
-                                Email
-                            </label>
-                            <input
-                                id="email"
-                                type="email"
-                                name="email"
-                                value="{{ old('email') }}"
-                                required
-                                autofocus
-                                autocomplete="username"
-                                class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                                placeholder="Masukkan email"
-                            >
-                        </div>
-
-                        <div>
-                            <label for="password" class="block text-sm font-semibold text-slate-700 mb-2">
-                                Password
-                            </label>
-                            <input
-                                id="password"
-                                type="password"
-                                name="password"
-                                required
-                                autocomplete="current-password"
-                                class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                                placeholder="Masukkan password"
-                            >
-                        </div>
-
-                        <div class="flex items-center justify-between">
-                            <label class="inline-flex items-center gap-2 text-sm text-slate-600">
-                                <input
-                                    type="checkbox"
-                                    name="remember"
-                                    class="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
-                                >
-                                <span>Remember me</span>
-                            </label>
-
-                            @if (Route::has('password.request'))
-                                <a href="{{ route('password.request') }}" class="text-sm font-medium text-emerald-600 hover:text-emerald-700">
-                                    Lupa password?
-                                </a>
-                            @endif
-                        </div>
-
-                        <button
-                            type="submit"
-                            class="w-full rounded-xl bg-emerald-600 px-4 py-3 text-sm font-semibold text-white hover:bg-emerald-700 transition shadow-lg shadow-emerald-600/20">
-                            Masuk
-                        </button>
-                    </form>
+                    <p class="text-sm text-slate-500 mt-2">
+                        Masuk untuk mengelola sistem desa
+                    </p>
                 </div>
+
+                {{-- ALERT --}}
+                @if (session('status'))
+                    <div class="mb-4 text-sm text-emerald-700 bg-emerald-50 border border-emerald-200 px-4 py-3 rounded-xl">
+                        {{ session('status') }}
+                    </div>
+                @endif
+
+                @if ($errors->any())
+                    <div class="mb-4 text-sm text-rose-700 bg-rose-50 border border-rose-200 px-4 py-3 rounded-xl">
+                        <ul class="list-disc list-inside">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <!-- FORM -->
+                <form method="POST" action="{{ route('login') }}" class="space-y-5">
+                    @csrf
+
+                    <!-- EMAIL -->
+                    <div>
+                        <label class="text-sm font-medium text-slate-600">Email</label>
+                        <input type="email" name="email"
+                               value="{{ old('email') }}"
+                               required autofocus
+                               class="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm 
+                                      focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 
+                                      transition"
+                               placeholder="email@desa.id">
+                    </div>
+
+                    <!-- PASSWORD -->
+                    <div>
+                        <label class="text-sm font-medium text-slate-600">Kata Sandi</label>
+                        <input type="password" name="password"
+                               required
+                               class="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm 
+                                      focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 
+                                      transition"
+                               placeholder="••••••••">
+                    </div>
+
+                    <!-- OPTIONS -->
+                    <div class="flex items-center justify-between text-sm text-slate-600">
+                        <label class="flex items-center gap-2">
+                            <input type="checkbox" name="remember"
+                                   class="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500">
+                            Ingat saya
+                        </label>
+
+                        @if (Route::has('password.request'))
+                            <a href="{{ route('password.request') }}"
+                               class="text-emerald-600 hover:text-emerald-700 font-medium">
+                                Lupa?
+                            </a>
+                        @endif
+                    </div>
+
+                    <!-- BUTTON -->
+                    <button type="submit"
+                        class="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 text-white 
+                               py-3 rounded-xl font-semibold shadow-md 
+                               hover:scale-[1.02] transition">
+                        Masuk
+                    </button>
+
+                </form>
+
+                <!-- FOOTER -->
+                <p class="text-center text-xs text-slate-400 mt-6">
+                    © {{ date('Y') }} Sistem Informasi Desa
+                </p>
+
             </div>
         </div>
     </div>
+
+</div>
 </body>
 </html>
