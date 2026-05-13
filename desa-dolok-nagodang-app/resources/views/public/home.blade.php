@@ -105,7 +105,7 @@
         </div>
 
         {{-- NAVIGATION --}}
-        <button type="button"
+        <!-- <button type="button"
         class="hero-prev absolute left-6 top-1/2 z-30 -translate-y-1/2 w-14 h-14 rounded-full bg-white/15 text-white border border-white/30 backdrop-blur-md hover:bg-emerald-600 hover:border-emerald-500 transition hidden md:flex items-center justify-center text-3xl">
             ‹
         </button>
@@ -113,7 +113,7 @@
         <button type="button"
                 class="hero-next absolute right-6 top-1/2 z-30 -translate-y-1/2 w-14 h-14 rounded-full bg-white/15 text-white border border-white/30 backdrop-blur-md hover:bg-emerald-600 hover:border-emerald-500 transition hidden md:flex items-center justify-center text-3xl">
             ›
-        </button>
+        </button> -->
 
         {{-- PAGINATION --}}
         <div class="swiper-pagination"></div>
