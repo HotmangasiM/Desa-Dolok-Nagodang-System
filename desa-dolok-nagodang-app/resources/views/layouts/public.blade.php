@@ -263,17 +263,17 @@
     @endif
 
     {{-- FLOATING PENGADUAN --}}
-<div class="fixed right-5 bottom-6 z-50">
-    <button
-        type="button"
-        onclick="toggleComplaintPanel()"
-        class="rounded-2xl bg-rose-500/90 text-white border border-white/30 shadow-2xl backdrop-blur px-5 py-4 hover:bg-rose-600 transition">
-        <div class="flex items-center gap-3">
-            <span class="text-2xl">🎧</span>
-            <span class="font-bold">Pengaduan</span>
-        </div>
-    </button>
-</div>
+    <div class="fixed right-5 bottom-6 z-50">
+        <button
+            type="button"
+            onclick="toggleComplaintPanel()"
+            class="rounded-2xl bg-rose-500/90 text-white border border-white/30 shadow-2xl backdrop-blur px-5 py-4 hover:bg-rose-600 transition">
+            <div class="flex items-center gap-3">
+                <span class="text-2xl">🎧</span>
+                <span class="font-bold">Pengaduan</span>
+            </div>
+        </button>
+    </div>
 
     {{-- PANEL PENGADUAN --}}
     <div id="complaintPanel"
@@ -439,6 +439,6 @@
             elements.forEach(el => observer.observe(el));
         });
     </script>
-
+    @stack('scripts')
 </body>
 </html>

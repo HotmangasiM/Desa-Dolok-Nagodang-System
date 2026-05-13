@@ -12,6 +12,8 @@ window.Alpine = Alpine;
 
 Alpine.start();
 
+Swiper.use([Navigation, Pagination, Autoplay]);
+
 window.Swiper = Swiper;
 window.SwiperModules = {
     Navigation,
