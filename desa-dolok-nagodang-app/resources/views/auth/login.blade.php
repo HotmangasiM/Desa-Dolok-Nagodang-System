@@ -22,31 +22,43 @@
         <div class="absolute inset-0 bg-gradient-to-br from-white/40 via-white/10 to-transparent"></div>
 
         <!-- SMOOTH TRANSITION -->
-        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-white"></div>
-
+        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-white"></div>
         <!-- CONTENT -->
-        <div class="relative z-10 p-12 flex flex-col justify-between text-slate-800">
+<div class="relative z-10 flex items-center justify-center h-full px-16">
 
-            <div>
-                <h1 class="text-5xl font-extrabold leading-tight tracking-tight">
-                    Desa Digital
-                    <span class="block text-emerald-600">Dolok Nagodang</span>
-                </h1>
+    <div class="max-w-xl space-y-10">
 
-                <p class="mt-6 text-slate-600 max-w-md leading-relaxed">
-                    Platform terintegrasi untuk mengelola data desa secara modern,
-                    cepat, dan efisien.
-                </p>
-            </div>
+        <!-- ACCENT -->
+        <div class="w-20 h-1.5 bg-gradient-to-r from-emerald-500 to-emerald-300 rounded-full"></div>
 
-            <div class="bg-white/60 backdrop-blur-md border border-white/50 rounded-2xl p-6 shadow-lg">
-                <p class="text-sm text-slate-600">
-                    “Transformasi digital desa dimulai dari sistem yang rapi,
-                    aman, dan mudah digunakan.”
-                </p>
-            </div>
+        <!-- TITLE -->
+        <h1 class="text-5xl md:text-6xl font-extrabold leading-tight text-slate-800">
+            Desa Digital
+            <span class="block text-emerald-600 mt-2">
+                Dolok Nagodang
+            </span>
+        </h1>
+
+        <!-- DESCRIPTION -->
+        <p class="text-slate-600 text-lg leading-relaxed max-w-lg">
+            Platform terintegrasi untuk mengelola data desa secara modern,
+            cepat, dan efisien dengan sistem yang rapi, aman, dan mudah digunakan.
+        </p>
+
+        <!-- CARD QUOTE -->
+        <div class="bg-white/80 backdrop-blur-md border border-white/50 
+                    rounded-2xl p-6 shadow-xl max-w-md">
+
+            <p class="text-sm text-slate-600 italic leading-relaxed">
+                “Transformasi digital desa dimulai dari sistem yang rapi,
+                transparan, dan mudah diakses oleh masyarakat.”
+            </p>
 
         </div>
+
+    </div>
+
+</div>
     </div>
 
     {{-- RIGHT --}}
