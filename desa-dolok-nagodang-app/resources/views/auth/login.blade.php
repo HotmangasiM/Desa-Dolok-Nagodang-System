@@ -29,7 +29,7 @@
     <div class="max-w-xl space-y-10">
 
         <!-- ACCENT -->
-        <div class="w-20 h-1.5 bg-gradient-to-r from-emerald-500 to-emerald-300 rounded-full"></div>
+        <div class="w-25 h-1.5 bg-gradient-to-r from-emerald-500 to-emerald-300 rounded-full"></div>
 
         <!-- TITLE -->
         <h1 class="text-5xl md:text-6xl font-extrabold leading-tight text-slate-800">
@@ -46,16 +46,17 @@
         </p>
 
         <!-- CARD QUOTE -->
-        <div class="bg-white/80 backdrop-blur-md border border-white/50 
-                    rounded-2xl p-6 shadow-xl max-w-md">
+       <div class="bg-white/80 backdrop-blur-md border border-white/50 
+            rounded-2xl p-6 shadow-xl max-w-md text-center">
 
-            <p class="text-sm text-slate-600 italic leading-relaxed">
-                “Transformasi digital desa dimulai dari sistem yang rapi,
-                transparan, dan mudah diakses oleh masyarakat.”
-            </p>
+    <div class="text-emerald-500 text-2xl mb-2">“</div>
 
-        </div>
+    <p class="text-sm text-slate-600 italic leading-relaxed max-w-xs mx-auto">
+        Transformasi digital desa dimulai dari sistem yang rapi,
+        transparan, dan mudah diakses oleh masyarakat.
+    </p>
 
+</div>
     </div>
 
 </div>
