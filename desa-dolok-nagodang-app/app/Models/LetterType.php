@@ -15,6 +15,8 @@ class LetterType extends Model
         'name',
         'code',
         'description',
+        'template_file',
+        'is_active',
     ];
 
     public function letters()

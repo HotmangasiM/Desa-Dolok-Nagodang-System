@@ -5,7 +5,7 @@
 {{-- HERO SLIDER --}}
 <section class="relative">
 
-    <div class="swiper heroSwiper h-[700px]">
+    <div class="swiper heroSwiper h-[620px] md:h-[700px]">
 
         <div class="swiper-wrapper">
 
@@ -104,6 +104,17 @@
 
         </div>
 
+        {{-- NAVIGATION --}}
+        <!-- <button type="button"
+        class="hero-prev absolute left-6 top-1/2 z-30 -translate-y-1/2 w-14 h-14 rounded-full bg-white/15 text-white border border-white/30 backdrop-blur-md hover:bg-emerald-600 hover:border-emerald-500 transition hidden md:flex items-center justify-center text-3xl">
+            ‹
+        </button>
+
+        <button type="button"
+                class="hero-next absolute right-6 top-1/2 z-30 -translate-y-1/2 w-14 h-14 rounded-full bg-white/15 text-white border border-white/30 backdrop-blur-md hover:bg-emerald-600 hover:border-emerald-500 transition hidden md:flex items-center justify-center text-3xl">
+            ›
+        </button> -->
+
         {{-- PAGINATION --}}
         <div class="swiper-pagination"></div>
 
@@ -112,27 +123,26 @@
 </section>
 {{-- QUICK MENU --}}
 <section class="max-w-7xl mx-auto px-4 -mt-12 relative z-10">
-    @php
-        $menus = [
-            ['label'=>'Profil Desa','desc'=>'Informasi wilayah','icon'=>'home','url'=>route('public.profile')],
-            ['label'=>'Berita Desa','desc'=>number_format($totalPublishedNews ?? 0).' berita tayang','icon'=>'newspaper','url'=>route('public.news.index')],
-            ['label'=>'Aparat Desa','desc'=>'Struktur perangkat','icon'=>'users','url'=>route('public.officials')],
-            ['label'=>'Layanan Surat','desc'=>number_format($totalLetterTypes ?? 0).' jenis layanan','icon'=>'file-text','url'=>route('public.letters')],
-        ];
-    @endphp
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        @php
+            $menus = [
+                ['label' => 'Profil Desa', 'desc' => 'Informasi wilayah', 'icon' => '🏘️', 'url' => route('public.profile')],
+                ['label' => 'Berita Desa', 'desc' => number_format($totalPublishedNews ?? 0) . ' berita tayang', 'icon' => '📰', 'url' => route('public.news.index')],
+                ['label' => 'Aparat Desa', 'desc' => 'Struktur perangkat', 'icon' => '👥', 'url' => route('public.officials')],
+                ['label' => 'Layanan Surat', 'desc' => number_format($totalLetterTypes ?? 0) . ' jenis layanan', 'icon' => '📄', 'url' => route('public.letters')],
+            ];
+        @endphp
 
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
         @foreach ($menus as $menu)
-        <a href="{{ $menu['url'] }}"
-           class="group rounded-3xl bg-white p-5 shadow-sm border hover:shadow-lg hover:-translate-y-1 transition">
-
-            <div class="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center group-hover:bg-emerald-100 transition">
-                <i data-lucide="{{ $menu['icon'] }}" class="w-6 h-6 text-emerald-600 group-hover:scale-110 transition"></i>
-            </div>
-
-            <p class="mt-4 font-bold text-slate-800">{{ $menu['label'] }}</p>
-            <p class="mt-1 text-xs text-slate-500">{{ $menu['desc'] }}</p>
-        </a>
+            <a href="{{ $menu['url'] }}"
+               class="group rounded-3xl bg-white p-5 shadow-sm border border-slate-200 hover:shadow-lg hover:-translate-y-1 transition">
+                <div class="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-3xl group-hover:bg-emerald-100 transition">
+                    {{ $menu['icon'] }}
+                </div>
+                <p class="mt-4 font-bold text-slate-800">{{ $menu['label'] }}</p>
+                <p class="mt-1 text-xs text-slate-500">{{ $menu['desc'] }}</p>
+            </a>
         @endforeach
     </div>
 </section>
@@ -416,22 +426,43 @@
     </div>
 </section>
 @endsection
+@push('styles')
+<style>
+    .heroSwiper .swiper-pagination-bullet {
+        width: 10px;
+        height: 10px;
+        background: rgba(255, 255, 255, 0.75);
+        opacity: 1;
+    }
+
+    .heroSwiper .swiper-pagination-bullet-active {
+        width: 28px;
+        border-radius: 999px;
+        background: #10b981;
+    }
+</style>
+@endpush
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    if (typeof Swiper === 'undefined') {
+        console.error('Swiper belum ter-load. Cek resources/js/app.js dan npm run build.');
+        return;
+    }
 
-    new Swiper('.heroSwiper', {
-        modules: [
-            window.SwiperModules.Navigation,
-            window.SwiperModules.Pagination,
-            window.SwiperModules.Autoplay
-        ],
-
+    const heroSwiper = new Swiper('.heroSwiper', {
         loop: true,
+        slidesPerView: 1,
+        speed: 800,
 
         autoplay: {
             delay: 5000,
             disableOnInteraction: false,
+        },
+
+        navigation: {
+            nextEl: '.hero-next',
+            prevEl: '.hero-prev',
         },
 
         pagination: {
@@ -440,6 +471,7 @@ document.addEventListener('DOMContentLoaded', function () {
         },
     });
 
+    console.log('Hero Swiper aktif:', heroSwiper);
 });
 </script>
 @endpush

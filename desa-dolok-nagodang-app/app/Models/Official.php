@@ -23,7 +23,7 @@ class Official extends Model
         'term_end',
         'order',
         'is_active',
-        'sort_oder',
+        'sort_order',
     ];
 
     protected $casts = [

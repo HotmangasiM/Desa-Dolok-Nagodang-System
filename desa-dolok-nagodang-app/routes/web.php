@@ -17,10 +17,6 @@ use App\Http\Controllers\PublicVillageProfileController;
 use App\Http\Controllers\PublicLetterServiceController;
 use App\Http\Controllers\PublicComplaintController;
 
-Route::get('/', function () {
-    return redirect()->route('login');
-});
-
 Route::middleware('auth')->prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
 
@@ -76,7 +72,6 @@ Route::middleware('track.visitor')->group(function () {
 
     Route::get('/profil-desa', [PublicVillageProfileController::class, 'index'])->name('public.profile');
     Route::get('/aparat-desa', [PublicOfficialController::class, 'index'])->name('public.officials');
-    Route::get('/layanan-surat', [PublicLetterServiceController::class, 'index'])->name('public.letters');
     Route::get('/layanan-surat', [PublicLetterServiceController::class, 'index'])
         ->name('public.letters');
 
