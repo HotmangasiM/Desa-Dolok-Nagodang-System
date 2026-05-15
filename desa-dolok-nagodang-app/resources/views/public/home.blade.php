@@ -121,32 +121,33 @@
     </div>
 
 </section>
+
 {{-- QUICK MENU --}}
 <section class="max-w-7xl mx-auto px-4 -mt-12 relative z-10">
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        @php
-            $menus = [
-                ['label' => 'Profil Desa', 'desc' => 'Informasi wilayah', 'icon' => '🏘️', 'url' => route('public.profile')],
-                ['label' => 'Berita Desa', 'desc' => number_format($totalPublishedNews ?? 0) . ' berita tayang', 'icon' => '📰', 'url' => route('public.news.index')],
-                ['label' => 'Aparat Desa', 'desc' => 'Struktur perangkat', 'icon' => '👥', 'url' => route('public.officials')],
-                ['label' => 'Layanan Surat', 'desc' => number_format($totalLetterTypes ?? 0) . ' jenis layanan', 'icon' => '📄', 'url' => route('public.letters')],
-            ];
-        @endphp
+    @php
+        $menus = [
+            ['label'=>'Profil Desa','desc'=>'Informasi wilayah','icon'=>'home','url'=>route('public.profile')],
+            ['label'=>'Berita Desa','desc'=>number_format($totalPublishedNews ?? 0).' berita tayang','icon'=>'newspaper','url'=>route('public.news.index')],
+            ['label'=>'Aparat Desa','desc'=>'Struktur perangkat','icon'=>'users','url'=>route('public.officials')],
+            ['label'=>'Layanan Surat','desc'=>number_format($totalLetterTypes ?? 0).' jenis layanan','icon'=>'file-text','url'=>route('public.letters')],
+        ];
+    @endphp
 
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
         @foreach ($menus as $menu)
-            <a href="{{ $menu['url'] }}"
-               class="group rounded-3xl bg-white p-5 shadow-sm border border-slate-200 hover:shadow-lg hover:-translate-y-1 transition">
-                <div class="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-3xl group-hover:bg-emerald-100 transition">
-                    {{ $menu['icon'] }}
-                </div>
-                <p class="mt-4 font-bold text-slate-800">{{ $menu['label'] }}</p>
-                <p class="mt-1 text-xs text-slate-500">{{ $menu['desc'] }}</p>
-            </a>
+        <a href="{{ $menu['url'] }}"
+           class="group rounded-3xl bg-white p-5 shadow-sm border hover:shadow-lg hover:-translate-y-1 transition">
+
+            <div class="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center group-hover:bg-emerald-100 transition">
+                <i data-lucide="{{ $menu['icon'] }}" class="w-6 h-6 text-emerald-600 group-hover:scale-110 transition"></i>
+            </div>
+
+            <p class="mt-4 font-bold text-slate-800">{{ $menu['label'] }}</p>
+            <p class="mt-1 text-xs text-slate-500">{{ $menu['desc'] }}</p>
+        </a>
         @endforeach
     </div>
 </section>
-
 
 {{-- INFORMASI CEPAT --}}
 <section class="max-w-7xl mx-auto px-4 py-12">
@@ -325,7 +326,7 @@
                                  alt="{{ $item->title }}">
                         @else
                             <div class="w-full h-full flex items-center justify-center text-5xl">
-                                <i data-lucide="newspaper" class="w-10 h-10 text-slate-400"></i>
+                                📰
                             </div>
                         @endif
                     </div>
@@ -409,9 +410,7 @@
         <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-5">
             @forelse ($letterTypes as $type)
                 <div class="rounded-2xl bg-white/10 border border-white/10 p-5 hover:bg-white/15 transition">
-                    <div class="text-3xl">
-                        <i data-lucide="file-text" class="w-6 h-6"></i>
-                    </div>
+                    <div class="text-3xl">📄</div>
                     <h3 class="mt-3 font-bold">{{ $type->name }}</h3>
                     <p class="mt-2 text-sm text-emerald-100 leading-6">
                         Silakan hubungi kantor desa untuk proses administrasi surat.
