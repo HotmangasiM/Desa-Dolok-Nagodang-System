@@ -47,7 +47,7 @@
 
         <!-- CARD QUOTE -->
        <div class="bg-white/80 backdrop-blur-md border border-white/50 
-            rounded-2xl p-6 shadow-xl max-w-md text-center">
+            rounded-2xl p-5 shadow-xl max-w-md text-center">
 
     <div class="text-emerald-500 text-2xl mb-2">“</div>
 
