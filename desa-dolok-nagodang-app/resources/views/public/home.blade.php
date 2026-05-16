@@ -198,7 +198,7 @@
                 <div class="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center">
                     <i data-lucide="user" class="w-5 h-5 text-emerald-600"></i>
                 </div>
-                <p class="text-sm font-semibold text-emerald-700">Sambutan Kepala Desa</p>
+                <p class="text-sm font-semibold text-emerald-700">Sambutan Kepala Suku</p>
             </div>
 
             <div class="mt-5 flex items-center gap-5">
