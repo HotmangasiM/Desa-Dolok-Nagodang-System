@@ -1,4 +1,4 @@
-name: Deploy UAT
+name: Deploy Desa UAT
 
 on:
   push:
