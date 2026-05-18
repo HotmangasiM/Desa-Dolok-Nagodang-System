@@ -105,9 +105,9 @@
             <h2 class="mt-1 text-3xl font-bold text-slate-800">
                 Visi dan Misi
             </h2>
-            <p class="mt-3 text-slate-500">
+            <!-- <p class="mt-3 text-slate-500">
                 Landasan pelayanan dan pembangunan Desa Dolok Nagodang.
-            </p>
+            </p> -->
         </div>
 
         <div class="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-8">
