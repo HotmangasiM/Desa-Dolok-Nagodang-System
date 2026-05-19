@@ -71,17 +71,21 @@
         </div>
 
         <form method="GET" action="{{ route('admin.officials.index') }}" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+
             <div class="xl:col-span-2">
-                <label class="block text-sm font-semibold text-slate-700 mb-2">Cari Aparat</label>
+                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                    Cari Aparat
+                </label>
+
                 <input
                     type="text"
                     name="search"
                     value="{{ $filters['search'] ?? '' }}"
                     placeholder="Cari berdasarkan nama, jabatan, atau email"
-                    class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                >
+                    maxlength="100"
+                    oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '')"
+                    class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
             </div>
-
             <div>
                 <label class="block text-sm font-semibold text-slate-700 mb-2">Jabatan</label>
                 <input
