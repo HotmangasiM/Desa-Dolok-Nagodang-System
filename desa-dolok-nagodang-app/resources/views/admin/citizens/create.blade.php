@@ -28,8 +28,8 @@
         </div>
     @endif
 
-    <form action="{{ route('admin.citizens.store') }}" method="POST" class="space-y-6">
-        @csrf
+    <form id="formPenduduk" action="{{ route('admin.citizens.store') }}" method="POST" class="space-y-6">
+    @csrf
 
         <!-- Data Utama -->
         <div class="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
@@ -250,10 +250,10 @@
                 Batal
             </a>
 
-            <button type="button" onclick="confirmSubmit()"
-                    class="w-full sm:w-auto inline-flex items-center justify-center rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-700 shadow-lg shadow-emerald-600/20 transition">
-                Simpan Data Penduduk
-            </button>
+            <button type="button" id="btnSubmit"
+    class="w-full sm:w-auto inline-flex items-center justify-center rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-700 shadow-lg shadow-emerald-600/20 transition">
+    Simpan Data Penduduk
+</button>
         </div>
     </form>
 </div>
@@ -293,21 +293,53 @@ function confirmSubmit() {
 
         if (result.isConfirmed) {
 
-            Swal.fire({
-                title: 'Menyimpan...',
-                text: 'Mohon tunggu',
-                allowOutsideClick: false,
-                showConfirmButton: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                }
-            });
+         @push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
 
-            form.submit();
-        }
+    const btnSubmit = document.getElementById('btnSubmit');
+    const form = document.getElementById('formPenduduk');
+
+    if (!btnSubmit || !form) {
+        console.error('Button atau form tidak ditemukan!');
+        return;
+    }
+
+    btnSubmit.addEventListener('click', function (e) {
+
+        e.preventDefault();
+
+        Swal.fire({
+            title: 'Konfirmasi Tambah Data',
+            text: 'Apakah Anda yakin ingin menyimpan data penduduk?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Simpan',
+            cancelButtonText: 'Batal',
+            confirmButtonColor: '#10b981',
+            cancelButtonColor: '#6b7280',
+            reverseButtons: true
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+
+                Swal.fire({
+                    title: 'Menyimpan...',
+                    text: 'Mohon tunggu',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                form.submit();
+            }
+
+        });
 
     });
 
-}
+});
 </script>
 @endpush

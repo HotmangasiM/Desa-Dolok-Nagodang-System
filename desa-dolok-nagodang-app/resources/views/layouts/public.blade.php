@@ -34,15 +34,24 @@
         <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
 
             {{-- LOGO --}}
-            <a href="{{ route('public.home') }}" class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center text-white font-bold">
-                    D
-                </div>
-                <div>
-                    <p class="text-sm font-bold text-slate-800">Desa Dolok Nagodang</p>
-                    <p class="text-xs text-slate-500">Kabupaten Toba</p>
-                </div>
-            </a>
+           <a href="{{ route('public.home') }}" class="flex items-center gap-3">
+    
+    <!-- Logo -->
+    <div class="w-12 h-12 rounded-xl bg-white shadow-sm border flex items-center justify-center overflow-hidden">
+        <img 
+            src="{{ asset('images/logo.jpg') }}" 
+            alt="Logo Desa Dolok Nagodang"
+            class="w-full h-full object-contain"
+        >
+    </div>
+
+    <!-- Text -->
+    <div class="leading-tight">
+        <p class="text-sm font-semibold text-slate-800">Desa Dolok Nagodang</p>
+        <p class="text-xs text-slate-500">Kabupaten Toba</p>
+    </div>
+
+</a>
 
             {{-- NAV DESKTOP --}}
             <!-- <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-700">
