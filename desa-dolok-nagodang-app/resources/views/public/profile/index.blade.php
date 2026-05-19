@@ -102,13 +102,12 @@
 <section class="bg-slate-100/80 py-16">
     <div class="max-w-7xl mx-auto px-4">
         <div class="text-center max-w-3xl mx-auto">
-            <p class="text-sm font-semibold text-emerald-700">Arah Pembangunan Desa</p>
             <h2 class="mt-1 text-3xl font-bold text-slate-800">
                 Visi dan Misi
             </h2>
-            <p class="mt-3 text-slate-500">
+            <!-- <p class="mt-3 text-slate-500">
                 Landasan pelayanan dan pembangunan Desa Dolok Nagodang.
-            </p>
+            </p> -->
         </div>
 
         <div class="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-8">

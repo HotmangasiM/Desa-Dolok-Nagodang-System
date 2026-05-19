@@ -187,19 +187,18 @@
     </div>
 </section>
 
-<section class="max-w-7xl mx-auto px-4 py-20">
-    <div class="rounded-3xl bg-white border border-slate-200 shadow-sm p-10">
+{{-- SAMBUTAN + STATISTIK --}}
+<section class="max-w-7xl mx-auto px-4 py-16">
+    <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
 
-        <div class="grid md:grid-cols-3 gap-10 items-center">
+        {{-- SAMBUTAN --}}
+        <div class="lg:col-span-2 rounded-3xl bg-white border border-slate-200 p-8 shadow-sm">
 
-            {{-- FOTO / LOGO --}}
-          <div class="flex justify-center md:justify-center items-center h-full">
-                
-                {{-- LOGO UTAMA --}}
-                <img src="{{ asset('images/sambutan.jpg') }}" 
-                     alt="Logo Desa"
-                     class="w-44 md:w-52 lg:w-60 h-auto object-contain">
-
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center">
+                    <i data-lucide="user" class="w-5 h-5 text-emerald-600"></i>
+                </div>
+                <p class="text-sm font-semibold text-emerald-700">Sambutan Kepala Desa</p>
             </div>
 g
 

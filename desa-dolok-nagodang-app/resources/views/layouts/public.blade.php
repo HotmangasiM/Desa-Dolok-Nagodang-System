@@ -7,6 +7,7 @@
     <meta name="description" content="{{ $description ?? 'Website resmi Desa Dolok Nagodang sebagai pusat informasi dan pelayanan masyarakat.' }}">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @stack('styles')
 
     {{-- ANIMASI --}}
     <style>
