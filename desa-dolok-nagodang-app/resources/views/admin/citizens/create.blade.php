@@ -54,14 +54,6 @@
                 </div>
 
                 <div>
-<!-- <<<<<<< HEAD
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">Jenis Kelamin <span class="text-rose-500">*</span></label>
-                    <select name="gender"
-                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
-                        <option value="">Pilih Jenis Kelamin</option>
-                        <option value="L" {{ old('gender') === 'L' ? 'selected' : '' }}>L</option>
-                        <option value="P" {{ old('gender') === 'P' ? 'selected' : '' }}>P</option>
-======= -->
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Jenis Kelamin</label>
                     <select
                         name="gender"
@@ -250,8 +242,8 @@
                 Batal
             </a>
 
-            <button type="button" onclick="confirmSubmit()"
-                    class="w-full sm:w-auto inline-flex items-center justify-center rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-700 shadow-lg shadow-emerald-600/20 transition">
+            <button type="submit"
+                class="w-full sm:w-auto inline-flex items-center justify-center rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-700 shadow-lg shadow-emerald-600/20 transition">
                 Simpan Data Penduduk
             </button>
         </div>
@@ -265,49 +257,39 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-function confirmSubmit() {
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.querySelector('form[action*="citizens"]');
 
-    if (typeof Swal === 'undefined') {
-        console.error('SweetAlert tidak ter-load!');
-        return;
-    }
+    if (!form) return;
 
-    const form = document.querySelector('form');
-
-    Swal.fire({
-        title: 'Konfirmasi Tambah Data',
-        text: 'Apakah Anda yakin ingin menyimpan data penduduk?',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'Ya, simpan',
-        cancelButtonText: 'Batal',
-        confirmButtonColor: '#10b981',
-        cancelButtonColor: '#6b7280',
-        reverseButtons: true,
-        customClass: {
-            popup: 'rounded-2xl',
-            confirmButton: 'rounded-lg px-4 py-2',
-            cancelButton: 'rounded-lg px-4 py-2'
-        }
-    }).then((result) => {
-
-        if (result.isConfirmed) {
-
-            Swal.fire({
-                title: 'Menyimpan...',
-                text: 'Mohon tunggu',
-                allowOutsideClick: false,
-                showConfirmButton: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                }
-            });
-
-            form.submit();
+    form.addEventListener('submit', function (e) {
+        if (form.dataset.confirmed === 'true') {
+            return;
         }
 
+        if (typeof Swal === 'undefined') {
+            return; // fallback: submit normal
+        }
+
+        e.preventDefault();
+
+        Swal.fire({
+            title: 'Konfirmasi Tambah Data',
+            text: 'Apakah Anda yakin ingin menyimpan data penduduk?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, simpan',
+            cancelButtonText: 'Batal',
+            confirmButtonColor: '#10b981',
+            cancelButtonColor: '#6b7280',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.dataset.confirmed = 'true';
+                form.submit();
+            }
+        });
     });
-
-}
+});
 </script>
 @endpush
