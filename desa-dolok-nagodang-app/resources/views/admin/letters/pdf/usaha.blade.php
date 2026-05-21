@@ -236,18 +236,18 @@
         <tr>
             <td class="label">Usaha Pokok</td>
             <td class="colon">:</td>
-            <td>{{ $businessType }}</td>
+            <td>{{ $businessName }}</td>
         </tr>
         <tr>
             <td class="label">Usaha Tambahan</td>
             <td class="colon">:</td>
-            <td>{{ $businessName }}</td>
+            <td>{{ $businessType }}</td>
         </tr>
-        <tr>
+        <!-- <tr>
             <td class="label">Alamat Usaha</td>
             <td class="colon">:</td>
             <td>{{ $businessAddress }}</td>
-        </tr>
+        </tr> -->
     </table>
 
     <p class="paragraph">

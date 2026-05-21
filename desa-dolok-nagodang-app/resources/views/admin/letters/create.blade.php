@@ -16,11 +16,17 @@
     <form action="{{ route('admin.letters.store') }}" method="POST" class="space-y-6">
         @csrf
 
+        {{-- Field sistem --}}
+        <input type="hidden" id="subjectInput" name="subject" value="{{ old('subject', 'Surat Elektronik') }}">
+        <input type="hidden" name="status" value="{{ old('status', 'submitted') }}">
+
         {{-- Informasi Surat --}}
         <div class="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
             <div class="px-6 py-4 border-b border-slate-200">
                 <h2 class="text-lg font-bold text-slate-800">Informasi Surat</h2>
-                <p class="text-sm text-slate-500 mt-1">Masukkan informasi utama surat elektronik.</p>
+                <p class="text-sm text-slate-500 mt-1">
+                    Pilih jenis surat dan pemohon. Data lain akan menyesuaikan template surat.
+                </p>
             </div>
 
             <div class="p-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
@@ -50,6 +56,7 @@
                             <option
                                 value="{{ $type->id }}"
                                 data-code="{{ strtoupper($type->code ?? '') }}"
+                                data-name="{{ $type->name }}"
                                 {{ (string) old('letter_type_id') === (string) $type->id ? 'selected' : '' }}
                             >
                                 {{ $type->name }}
@@ -91,73 +98,19 @@
                     </select>
                 </div>
 
-                <div class="md:col-span-2 xl:col-span-2">
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">
-                        Subjek <span class="text-rose-500">*</span>
-                    </label>
-                    <input
-                        type="text"
-                        name="subject"
-                        value="{{ old('subject') }}"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                        placeholder="Masukkan subjek surat"
-                    >
-                </div>
-
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">
-                        Status <span class="text-rose-500">*</span>
+                        Tanggal Pengajuan
                     </label>
-                    <select
-                        name="status"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    >
-                        <option value="">Pilih Status</option>
-                        <option value="submitted" {{ old('status', 'submitted') === 'submitted' ? 'selected' : '' }}>submitted</option>
-                        <option value="processed" {{ old('status') === 'processed' ? 'selected' : '' }}>processed</option>
-                        <option value="completed" {{ old('status') === 'completed' ? 'selected' : '' }}>completed</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">Tanggal Pengajuan</label>
                     <input
                         type="date"
                         name="submission_date"
                         value="{{ old('submission_date') }}"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     >
-                </div>
-
-                <div class="md:col-span-2 xl:col-span-1">
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">File Hasil</label>
-                    <input
-                        type="text"
-                        name="result_file"
-                        value="{{ old('result_file') }}"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                        placeholder="Otomatis setelah PDF dibuat"
-                    >
-                </div>
-
-                <div class="xl:col-span-3">
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">Deskripsi</label>
-                    <textarea
-                        name="description"
-                        rows="4"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm leading-6 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                        placeholder="Deskripsi surat..."
-                    >{{ old('description') }}</textarea>
-                </div>
-
-                <div class="xl:col-span-3">
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">Catatan</label>
-                    <textarea
-                        name="notes"
-                        rows="4"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm leading-6 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                        placeholder="Catatan tambahan..."
-                    >{{ old('notes') }}</textarea>
+                    <p class="mt-1 text-xs text-slate-400">
+                        Jika dikosongkan, sistem dapat menggunakan tanggal hari ini.
+                    </p>
                 </div>
             </div>
         </div>
@@ -172,15 +125,42 @@
             </div>
 
             <div class="p-6">
-                {{-- DOM --}}
-                <div data-letter-fields="DOM" class="letter-fields hidden">
-                    <div class="rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-sm text-emerald-700">
-                        Surat Domisili menggunakan data alamat dari data penduduk yang dipilih.
+                {{-- DOM / Surat Domisili --}}
+                <!-- <div data-letter-fields="DOM" class="letter-fields hidden grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div class="md:col-span-2 rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-sm text-emerald-700">
+                        Surat Domisili menggunakan data alamat dari data penduduk yang dipilih. Jika alamat domisili berbeda, isi kolom alamat domisili di bawah.
                     </div>
-                </div>
+
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">
+                            Keperluan Surat
+                        </label>
+                        <input
+                            type="text"
+                            name="payload[purpose]"
+                            value="{{ old('payload.purpose') }}"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                            placeholder="Contoh: Persyaratan administrasi"
+                        >
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">
+                            Alamat Domisili
+                        </label>
+                        <input
+                            id="payload_domicile_address"
+                            type="text"
+                            name="payload[domicile_address]"
+                            value="{{ old('payload.domicile_address') }}"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                            placeholder="Otomatis dari alamat penduduk, bisa diubah jika diperlukan"
+                        >
+                    </div>
+                </div> -->
 
                 {{-- SKTM --}}
-                <div data-letter-fields="SKTM" class="letter-fields hidden grid grid-cols-1 md:grid-cols-2 gap-5">
+                <!-- <div data-letter-fields="SKTM" class="letter-fields hidden grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div class="md:col-span-2">
                         <label class="block text-sm font-semibold text-slate-700 mb-2">
                             Keperluan Surat
@@ -205,12 +185,12 @@
                             placeholder="Opsional"
                         >{{ old('payload.additional_notes') }}</textarea>
                     </div>
-                </div>
+                </div> -->
 
                 {{-- YTM --}}
                 <div data-letter-fields="YTM" class="letter-fields hidden space-y-8">
                     <div>
-                        <h3 class="text-base font-bold text-slate-800 mb-4">Data Orang Tua</h3>
+                        <h3 class="text-base font-bold text-slate-800 mb-4">Data Orang Tua / Wali</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <div>
                                 <label class="block text-sm font-semibold text-slate-700 mb-2">Nama Ayah</label>
@@ -245,7 +225,7 @@
                                 </select>
                             </div>
 
-                            <div>
+                            <!-- <div>
                                 <label class="block text-sm font-semibold text-slate-700 mb-2">Tanggal Meninggal Orang Tua</label>
                                 <input
                                     type="date"
@@ -253,16 +233,7 @@
                                     value="{{ old('payload.parent_death_date') }}"
                                     class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                                 >
-                            </div>
-
-                            <div class="md:col-span-2">
-                                <label class="block text-sm font-semibold text-slate-700 mb-2">Keterangan</label>
-                                <textarea
-                                    name="payload[orphan_notes]"
-                                    rows="3"
-                                    class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm leading-6 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                                >{{ old('payload.orphan_notes') }}</textarea>
-                            </div>
+                            </div> -->
 
                             <div class="md:col-span-2">
                                 <label class="block text-sm font-semibold text-slate-700 mb-2">Tinggal Bersama / Nama Orang Tua Wali</label>
@@ -285,18 +256,24 @@
                                     placeholder="Contoh: Dusun I Dolok Nagodang"
                                 >
                             </div>
+
+                            <!-- <div class="md:col-span-2">
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">Keterangan</label>
+                                <textarea
+                                    name="payload[orphan_notes]"
+                                    rows="3"
+                                    class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm leading-6 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                                >{{ old('payload.orphan_notes') }}</textarea>
+                            </div> -->
                         </div>
                     </div>
                 </div>
 
                 {{-- SKOT --}}
                 <div data-letter-fields="SKOT" class="letter-fields hidden space-y-8">
-
-                    {{-- Data Ayah --}}
                     <div>
                         <h3 class="text-base font-bold text-slate-800 mb-4">Data Ayah</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-
                             <div>
                                 <label class="block text-sm font-semibold text-slate-700 mb-2">
                                     Pilih Ayah <span class="text-rose-500">*</span>
@@ -307,7 +284,7 @@
                                 >
                                     <option value="">Pilih Data Ayah</option>
                                     @foreach ($citizens as $citizen)
-                                        <option value="{{ $citizen->id }}">
+                                        <option value="{{ $citizen->id }}" {{ (string) old('payload.father_citizen_id') === (string) $citizen->id ? 'selected' : '' }}>
                                             {{ $citizen->full_name }} - {{ $citizen->nik }}
                                         </option>
                                     @endforeach
@@ -326,15 +303,12 @@
                                     placeholder="Contoh: Rp. 1.000.000/Bulan"
                                 >
                             </div>
-
                         </div>
                     </div>
 
-                    {{-- Data Ibu --}}
                     <div>
                         <h3 class="text-base font-bold text-slate-800 mb-4">Data Ibu</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-
                             <div>
                                 <label class="block text-sm font-semibold text-slate-700 mb-2">
                                     Pilih Ibu <span class="text-rose-500">*</span>
@@ -345,7 +319,7 @@
                                 >
                                     <option value="">Pilih Data Ibu</option>
                                     @foreach ($citizens as $citizen)
-                                        <option value="{{ $citizen->id }}">
+                                        <option value="{{ $citizen->id }}" {{ (string) old('payload.mother_citizen_id') === (string) $citizen->id ? 'selected' : '' }}>
                                             {{ $citizen->full_name }} - {{ $citizen->nik }}
                                         </option>
                                     @endforeach
@@ -364,15 +338,12 @@
                                     placeholder="Contoh: Rp. 500.000/Bulan"
                                 >
                             </div>
-
                         </div>
                     </div>
 
-                    {{-- Data Anak tetap auto dari citizen --}}
                     <div>
                         <h3 class="text-base font-bold text-slate-800 mb-4">Data Anak / Pemohon</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-
                             <div>
                                 <label class="block text-sm font-semibold text-slate-700 mb-2">Nama Anak</label>
                                 <input id="payload_child_name" type="text" name="payload[child_name]"
@@ -414,16 +385,14 @@
                                     value="{{ old('payload.child_address') }}"
                                     class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm">
                             </div>
-
                         </div>
                     </div>
-
                 </div>
 
                 {{-- SKU --}}
                 <div data-letter-fields="SKU" class="letter-fields hidden grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-2">Nama Usaha</label>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Usaha Pokok</label>
                         <input
                             type="text"
                             name="payload[business_name]"
@@ -434,7 +403,7 @@
                     </div>
 
                     <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-2">Jenis Usaha</label>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Usaha Tambahan</label>
                         <input
                             type="text"
                             name="payload[business_type]"
@@ -444,7 +413,7 @@
                         >
                     </div>
 
-                    <div class="md:col-span-2">
+                    <!-- <div class="md:col-span-2">
                         <label class="block text-sm font-semibold text-slate-700 mb-2">Alamat Usaha</label>
                         <input
                             type="text"
@@ -464,7 +433,7 @@
                             class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                             placeholder="Contoh: Persyaratan administrasi"
                         >
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -490,35 +459,217 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    const letterTypeSelect = document.getElementById('letter_type_id');
+    const citizenSelect = document.getElementById('citizen_id');
+    const payloadSection = document.getElementById('payloadSection');
+    const payloadDescription = document.getElementById('payloadDescription');
+    const fieldGroups = document.querySelectorAll('.letter-fields');
+    const subjectInput = document.getElementById('subjectInput');
 
-    if (typeof Swal === 'undefined') {
-        console.error('SweetAlert tidak ter-load!');
-        return;
+    const descriptionMap = {
+        DOM: 'Lengkapi data tambahan untuk Surat Keterangan Domisili.',
+        SKTM: 'Lengkapi keperluan atau keterangan untuk Surat Keterangan Tidak Mampu.',
+        YTM: 'Lengkapi data pendukung untuk Surat Yatim.',
+        SKOT: 'Lengkapi data orang tua dan data anak untuk Surat Keterangan Orang Tua.',
+        SKU: 'Lengkapi data usaha untuk Surat Keterangan Usaha.'
+    };
+
+    function getSelectedLetterOption() {
+        if (!letterTypeSelect) return null;
+        return letterTypeSelect.options[letterTypeSelect.selectedIndex] || null;
     }
 
-    // ✅ TOAST SUCCESS (setelah redirect dari controller)
-    @if(session('success'))
-        Swal.fire({
-            toast: true,
-            position: 'top-end',
-            icon: 'success',
-            title: '{{ session('success') }}',
-            showConfirmButton: false,
-            timer: 2500,
-            timerProgressBar: true
+    function getSelectedLetterCode() {
+        const selectedOption = getSelectedLetterOption();
+        return selectedOption ? (selectedOption.dataset.code || '').toUpperCase() : '';
+    }
+
+    function getSelectedLetterName() {
+        const selectedOption = getSelectedLetterOption();
+        return selectedOption ? (selectedOption.dataset.name || selectedOption.textContent || '').trim() : '';
+    }
+
+    function setGroupInputsDisabled(group, disabled) {
+        group.querySelectorAll('input, textarea, select').forEach(function (input) {
+            input.disabled = disabled;
         });
-    @endif
+    }
 
-    // ✅ CONFIRM SUBMIT (CREATE SURAT)
-    document.addEventListener('submit', function (e) {
+    function selectedCitizenData() {
+        if (!citizenSelect) return null;
 
-        const form = e.target;
+        const selectedOption = citizenSelect.options[citizenSelect.selectedIndex];
 
-        // 🎯 filter khusus route letters (biar konsisten)
-        if (!form.action.includes('letters')) return;
+        if (!selectedOption || !selectedOption.value) {
+            return null;
+        }
 
-        // kalau sudah confirmed → lanjut submit
-        if (form.dataset.confirmed === 'true') return;
+        return {
+            fullName: selectedOption.dataset.fullName || '',
+            birthPlace: selectedOption.dataset.birthPlace || '',
+            birthDate: selectedOption.dataset.birthDate || '',
+            gender: selectedOption.dataset.gender || '',
+            religion: selectedOption.dataset.religion || '',
+            occupation: selectedOption.dataset.occupation || '',
+            address: selectedOption.dataset.address || '',
+            village: selectedOption.dataset.village || '',
+            district: selectedOption.dataset.district || '',
+            regency: selectedOption.dataset.regency || '',
+            province: selectedOption.dataset.province || '',
+        };
+    }
+
+    function formatGender(gender) {
+        if (gender === 'L') return 'Laki-laki';
+        if (gender === 'P') return 'Perempuan';
+        return gender || '';
+    }
+
+    function formatBirth(data) {
+        if (!data) return '';
+
+        const place = data.birthPlace || '';
+        const date = data.birthDate ? data.birthDate.substring(0, 10) : '';
+
+        if (place && date) return place + ', ' + date;
+
+        return place || date || '';
+    }
+
+    function formatAddress(data) {
+        if (!data) return '';
+
+        return [
+            data.address,
+            data.village,
+            data.district,
+            data.regency,
+            data.province,
+        ].filter(Boolean).join(', ');
+    }
+
+    function setValueIfEmpty(id, value) {
+        const input = document.getElementById(id);
+
+        if (input && !input.value.trim()) {
+            input.value = value || '';
+        }
+    }
+
+    function autofillChildPayload() {
+        const data = selectedCitizenData();
+
+        if (!data) return;
+
+        setValueIfEmpty('payload_child_name', data.fullName);
+        setValueIfEmpty('payload_child_birth', formatBirth(data));
+        setValueIfEmpty('payload_child_gender', formatGender(data.gender));
+        setValueIfEmpty('payload_child_job', data.occupation);
+        setValueIfEmpty('payload_child_religion', data.religion);
+        setValueIfEmpty('payload_child_address', formatAddress(data) || data.address);
+    }
+
+    function autofillDomisiliPayload() {
+        const data = selectedCitizenData();
+
+        if (!data) return;
+
+        setValueIfEmpty('payload_domicile_address', formatAddress(data) || data.address);
+    }
+
+    function updateSubject() {
+        const letterName = getSelectedLetterName();
+        const data = selectedCitizenData();
+
+        if (!subjectInput) return;
+
+        if (letterName && data && data.fullName) {
+            subjectInput.value = letterName + ' - ' + data.fullName;
+        } else if (letterName) {
+            subjectInput.value = letterName;
+        } else {
+            subjectInput.value = 'Surat Elektronik';
+        }
+    }
+
+    function toggleLetterFields() {
+        const selectedCode = getSelectedLetterCode();
+
+        fieldGroups.forEach(function (group) {
+            group.classList.add('hidden');
+            setGroupInputsDisabled(group, true);
+        });
+
+        if (!selectedCode) {
+            payloadSection.classList.add('hidden');
+            if (payloadDescription) {
+                payloadDescription.textContent = 'Lengkapi data khusus sesuai jenis surat yang dipilih.';
+            }
+            updateSubject();
+            return;
+        }
+
+        const selectedGroup = document.querySelector('[data-letter-fields="' + selectedCode + '"]');
+
+        if (!selectedGroup) {
+            payloadSection.classList.add('hidden');
+            updateSubject();
+            return;
+        }
+
+        payloadSection.classList.remove('hidden');
+        selectedGroup.classList.remove('hidden');
+        setGroupInputsDisabled(selectedGroup, false);
+
+        if (payloadDescription) {
+            payloadDescription.textContent = descriptionMap[selectedCode] || 'Lengkapi data tambahan surat.';
+        }
+
+        updateSubject();
+
+        if (selectedCode === 'DOM') {
+            autofillDomisiliPayload();
+        }
+
+        if (selectedCode === 'SKOT') {
+            autofillChildPayload();
+        }
+    }
+
+    if (letterTypeSelect) {
+        letterTypeSelect.addEventListener('change', function () {
+            toggleLetterFields();
+        });
+    }
+
+    if (citizenSelect) {
+        citizenSelect.addEventListener('change', function () {
+            updateSubject();
+
+            if (getSelectedLetterCode() === 'DOM') {
+                autofillDomisiliPayload();
+            }
+
+            if (getSelectedLetterCode() === 'SKOT') {
+                autofillChildPayload();
+            }
+        });
+    }
+
+    toggleLetterFields();
+
+    const form = document.querySelector('form[action*="letters"]');
+
+    if (!form) return;
+
+    form.addEventListener('submit', function (e) {
+        if (form.dataset.confirmed === 'true') {
+            return;
+        }
+
+        if (typeof Swal === 'undefined') {
+            return;
+        }
 
         e.preventDefault();
 
@@ -538,9 +689,7 @@ document.addEventListener('DOMContentLoaded', function () {
             reverseButtons: true,
             focusCancel: true
         }).then((result) => {
-
             if (result.isConfirmed) {
-
                 form.dataset.confirmed = 'true';
 
                 Swal.fire({
@@ -556,11 +705,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 form.submit();
             }
-
         });
-
     });
-
 });
 </script>
 @endpush
