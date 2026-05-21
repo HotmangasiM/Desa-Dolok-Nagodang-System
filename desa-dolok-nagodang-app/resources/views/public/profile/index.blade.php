@@ -100,58 +100,118 @@
 
 {{-- VISI MISI --}}
 <section class="bg-slate-100/80 py-16">
-    <div class="max-w-7xl mx-auto px-4">
+
+    <div class="max-w-5xl mx-auto px-4">
+
+        {{-- Heading --}}
         <div class="text-center max-w-3xl mx-auto">
-            <h2 class="mt-1 text-3xl font-bold text-slate-800">
+
+            <h2 class="text-3xl md:text-4xl font-bold text-slate-800">
                 Visi dan Misi
             </h2>
-            <!-- <p class="mt-3 text-slate-500">
-                Landasan pelayanan dan pembangunan Desa Dolok Nagodang.
-            </p> -->
+            <h3 class="text-2xl font-bold text-slate-800">
+                            Desa Dolok Nagodang
+                        </h3>
+
+            <div class="mt-4 w-24 h-1 bg-emerald-600 rounded-full mx-auto"></div>
+
         </div>
 
-        <div class="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div class="rounded-3xl bg-white border border-slate-200 p-8 shadow-sm">
-                <div class="w-14 h-14 rounded-2xl bg-emerald-100 flex items-center justify-center text-3xl">
-                    🎯
+
+        <div class="mt-12 space-y-8">
+
+            {{-- VISI --}}
+            <div class="rounded-3xl bg-white p-8 md:p-10 shadow-sm">
+
+                <div class="flex items-center gap-4">
+                    <div>
+                        <p class="text-sm font-semibold uppercase tracking-wider text-emerald-600">
+                            Visi
+                        </p>
+
+                        
+                    </div>
+
                 </div>
 
-                <h3 class="mt-5 text-2xl font-bold text-slate-800">Visi</h3>
 
-                <p class="mt-4 text-slate-600 leading-7">
-                    Mewujudkan Desa Dolok Nagodang yang tertib administrasi, informatif,
-                    transparan, dan memberikan pelayanan terbaik kepada masyarakat.
-                </p>
-            </div>
+                <div class="mt-6">
 
-            <div class="rounded-3xl bg-white border border-slate-200 p-8 shadow-sm">
-                <div class="w-14 h-14 rounded-2xl bg-emerald-100 flex items-center justify-center text-3xl">
-                    ✅
+                    <p class="text-lg leading-9 text-slate-600">
+                        Mewujudkan Desa Dolok Nagodang yang tertib administrasi,
+                        informatif, transparan, dan memberikan pelayanan terbaik
+                        kepada masyarakat.
+                    </p>
+
                 </div>
 
-                <h3 class="mt-5 text-2xl font-bold text-slate-800">Misi</h3>
-
-                <ul class="mt-4 space-y-3 text-slate-600">
-                    <li class="flex gap-3">
-                        <span class="text-emerald-600 font-bold">✓</span>
-                        <span>Meningkatkan kualitas pelayanan administrasi desa.</span>
-                    </li>
-                    <li class="flex gap-3">
-                        <span class="text-emerald-600 font-bold">✓</span>
-                        <span>Menyediakan informasi desa yang mudah diakses masyarakat.</span>
-                    </li>
-                    <li class="flex gap-3">
-                        <span class="text-emerald-600 font-bold">✓</span>
-                        <span>Mendorong transparansi dalam penyelenggaraan pemerintahan desa.</span>
-                    </li>
-                    <li class="flex gap-3">
-                        <span class="text-emerald-600 font-bold">✓</span>
-                        <span>Mendukung partisipasi masyarakat dalam pembangunan desa.</span>
-                    </li>
-                </ul>
             </div>
+
+
+
+            {{-- MISI --}}
+            <div class="rounded-3xl bg-white p-8 md:p-10 shadow-sm">
+
+                <div class="flex items-center gap-4">
+
+                    <div>
+                        <p class="text-sm font-semibold uppercase tracking-wider text-emerald-600">
+                            Misi
+                        </p>
+
+                        <h3 class="text-2xl font-bold text-slate-800">
+                            Langkah dan Komitmen Desa
+                        </h3>
+                    </div>
+
+                </div>
+
+
+                <div class="mt-6 space-y-5">
+
+                    <div class="flex gap-4">
+                        <div class="mt-1 text-emerald-600 font-bold">✓</div>
+
+                        <p class="text-slate-600 leading-7">
+                            Meningkatkan kualitas pelayanan administrasi desa.
+                        </p>
+                    </div>
+
+
+                    <div class="flex gap-4">
+                        <div class="mt-1 text-emerald-600 font-bold">✓</div>
+
+                        <p class="text-slate-600 leading-7">
+                            Menyediakan informasi desa yang mudah diakses masyarakat.
+                        </p>
+                    </div>
+
+
+                    <div class="flex gap-4">
+                        <div class="mt-1 text-emerald-600 font-bold">✓</div>
+
+                        <p class="text-slate-600 leading-7">
+                            Mendorong transparansi dalam penyelenggaraan pemerintahan desa.
+                        </p>
+                    </div>
+
+
+                    <div class="flex gap-4">
+                        <div class="mt-1 text-emerald-600 font-bold">✓</div>
+
+                        <p class="text-slate-600 leading-7">
+                            Mendukung partisipasi masyarakat dalam pembangunan desa.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+
         </div>
+
     </div>
+
 </section>
 
 {{-- WILAYAH ADMINISTRATIF --}}
