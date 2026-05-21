@@ -208,27 +208,40 @@
 @endsection
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
+function previewAssetImage(event) {
+    const input = event.target;
+    const preview = document.getElementById('assetPreview');
+
+    if (!input.files || !input.files[0] || !preview) return;
+
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+        preview.src = e.target.result;
+        preview.classList.remove('hidden');
+    };
+
+    reader.readAsDataURL(input.files[0]);
+}
+
 document.addEventListener('DOMContentLoaded', function () {
+    const form = document.querySelector('form[action*="assets"]');
 
-    if (typeof Swal === 'undefined') {
-        console.error('SweetAlert tidak ter-load!');
-        return;
-    }
+    if (!form) return;
 
-    // Tangkap SEMUA form submit
-    document.addEventListener('submit', function (e) {
+    form.addEventListener('submit', function (e) {
+        if (form.dataset.confirmed === 'true') {
+            return;
+        }
 
-        const form = e.target;
+        if (typeof Swal === 'undefined') {
+            return; // fallback: submit normal kalau SweetAlert gagal load
+        }
 
-        // hanya target form create (optional filter)
-        if (!form.action.includes('assets')) return;
-
-        // cegah submit dulu
         e.preventDefault();
-
-        // supaya tidak loop
-        if (form.dataset.confirmed === 'true') return;
 
         Swal.fire({
             title: 'Konfirmasi Tambah Data',
@@ -241,15 +254,15 @@ document.addEventListener('DOMContentLoaded', function () {
             cancelButtonColor: '#6b7280',
             reverseButtons: true
         }).then((result) => {
-
             if (result.isConfirmed) {
-
                 form.dataset.confirmed = 'true';
 
                 Swal.fire({
                     title: 'Menyimpan...',
                     text: 'Mohon tunggu',
                     allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    showConfirmButton: false,
                     didOpen: () => {
                         Swal.showLoading();
                     }
@@ -257,11 +270,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 form.submit();
             }
-
         });
-
     });
-
 });
 </script>
 @endpush
