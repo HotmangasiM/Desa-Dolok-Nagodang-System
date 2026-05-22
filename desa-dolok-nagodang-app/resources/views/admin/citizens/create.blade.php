@@ -242,17 +242,10 @@
                 Batal
             </a>
 
-<<<<<<< HEAD
-            <button type="button" id="btnSubmit"
-    class="w-full sm:w-auto inline-flex items-center justify-center rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-700 shadow-lg shadow-emerald-600/20 transition">
-    Simpan Data Penduduk
-</button>
-=======
             <button type="submit"
                 class="w-full sm:w-auto inline-flex items-center justify-center rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-700 shadow-lg shadow-emerald-600/20 transition">
                 Simpan Data Penduduk
             </button>
->>>>>>> be742c3934aae12d01b0c0f28ed6f88823803e8a
         </div>
     </form>
 </div>
@@ -269,7 +262,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (!form) return;
 
-<<<<<<< HEAD
     const form = document.querySelector('form');
 
     Swal.fire({
@@ -335,13 +327,10 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
         });
-=======
     form.addEventListener('submit', function (e) {
         if (form.dataset.confirmed === 'true') {
             return;
         }
->>>>>>> be742c3934aae12d01b0c0f28ed6f88823803e8a
-
         if (typeof Swal === 'undefined') {
             return; // fallback: submit normal
         }

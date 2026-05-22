@@ -285,7 +285,7 @@
             </div>
 
             {{-- Ringkas --}}
-            <div class="w-64 rounded-2xl bg-emerald-500/85 text-white border border-white/30 shadow-2xl backdrop-blur px-5 py-4 cursor-pointer">
+            <div class="w-64 rounded-2xl bg-emerald-400/85 text-white border border-white/30 shadow-2xl backdrop-blur px-5 py-4 cursor-pointer">
                 <div class="flex items-center justify-between gap-4">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center text-xl">
@@ -312,7 +312,7 @@
         <button
             type="button"
             onclick="toggleComplaintPanel()"
-            class="rounded-2xl bg-rose-500/90 text-white border border-white/30 shadow-2xl backdrop-blur px-5 py-4 hover:bg-rose-600 transition">
+            class="rounded-2xl bg-rose-400/90 text-white border border-white/30 shadow-2xl backdrop-blur px-5 py-4 hover:bg-rose-600 transition">
             <div class="flex items-center gap-3">
                 <span class="text-2xl">🎧</span>
                 <span class="font-bold">Pengaduan</span>
