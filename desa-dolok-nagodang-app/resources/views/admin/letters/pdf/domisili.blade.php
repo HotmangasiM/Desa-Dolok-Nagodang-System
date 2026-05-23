@@ -143,7 +143,7 @@
         <tr>
             <td class="logo-cell">
                 {{-- Simpan logo di public/images/logo-toba.png --}}
-                <img src="{{ public_path('images/logo-kab-toba.jpg') }}" class="logo">
+                <img src="{{ public_path('images/logo.png') }}" class="logo">
             </td>
             <td class="kop-title">
                 <div class="line-1">PEMERINTAH KABUPATEN TOBA</div>

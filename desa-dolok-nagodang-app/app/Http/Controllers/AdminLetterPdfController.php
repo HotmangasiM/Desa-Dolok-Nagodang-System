@@ -146,6 +146,9 @@ class AdminLetterPdfController extends Controller
 
             // Data SKTM
             'sktm' => [
+                'family_card_number' => $payload['family_card_number']
+                    ?? optional($citizen)->family_card_number
+                    ?? '-',
                 'purpose' => $payload['purpose'] ?? null,
                 'additional_notes' => $payload['additional_notes'] ?? null,
             ],
