@@ -29,7 +29,7 @@
     <div class="max-w-xl space-y-10">
 
         <!-- ACCENT -->
-        <div class="w-25 h-1.5 bg-gradient-to-r from-emerald-500 to-emerald-300 rounded-full"></div>
+        <div class="w-20 h-1.5 bg-gradient-to-r from-emerald-500 to-emerald-300 rounded-full"></div>
 
         <!-- TITLE -->
         <h1 class="text-5xl md:text-6xl font-extrabold leading-tight text-slate-800">
