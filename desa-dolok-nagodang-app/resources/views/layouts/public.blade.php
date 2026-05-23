@@ -141,11 +141,11 @@
             <div class="flex items-center gap-3">
 
                 {{-- BUTTON --}}
-                <a href="{{ route('public.letters') }}"
+                <!-- <a href="{{ route('public.letters') }}"
                    class="hidden md:inline-flex items-center gap-2 rounded-2xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-600/20 hover:bg-emerald-700 transition">
                     <i data-lucide="file-plus-2" class="w-4 h-4"></i>
                     Layanan
-                </a>
+                </a> -->
 
                 {{-- MOBILE BUTTON --}}
                 <button
@@ -340,6 +340,14 @@
                             </p>
                         </div>
                     </div>
+                    <div class="flex items-start gap-3 group">
+                    <div class="p-2 rounded-xl bg-emerald-500/10 group-hover:bg-emerald-500/20 transition">
+                        <i data-lucide="mail" class="w-4 h-4 text-emerald-400"></i>
+                    </div>
+                    <p>
+                        desa@email.com
+                    </p>
+                </div>
 
                 </div>
 
