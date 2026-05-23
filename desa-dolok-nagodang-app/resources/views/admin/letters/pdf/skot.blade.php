@@ -130,7 +130,7 @@
     <table class="kop-table">
         <tr>
             <td style="width:95px;">
-                <img src="{{ public_path('images/logo-kab-toba.jpg') }}" class="logo">
+                <img src="{{ public_path('images/logo.png') }}" class="logo">
             </td>
             <td class="center kop-title">
                 <div>{{ $government_name }}</div>
