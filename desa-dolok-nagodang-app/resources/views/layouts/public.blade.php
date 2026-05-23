@@ -211,7 +211,7 @@
 </main>
 
 {{-- ================= FOOTER ================= --}}
-<footer class="relative overflow-hidden bg-slate-950 text-slate-300 mt-16">
+<footer class="relative overflow-hidden bg-slate-950 text-slate-300 mt-4">
 
     {{-- BACKGROUND --}}
     <div class="absolute inset-0 opacity-10">
@@ -340,8 +340,8 @@
                             </p>
                         </div>
                     </div>
-                    <div class="flex items-start gap-3 group">
-                    <div class="p-2 rounded-xl bg-emerald-500/10 group-hover:bg-emerald-500/20 transition">
+                    <div class="flex gap-3">
+                     <div class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
                         <i data-lucide="mail" class="w-4 h-4 text-emerald-400"></i>
                     </div>
                     <p>
