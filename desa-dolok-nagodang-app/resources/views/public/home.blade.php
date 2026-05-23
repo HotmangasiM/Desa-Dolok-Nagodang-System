@@ -2,7 +2,6 @@
 
 @section('content')
 {{-- HERO --}}
-{{-- HERO SLIDER --}}
 <section class="relative">
 
     <div class="swiper heroSwiper h-[620px] md:h-[700px]">
@@ -123,7 +122,7 @@
 </section>
 
 {{-- QUICK MENU --}}
-<section class="max-w-7xl mx-auto px-4 -mt-12 relative z-10">
+<section class="max-w-7xl mx-auto px-4 mt-8 md:mt-10 relative z-10">
     @php
         $menus = [
             ['label'=>'Profil Desa','desc'=>'Informasi wilayah','icon'=>'home','url'=>route('public.profile')],
@@ -136,7 +135,7 @@
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
         @foreach ($menus as $menu)
         <a href="{{ $menu['url'] }}"
-           class="group rounded-3xl bg-white p-5 shadow-sm border hover:shadow-lg hover:-translate-y-1 transition">
+           class="group rounded-3xl bg-white p-4 shadow-sm border hover:shadow-lg hover:-translate-y-1 transition">
 
             <div class="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center group-hover:bg-emerald-100 transition">
                 <i data-lucide="{{ $menu['icon'] }}" class="w-6 h-6 text-emerald-600 group-hover:scale-110 transition"></i>
@@ -150,8 +149,8 @@
 </section>
 
 {{-- INFORMASI CEPAT --}}
-<section class="max-w-7xl mx-auto px-4 py-12">
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
+<section class="max-w-7xl mx-auto px-4 mt-8 md:mt-10 relative z-10">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
 
         @php
         $info = [
@@ -187,120 +186,327 @@
     </div>
 </section>
 
-{{-- SAMBUTAN + STATISTIK --}}
-<section class="max-w-7xl mx-auto px-4 py-16">
-    <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+{{-- SAMBUTAN FULL SECTION --}} 
+<section class="relative py-16 md:py-20 bg-gradient-to-br from-slate-50 via-white to-emerald-50 overflow-hidden">
 
-        {{-- SAMBUTAN --}}
-        <div class="lg:col-span-2 rounded-3xl bg-white border border-slate-200 p-8 shadow-sm">
+    {{-- Background Decoration --}}
+    <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-100 rounded-full blur-3xl opacity-30"></div>
+    <div class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-sky-100 rounded-full blur-3xl opacity-20"></div>
 
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center">
-                    <i data-lucide="user" class="w-5 h-5 text-emerald-600"></i>
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-screen flex items-center py-16">
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center w-full">
+
+            {{-- FOTO --}}
+            <div class="flex justify-center lg:justify-start order-1">
+
+                <div class="relative">
+
+                    <!-- {{-- Glow --}}
+                    <div class="absolute inset-0 bg-emerald-200 blur-[100px] opacity-40 rounded-full scale-110"></div>
+
+                    {{-- Decorative Circle --}}
+                    <div class="absolute -top-6 -right-6 w-24 h-24 rounded-full border border-emerald-200"></div>
+                    <div class="absolute -bottom-6 -left-6 w-16 h-16 rounded-full bg-emerald-100"></div> -->
+
+                    {{-- Image --}}
+                    <img
+                        src="{{ asset('images/sambutan.png') }}"
+                        alt="Kepala Desa"
+                        class="relative z-10 w-[200px] sm:w-[280px] lg:w-[380px] object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.18)]"
+                    >
+
                 </div>
-                <p class="text-sm font-semibold text-emerald-700">Sambutan Kepala Suku</p>
+
             </div>
 
-            <div class="mt-5 flex items-center gap-5">
-                <div class="w-20 h-20 rounded-2xl bg-emerald-100 overflow-hidden flex items-center justify-center text-3xl font-bold text-emerald-700">
-                    @if(!empty($villageHead?->photo))
-                        <img src="{{ asset('storage/' . $villageHead->photo) }}" class="w-full h-full object-cover">
-                    @else
-                        {{ $villageHead ? strtoupper(substr($villageHead->name, 0, 1)) : 'K' }}
-                    @endif
+            {{-- TEXT --}}
+            <div class="order-2 text-center lg:text-left">
+
+                {{-- Badge --}}
+                <div class="inline-flex items-center gap-3 rounded-full bg-white/80 backdrop-blur border border-emerald-100 px-5 py-3 shadow-sm">
+
+                    <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center">
+                        <i data-lucide="user" class="w-5 h-5 text-emerald-600"></i>
+                    </div>
+
+                    <span class="text-sm font-medium text-emerald-700 tracking-wide">
+                        Sambutan Kepala Desa
+                    </span>
+
                 </div>
 
-                <div>
-                    <h2 class="text-2xl font-bold text-slate-800">
-                        {{ $villageHead->name ?? 'Kepala Desa Dolok Nagodang' }}
+                {{-- Title --}}
+                <h1 class="mt-7 text-3xl sm:text-5xl lg:text-3xl md:text-5xl font-bold leading-tight text-slate-900">
+
+                    Desa
+                    <span class="text-emerald-600">
+                        Dolok Nagodang
+                    </span>
+
+                </h1>
+
+                {{-- Nama --}}
+                <div class="mt-8">
+
+                    <h2 class="text-2xl sm:text-3xl lg:text-3xl font-bold text-slate-800 leading-snug">
+                        {{ $villageHead->name ?? 'HOTMAN SIHOTANG' }}
                     </h2>
-                    <p class="text-sm text-slate-500">
+
+                    <p class="mt-3 text-base sm:text-lg text-slate-500 font-medium">
                         {{ $villageHead->position ?? 'Kepala Desa' }}
                     </p>
+
                 </div>
+
+                {{-- Sambutan --}}
+                <div class="mt-8 space-y-5 text-slate-600 text-base sm:text-lg leading-8 max-w-2xl mx-auto lg:mx-0">
+
+                    <p class="text-xl font-semibold text-slate-800">
+                        Horas,
+                    </p>
+
+                    <p>
+                        Selamat datang di Website Resmi Desa Dolok Nagodang.
+                        Website ini hadir sebagai media informasi, pelayanan publik,
+                        dan transparansi pemerintahan desa untuk seluruh masyarakat.
+                    </p>
+
+                    <p>
+                        Kami berkomitmen menghadirkan pelayanan yang cepat,
+                        terbuka, dan modern guna mendukung transformasi digital desa
+                        menuju masyarakat yang mandiri dan berdaya saing.
+                    </p>
+
+                </div>
+
+                {{-- BUTTON --}}
+                <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+
+                    <a href="{{ route('public.profile') }}"
+                       class="inline-flex items-center justify-center gap-3 rounded-2xl bg-emerald-600 px-8 py-4 text-white font-semibold shadow-lg hover:bg-emerald-700 hover:-translate-y-0.5 transition duration-300">
+
+                        Lihat Profil Desa
+
+                        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+
+                    </a>
+                </div>
+
             </div>
 
-            <p class="mt-6 text-slate-600 leading-7">
-                Selamat datang di Website Resmi Desa Dolok Nagodang. Website ini hadir sebagai media informasi,
-                pelayanan, dan transparansi desa untuk seluruh masyarakat.
-            </p>
-
-            <a href="{{ route('public.profile') }}"
-               class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-emerald-700 hover:text-emerald-800">
-                Lihat profil desa
-                <i data-lucide="arrow-right" class="w-4 h-4"></i>
-            </a>
         </div>
 
-        {{-- STATISTIK --}}
-        <div class="lg:col-span-3 rounded-3xl bg-white border border-slate-200 p-8 shadow-sm">
+    </div>
 
-            <div class="flex items-center justify-between">
+</section>
+
+{{-- STATISTIK --}}
+<section class="py-12 md:py-14 bg-gradient-to-b from-white to-slate-50">
+
+    <div class="max-w-7xl mx-auto px-4">
+
+        {{-- HEADER --}}
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+
+            <div>
+                <p class="text-sm font-semibold text-emerald-600">
+                    Data Penduduk
+                </p>
+
+                <h2 class="mt-1 text-3xl font-bold text-slate-800">
+                    Statistik Desa
+                </h2>
+
+                <p class="mt-2 text-slate-500">
+                    Informasi jumlah penduduk berdasarkan kategori dan dusun.
+                </p>
+            </div>
+
+            <div class="hidden md:flex w-14 h-14 rounded-2xl bg-emerald-100 items-center justify-center">
+                <i data-lucide="bar-chart-3" class="w-7 h-7 text-emerald-600"></i>
+            </div>
+
+        </div>
+
+        {{-- CARD UTAMA --}}
+        <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-5">
+
+            {{-- TOTAL --}}
+            <div class="group rounded-3xl bg-white p-6 shadow-sm border border-slate-200 hover:shadow-md transition">
+
+                <div class="flex items-center justify-between">
+
+                    <div>
+                        <p class="text-sm text-slate-500">
+                            Total Penduduk
+                        </p>
+
+                        <h3 class="mt-2 text-3xl font-bold text-slate-800">
+                            {{ number_format($totalCitizens) }}
+                        </h3>
+                    </div>
+
+                    <div class="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center">
+                        <i data-lucide="users" class="w-7 h-7 text-emerald-600"></i>
+                    </div>
+
+                </div>
+
+            </div>
+
+            {{-- LAKI --}}
+            <div class="group rounded-3xl bg-white p-6 shadow-sm border border-slate-200 hover:shadow-md transition">
+
+                <div class="flex items-center justify-between">
+
+                    <div>
+                        <p class="text-sm text-slate-500">
+                            Laki-laki
+                        </p>
+
+                        <h3 class="mt-2 text-3xl font-bold text-slate-800">
+                            {{ number_format($maleCitizens) }}
+                        </h3>
+                    </div>
+
+                    <div class="w-14 h-14 rounded-2xl bg-sky-50 flex items-center justify-center">
+                        <i data-lucide="user" class="w-7 h-7 text-sky-600"></i>
+                    </div>
+
+                </div>
+
+            </div>
+
+            {{-- PEREMPUAN --}}
+            <div class="group rounded-3xl bg-white p-6 shadow-sm border border-slate-200 hover:shadow-md transition">
+
+                <div class="flex items-center justify-between">
+
+                    <div>
+                        <p class="text-sm text-slate-500">
+                            Perempuan
+                        </p>
+
+                        <h3 class="mt-2 text-3xl font-bold text-slate-800">
+                            {{ number_format($femaleCitizens) }}
+                        </h3>
+                    </div>
+
+                    <div class="w-14 h-14 rounded-2xl bg-pink-50 flex items-center justify-center">
+                        <i data-lucide="user-round" class="w-7 h-7 text-pink-600"></i>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {{-- DUSUN --}}
+        <div class="mt-10">
+
+            <div class="flex items-center justify-between mb-5">
+
                 <div>
-                    <p class="text-sm font-semibold text-emerald-700">Data Penduduk</p>
-                    <h2 class="text-2xl font-bold text-slate-800">Statistik Penduduk</h2>
+                    <h3 class="text-xl font-bold text-slate-800">
+                        Statistik Per Dusun
+                    </h3>
+
+                    <p class="text-sm text-slate-500 mt-1">
+                        {{ count($dusunStats) }} dusun terdata
+                    </p>
                 </div>
 
-                <div class="w-12 h-12 rounded-2xl bg-emerald-100 flex items-center justify-center">
-                    <i data-lucide="bar-chart-3" class="w-6 h-6 text-emerald-600"></i>
-                </div>
             </div>
 
-            {{-- ANGKA --}}
-            <div class="mt-6 grid md:grid-cols-3 gap-4">
-                <div class="rounded-2xl bg-emerald-50 p-5">
-                    <p class="text-sm text-slate-500">Total Penduduk</p>
-                    <h3 class="text-3xl font-bold text-slate-800">{{ number_format($totalCitizens) }}</h3>
-                </div>
+            {{-- GRID --}}
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 
-                <div class="rounded-2xl bg-sky-50 p-5">
-                    <p class="text-sm text-slate-500">Laki-laki</p>
-                    <h3 class="text-3xl font-bold text-slate-800">{{ number_format($maleCitizens) }}</h3>
-                </div>
-
-                <div class="rounded-2xl bg-pink-50 p-5">
-                    <p class="text-sm text-slate-500">Perempuan</p>
-                    <h3 class="text-3xl font-bold text-slate-800">{{ number_format($femaleCitizens) }}</h3>
-                </div>
-            </div>
-
-            {{-- PROGRESS --}}
-            <div class="mt-6 space-y-4">
                 @forelse ($dusunStats as $dusun)
+
                     @php
                         $percentage = $totalCitizens > 0
                             ? round(($dusun->total / $totalCitizens) * 100, 1)
                             : 0;
                     @endphp
 
-                    <div class="rounded-2xl border bg-slate-50 p-5">
-                        <div class="flex justify-between">
-                            <div>
-                                <p class="font-semibold">{{ $dusun->dusun }}</p>
-                                <p class="text-sm text-slate-500">{{ number_format($dusun->total) }} penduduk</p>
+                    <div class="group rounded-3xl bg-white border border-slate-200 p-4 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300">
+
+                        {{-- ICON --}}
+                        <div class="w-12 h-12 rounded-2xl bg-emerald-50 flex items-center justify-center">
+
+                            <i data-lucide="map-pinned" class="w-6 h-6 text-emerald-600"></i>
+
+                        </div>
+
+                        {{-- TEXT --}}
+                        <div class="mt-5">
+
+                            <h4 class="text-lg font-bold text-slate-800">
+                                {{ $dusun->dusun }}
+                            </h4>
+
+                            <p class="mt-1 text-sm text-slate-500">
+                                {{ number_format($dusun->total) }} Penduduk
+                            </p>
+
+                        </div>
+
+                        {{-- PERCENT --}}
+                        <div class="mt-6">
+
+                            <div class="flex items-center justify-between mb-2">
+
+                                <span class="text-sm text-slate-500">
+                                    Persentase
+                                </span>
+
+                                <span class="text-sm font-bold text-emerald-600">
+                                    {{ $percentage }}%
+                                </span>
+
                             </div>
 
-                            <p class="font-bold text-emerald-700">{{ $percentage }}%</p>
+                            <div class="h-2 rounded-full bg-slate-100 overflow-hidden">
+
+                                <div
+                                    class="h-full rounded-full bg-gradient-to-r from-emerald-500 to-emerald-600"
+                                    style="width: {{ $percentage }}%">
+                                </div>
+
+                            </div>
+
                         </div>
 
-                        <div class="mt-3 h-2 bg-slate-200 rounded-full">
-                            <div class="h-full bg-emerald-600 rounded-full"
-                                 style="width: {{ $percentage }}%"></div>
-                        </div>
                     </div>
+
                 @empty
-                    <div class="rounded-2xl bg-slate-50 p-5 text-sm text-slate-500">
-                        Statistik dusun belum tersedia.
+
+                    <div class="col-span-full rounded-3xl border border-dashed border-slate-300 bg-white p-10 text-center">
+
+                        <div class="mx-auto w-14 h-14 rounded-2xl bg-slate-100 flex items-center justify-center">
+                            <i data-lucide="database" class="w-6 h-6 text-slate-400"></i>
+                        </div>
+
+                        <p class="mt-4 text-slate-500">
+                            Statistik dusun belum tersedia.
+                        </p>
+
                     </div>
+
                 @endforelse
+
             </div>
 
         </div>
+
     </div>
+
 </section>
 
 {{-- BERITA --}}
-<section class="bg-slate-100/80 py-16">
+<section class="bg-slate-100/80 py-12 md:py-14">
     <div class="max-w-7xl mx-auto px-4">
         <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
             <div>
@@ -331,7 +537,7 @@
                         @endif
                     </div>
 
-                    <div class="p-5">
+                    <div class="p-4">
                         <p class="text-xs text-slate-500">
                             {{ $item->published_at ? $item->published_at->format('d M Y') : '-' }}
                         </p>
@@ -353,7 +559,7 @@
 </section>
 
 {{-- APARAT --}}
-<section class="max-w-7xl mx-auto px-4 py-16">
+<section class="max-w-7xl mx-auto px-4 py-12 md:py-14">
     <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
         <div>
             <p class="text-sm font-semibold text-emerald-700">Pemerintahan Desa</p>
@@ -392,7 +598,7 @@
 </section>
 
 {{-- LAYANAN SURAT --}}
-<section class="bg-emerald-950 text-white py-16">
+<section class="bg-emerald-950 text-white py-12 md:py-14">
     <div class="max-w-7xl mx-auto px-4">
         <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
             <div>
@@ -407,9 +613,9 @@
             </a>
         </div>
 
-        <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
             @forelse ($letterTypes as $type)
-                <div class="rounded-2xl bg-white/10 border border-white/10 p-5 hover:bg-white/15 transition">
+                <div class="rounded-2xl bg-white/10 border border-white/10 p-4 hover:bg-white/15 transition">
                     <div class="text-3xl">📄</div>
                     <h3 class="mt-3 font-bold">{{ $type->name }}</h3>
                     <p class="mt-2 text-sm text-emerald-100 leading-6">

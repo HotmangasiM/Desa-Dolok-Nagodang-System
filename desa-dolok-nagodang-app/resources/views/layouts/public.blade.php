@@ -3,217 +3,344 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ $title ?? 'Website Desa Dolok Nagodang' }}</title>
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="{{ $description ?? 'Website resmi Desa Dolok Nagodang sebagai pusat informasi dan pelayanan masyarakat.' }}">
+    <meta name="description"
+          content="{{ $description ?? 'Website resmi Desa Dolok Nagodang sebagai pusat informasi dan pelayanan masyarakat.' }}">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
     @stack('styles')
 
-    {{-- ANIMASI --}}
+    {{-- GOOGLE FONT --}}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    {{-- LUCIDE ICON --}}
+    <script src="https://unpkg.com/lucide@latest"></script>
+
     <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
         .fade-up {
             opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.6s ease;
+            transform: translateY(25px);
+            transition: all .7s ease;
         }
+
         .fade-up.show {
             opacity: 1;
             transform: translateY(0);
         }
+
+        .glass {
+            background: rgba(255,255,255,.7);
+            backdrop-filter: blur(12px);
+        }
+
+        .mobile-scroll::-webkit-scrollbar {
+            display: none;
+        }
     </style>
 </head>
-        <script src="https://unpkg.com/lucide@latest"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        lucide.createIcons();
-    });
-</script>
-<body class="bg-slate-50 text-slate-800">
 
-    {{-- ================= HEADER ================= --}}
-    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-slate-200 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+<body class="bg-slate-50 text-slate-800 overflow-x-hidden">
+
+{{-- ================= HEADER ================= --}}
+<header class="sticky top-0 z-[999] bg-white/90 backdrop-blur-xl border-b border-slate-200/80 shadow-sm">
+
+    <div class="max-w-7xl mx-auto px-4 lg:px-6">
+
+        <div class="h-20 flex items-center justify-between gap-4">
 
             {{-- LOGO --}}
-            <a href="{{ route('public.home') }}" class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center text-white font-bold">
-                    D
+            <a href="{{ route('public.home') }}"
+               class="flex items-center gap-3 min-w-0">
+
+                <div class="w-12 h-12 rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden flex items-center justify-center shrink-0">
+                    <img
+                        src="{{ asset('images/logo.png') }}"
+                        alt="Logo Desa"
+                        class="w-full h-full object-contain"
+                    >
                 </div>
-                <div>
-                    <p class="text-sm font-bold text-slate-800">Desa Dolok Nagodang</p>
-                    <p class="text-xs text-slate-500">Kabupaten Toba</p>
+
+                <div class="leading-tight min-w-0">
+                    <h1 class="text-sm md:text-base font-bold text-slate-800 truncate">
+                        Desa Dolok Nagodang
+                    </h1>
+
+                    <p class="text-xs text-slate-500 truncate">
+                        Kabupaten Toba • Sumatera Utara
+                    </p>
                 </div>
             </a>
 
-            {{-- NAV DESKTOP --}}
-            <!-- <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-700">
-                <a href="{{ route('public.home') }}" class="hover:text-emerald-600 transition">Beranda</a>
-                <a href="{{ route('public.profile') }}" class="hover:text-emerald-600 transition">Profil</a>
-                <a href="{{ route('public.news.index') }}" class="hover:text-emerald-600 transition">Berita</a>
-                <a href="{{ route('public.officials') }}" class="hover:text-emerald-600 transition">Aparat</a>
-                <a href="{{ route('public.letters') }}" class="hover:text-emerald-600 transition">Layanan</a>
-            </nav> -->
-
+            {{-- NAVIGATION --}}
             @php
                 $navItems = [
-                    ['label' => 'Beranda', 'route' => 'public.home', 'active' => 'public.home'],
-                    ['label' => 'Profil', 'route' => 'public.profile', 'active' => 'public.profile'],
-                    ['label' => 'Berita', 'route' => 'public.news.index', 'active' => 'public.news.*'],
-                    ['label' => 'Aparat', 'route' => 'public.officials', 'active' => 'public.officials'],
-                    ['label' => 'Layanan', 'route' => 'public.letters', 'active' => 'public.letters*'],
+                    [
+                        'label' => 'Beranda',
+                        'route' => 'public.home',
+                        'active' => 'public.home',
+                        'icon' => 'home',
+                    ],
+                    [
+                        'label' => 'Profil',
+                        'route' => 'public.profile',
+                        'active' => 'public.profile',
+                        'icon' => 'building-2',
+                    ],
+                    [
+                        'label' => 'Berita',
+                        'route' => 'public.news.index',
+                        'active' => 'public.news.*',
+                        'icon' => 'newspaper',
+                    ],
+                    [
+                        'label' => 'Aparat',
+                        'route' => 'public.officials',
+                        'active' => 'public.officials',
+                        'icon' => 'users',
+                    ],
+                    [
+                        'label' => 'Layanan',
+                        'route' => 'public.letters',
+                        'active' => 'public.letters*',
+                        'icon' => 'file-text',
+                    ],
                 ];
             @endphp
 
-            <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
+            {{-- DESKTOP MENU --}}
+            <nav class="hidden lg:flex items-center gap-2">
+
                 @foreach ($navItems as $item)
+
                     <a href="{{ route($item['route']) }}"
-                    class="{{ request()->routeIs($item['active'])
-                            ? 'text-emerald-600 font-bold'
-                            : 'text-slate-700 hover:text-emerald-600' }} transition">
+                       class="relative px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300
+
+                       {{ request()->routeIs($item['active'])
+                            ? 'bg-emerald-600 text-white shadow-md'
+                            : 'text-slate-700 hover:bg-slate-100 hover:text-emerald-700'
+                       }}">
                         {{ $item['label'] }}
                     </a>
+
                 @endforeach
+
             </nav>
 
-            {{-- CTA --}}
-            <div class="hidden md:flex items-center gap-3">
-                <a href="{{ route('login') }}"
-                   class="rounded-xl border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 hidden">
-                    Login
-                </a>
+            {{-- RIGHT --}}
+            <div class="flex items-center gap-3">
 
-                <a href="{{ route('public.letters') }}"
-                   class="rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700 hidden">
-                    Ajukan Surat
-                </a>
+                {{-- BUTTON --}}
+                <!-- <a href="{{ route('public.letters') }}"
+                   class="hidden md:inline-flex items-center gap-2 rounded-2xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-600/20 hover:bg-emerald-700 transition">
+                    <i data-lucide="file-plus-2" class="w-4 h-4"></i>
+                    Layanan
+                </a> -->
+
+                {{-- MOBILE BUTTON --}}
+                <button
+                    id="menuBtn"
+                    class="lg:hidden w-11 h-11 rounded-2xl border border-slate-200 bg-white shadow-sm flex items-center justify-center">
+
+                    <i data-lucide="menu" class="w-5 h-5"></i>
+
+                </button>
+
             </div>
 
-            {{-- MOBILE MENU BUTTON --}}
-            <button id="menuBtn" class="md:hidden text-2xl">
-                ☰
-            </button>
         </div>
 
-        {{-- MOBILE MENU --}}
-        <!-- <div id="mobileMenu" class="hidden md:hidden border-t bg-white">
-            <div class="px-4 py-4 space-y-3 text-sm">
-                <a href="{{ route('public.home') }}" class="block">Beranda</a>
-                <a href="{{ route('public.profile') }}" class="block">Profil</a>
-                <a href="{{ route('public.news.index') }}" class="block">Berita</a>
-                <a href="{{ route('public.officials') }}" class="block">Aparat</a>
-                <a href="{{ route('public.letters') }}" class="block">Layanan</a>
-                <a href="{{ route('login') }}" class="block text-emerald-600 font-semibold">Login</a>
-            </div>
-        </div> -->
-        <div id="mobileMenu" class="hidden md:hidden border-t bg-white">
-            <div class="px-4 py-4 space-y-2 text-sm">
-                @foreach ($navItems as $item)
-                    <a href="{{ route($item['route']) }}"
-                    class="block rounded-xl px-4 py-3 {{ request()->routeIs($item['active'])
-                            ? 'bg-emerald-50 text-emerald-700 font-bold'
-                            : 'text-slate-700 hover:bg-slate-50' }}">
-                        {{ $item['label'] }}
-                    </a>
-                @endforeach
+    </div>
+
+    {{-- MOBILE MENU --}}
+    <div id="mobileMenu"
+         class="hidden lg:hidden border-t border-slate-200 bg-white">
+
+        <div class="px-4 py-5 space-y-2 max-h-[80vh] overflow-y-auto mobile-scroll">
+
+            @foreach ($navItems as $item)
+
+                <a href="{{ route($item['route']) }}"
+                   class="flex items-center gap-3 rounded-2xl px-4 py-4 text-sm font-semibold transition
+
+                   {{ request()->routeIs($item['active'])
+                        ? 'bg-emerald-600 text-white'
+                        : 'text-slate-700 hover:bg-slate-100'
+                   }}">
+
+                    <i data-lucide="{{ $item['icon'] }}" class="w-5 h-5"></i>
+
+                    {{ $item['label'] }}
+
+                </a>
+
+            @endforeach
+
+            <div class="pt-3">
 
                 <a href="{{ route('login') }}"
-                class="block rounded-xl px-4 py-3 text-emerald-700 font-semibold bg-emerald-50">
+                   class="flex items-center justify-center gap-2 rounded-2xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-100 transition">
+
+                    <i data-lucide="shield-check" class="w-4 h-4"></i>
+
                     Login Admin
+
                 </a>
-            </div>
-        </div>
-    </header>
 
-    {{-- ================= MAIN ================= --}}
-    <main>
-        @yield('content')
-    </main>
-
-    {{-- ================= FOOTER ================= --}}
-    <!-- <footer class="bg-slate-900 text-slate-300 mt-16">
-        <div class="max-w-7xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-3 gap-8">
-
-            <div>
-                <h3 class="text-white font-bold text-lg">Desa Dolok Nagodang</h3>
-                <p class="mt-3 text-sm leading-6">
-                    Website resmi desa sebagai pusat informasi dan pelayanan masyarakat.
-                </p>
             </div>
 
-            <div>
-                <h3 class="text-white font-semibold">Menu</h3>
-                <ul class="mt-3 space-y-2 text-sm">
-                    <li><a href="/" class="hover:text-white">Beranda</a></li>
-                    <li><a href="{{ route('public.news.index') }}" class="hover:text-white">Berita</a></li>
-                    <li><a href="{{ route('public.letters') }}" class="hover:text-white">Layanan</a></li>
-                </ul>
-            </div>
-
-            <div>
-                <h3 class="text-white font-semibold">Kontak</h3>
-                <p class="mt-3 text-sm leading-6">
-                    📍 Desa Dolok Nagodang<br>
-                    📞 08xxxxxxxxxx<br>
-                    ✉ desa@email.com
-                </p>
-            </div>
         </div>
 
-        <div class="border-t border-slate-800 text-center text-sm py-4">
-            © {{ date('Y') }} Desa Dolok Nagodang. All rights reserved.
-        </div>
-    </footer> -->
-
-    <footer class="bg-slate-950 text-slate-300 mt-16">
-        <div class="max-w-7xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div class="md:col-span-2">
-                <h3 class="text-white font-bold text-lg">Desa Dolok Nagodang</h3>
-                <p class="mt-3 text-sm leading-6 max-w-md">
-                    Website resmi desa sebagai pusat informasi, pelayanan administrasi,
-                    berita kegiatan, dan transparansi Pemerintah Desa Dolok Nagodang.
-                </p>
-            </div>
-
-            <div>
-                <h3 class="text-white font-semibold">Menu Utama</h3>
-                <ul class="mt-3 space-y-2 text-sm">
-                    <li><a href="{{ route('public.home') }}" class="hover:text-white">Beranda</a></li>
-                    <li><a href="{{ route('public.profile') }}" class="hover:text-white">Profil Desa</a></li>
-                    <li><a href="{{ route('public.news.index') }}" class="hover:text-white">Berita Desa</a></li>
-                    <li><a href="{{ route('public.letters') }}" class="hover:text-white">Layanan Surat</a></li>
-                </ul>
-            </div>
-
-            <div class="mt-3 space-y-3 text-sm">
-
-    <div class="flex items-start gap-3 group">
-        <div class="p-2 rounded-xl bg-emerald-500/10 group-hover:bg-emerald-500/20 transition">
-            <i data-lucide="map-pin" class="w-4 h-4 text-emerald-400"></i>
-        </div>
-        <p class="leading-relaxed">
-            Desa Dolok Nagodang, Kec. Uluan, Kab. Toba
-        </p>
     </div>
 
-    <div class="flex items-start gap-3 group">
-        <div class="p-2 rounded-xl bg-emerald-500/10 group-hover:bg-emerald-500/20 transition">
-            <i data-lucide="clock" class="w-4 h-4 text-emerald-400"></i>
-        </div>
-        <p>
-            Senin - Jumat, 08.00 - 15.00
-        </p>
+</header>
+
+{{-- ================= MAIN ================= --}}
+<main class="min-h-screen">
+    @yield('content')
+</main>
+
+{{-- ================= FOOTER ================= --}}
+<footer class="relative overflow-hidden bg-slate-950 text-slate-300 mt-16">
+
+    {{-- BACKGROUND --}}
+    <div class="absolute inset-0 opacity-10">
+        <div class="absolute -top-20 -left-20 w-72 h-72 bg-emerald-500 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 right-0 w-80 h-80 bg-cyan-500 rounded-full blur-3xl"></div>
     </div>
 
-        <div class="flex items-start gap-3 group">
-            <div class="p-2 rounded-xl bg-emerald-500/10 group-hover:bg-emerald-500/20 transition">
-                        <i data-lucide="phone" class="w-4 h-4 text-emerald-400"></i>
+    <div class="relative max-w-7xl mx-auto px-4 lg:px-6 py-14">
+
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-10">
+
+            {{-- PROFILE --}}
+            <div class="xl:col-span-2">
+
+                <div class="flex items-center gap-4">
+
+                    <div class="w-14 h-14 rounded-2xl bg-white overflow-hidden flex items-center justify-center">
+                        <img
+                            src="{{ asset('images/logo.png') }}"
+                            alt="Logo"
+                            class="w-full h-full object-contain"
+                        >
                     </div>
-                    <p>
-                        08xxxxxxxxxx
-                    </p>
+
+                    <div>
+                        <h3 class="text-xl font-bold text-white">
+                            Desa Dolok Nagodang
+                        </h3>
+
+                        <p class="text-sm text-slate-400">
+                            Kabupaten Toba
+                        </p>
+                    </div>
+
                 </div>
 
-                <div class="flex items-start gap-3 group">
+                <p class="mt-5 text-sm leading-7 text-slate-400 max-w-xl">
+                    Website resmi Pemerintah Desa Dolok Nagodang sebagai pusat informasi,
+                    pelayanan administrasi, berita kegiatan desa, dan transparansi publik
+                    kepada masyarakat.
+                </p>
+
+            </div>
+
+            {{-- MENU --}}
+            <div>
+
+                <h3 class="text-white font-bold text-lg">
+                    Menu Utama
+                </h3>
+
+                <div class="mt-5 space-y-3 text-sm">
+
+                    <a href="{{ route('public.home') }}"
+                       class="flex items-center gap-3 hover:text-white transition">
+                        <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        Beranda
+                    </a>
+
+                    <a href="{{ route('public.profile') }}"
+                       class="flex items-center gap-3 hover:text-white transition">
+                        <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        Profil Desa
+                    </a>
+
+                    <a href="{{ route('public.news.index') }}"
+                       class="flex items-center gap-3 hover:text-white transition">
+                        <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        Berita Desa
+                    </a>
+
+                    <a href="{{ route('public.letters') }}"
+                       class="flex items-center gap-3 hover:text-white transition">
+                        <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        Layanan Surat
+                    </a>
+
+                </div>
+
+            </div>
+
+            {{-- CONTACT --}}
+            <div>
+
+                <h3 class="text-white font-bold text-lg">
+                    Informasi Desa
+                </h3>
+
+                <div class="mt-5 space-y-5 text-sm">
+
+                    <div class="flex gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
+                            <i data-lucide="map-pin" class="w-4 h-4 text-emerald-400"></i>
+                        </div>
+
+                        <div>
+                            <p class="font-semibold text-white">Alamat</p>
+                            <p class="text-slate-400 leading-6">
+                                Desa Dolok Nagodang, Kecamatan Uluan, Kabupaten Toba
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
+                            <i data-lucide="clock-3" class="w-4 h-4 text-emerald-400"></i>
+                        </div>
+
+                        <div>
+                            <p class="font-semibold text-white">Jam Layanan</p>
+                            <p class="text-slate-400">
+                                Senin - Jumat, 08.00 - 15.00
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
+                            <i data-lucide="phone" class="w-4 h-4 text-emerald-400"></i>
+                        </div>
+
+                        <div>
+                            <p class="font-semibold text-white">Telepon</p>
+                            <p class="text-slate-400">
+                                08xxxxxxxxxx
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3 group">
                     <div class="p-2 rounded-xl bg-emerald-500/10 group-hover:bg-emerald-500/20 transition">
                         <i data-lucide="mail" class="w-4 h-4 text-emerald-400"></i>
                     </div>
@@ -222,259 +349,377 @@
                     </p>
                 </div>
 
-            </div>
-        </div>
-
-        <div class="border-t border-slate-800 py-4 text-center text-xs text-slate-500">
-            © {{ date('Y') }} Desa Dolok Nagodang. Dikelola oleh Pemerintah Desa.
-        </div>
-    </footer>
-
-    @if(isset($visitorStats))
-        <div class="fixed left-5 bottom-6 z-50 hidden lg:block group">
-            {{-- Detail --}}
-            <div class="absolute bottom-20 left-0 w-80 rounded-2xl bg-slate-900/90 text-white border border-white/20 shadow-2xl backdrop-blur p-5
-                        opacity-0 translate-y-3 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300">
-                <h3 class="text-lg font-bold mb-4">Jumlah Kunjungan</h3>
-
-                <div class="space-y-3 text-sm">
-                    <div class="flex justify-between border-b border-white/20 pb-2">
-                        <span>Hari Ini</span>
-                        <strong>{{ number_format($visitorStats['today'] ?? 0) }}</strong>
-                    </div>
-
-                    <div class="flex justify-between border-b border-white/20 pb-2">
-                        <span>Kemarin</span>
-                        <strong>{{ number_format($visitorStats['yesterday'] ?? 0) }}</strong>
-                    </div>
-
-                    <div class="flex justify-between border-b border-white/20 pb-2">
-                        <span>Minggu Ini</span>
-                        <strong>{{ number_format($visitorStats['this_week'] ?? 0) }}</strong>
-                    </div>
-
-                    <div class="flex justify-between border-b border-white/20 pb-2">
-                        <span>Minggu Lalu</span>
-                        <strong>{{ number_format($visitorStats['last_week'] ?? 0) }}</strong>
-                    </div>
-
-                    <div class="flex justify-between border-b border-white/20 pb-2">
-                        <span>Bulan Ini</span>
-                        <strong>{{ number_format($visitorStats['this_month'] ?? 0) }}</strong>
-                    </div>
-
-                    <div class="flex justify-between border-b border-white/20 pb-2">
-                        <span>Bulan Lalu</span>
-                        <strong>{{ number_format($visitorStats['last_month'] ?? 0) }}</strong>
-                    </div>
-
-                    <div class="flex justify-between pt-1">
-                        <span>Total Kunjungan</span>
-                        <strong>{{ number_format($visitorStats['total'] ?? 0) }}</strong>
-                    </div>
                 </div>
+
             </div>
 
-            {{-- Ringkas --}}
-            <div class="w-64 rounded-2xl bg-emerald-500/85 text-white border border-white/30 shadow-2xl backdrop-blur px-5 py-4 cursor-pointer">
-                <div class="flex items-center justify-between gap-4">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center text-xl">
-                            👥
-                        </div>
+        </div>
 
-                        <div>
-                            <p class="font-bold">Kunjungan</p>
-                            <p class="text-sm text-emerald-50">Hari Ini</p>
-                        </div>
-                    </div>
+    </div>
 
-                    <div class="text-right">
-                        <p class="text-xl font-bold">{{ number_format($visitorStats['today'] ?? 0) }}</p>
-                        <p class="text-xs text-emerald-50">visitor</p>
-                    </div>
-                </div>
+    {{-- COPYRIGHT --}}
+    <div class="border-t border-white/10">
+
+        <div class="max-w-7xl mx-auto px-4 lg:px-6 py-5 flex flex-col md:flex-row items-center justify-between gap-3 text-sm text-slate-500">
+
+            <p>
+                © {{ date('Y') }} Desa Dolok Nagodang. All rights reserved.
+            </p>
+
+            <p>
+                Dikelola oleh Pemerintah Desa Dolok Nagodang
+            </p>
+
+        </div>
+
+    </div>
+
+</footer>
+
+{{-- ================= VISITOR STATS ================= --}}
+@if(isset($visitorStats))
+
+<div class="fixed left-4 bottom-5 z-50 hidden xl:block group">
+
+    {{-- DETAIL --}}
+    <div class="absolute bottom-24 left-0 w-80 rounded-3xl bg-slate-900/95 border border-white/10 text-white p-6 shadow-2xl backdrop-blur-xl
+                opacity-0 invisible translate-y-3 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300">
+
+        <div class="flex items-center justify-between mb-5">
+            <h3 class="font-bold text-lg">
+                Statistik Pengunjung
+            </h3>
+
+            <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
+                <i data-lucide="activity" class="w-5 h-5 text-emerald-400"></i>
             </div>
         </div>
-    @endif
 
-    {{-- FLOATING PENGADUAN --}}
-    <div class="fixed right-5 bottom-6 z-50">
+        <div class="space-y-3 text-sm">
+
+            @php
+                $stats = [
+                    'Hari Ini' => $visitorStats['today'] ?? 0,
+                    'Kemarin' => $visitorStats['yesterday'] ?? 0,
+                    'Minggu Ini' => $visitorStats['this_week'] ?? 0,
+                    'Minggu Lalu' => $visitorStats['last_week'] ?? 0,
+                    'Bulan Ini' => $visitorStats['this_month'] ?? 0,
+                    'Bulan Lalu' => $visitorStats['last_month'] ?? 0,
+                ];
+            @endphp
+
+            @foreach($stats as $label => $value)
+
+            <div class="flex items-center justify-between border-b border-white/10 pb-2">
+
+                <span class="text-slate-300">
+                    {{ $label }}
+                </span>
+
+                <span class="font-bold text-white">
+                    {{ number_format($value) }}
+                </span>
+
+            </div>
+
+            @endforeach
+
+            <div class="flex items-center justify-between pt-2">
+
+                <span class="text-slate-300 font-semibold">
+                    Total
+                </span>
+
+                <span class="font-bold text-emerald-400">
+                    {{ number_format($visitorStats['total'] ?? 0) }}
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {{-- SHORT --}}
+    <div class="rounded-3xl bg-emerald-600 text-white shadow-2xl px-5 py-4 cursor-pointer">
+
+        <div class="flex items-center gap-4">
+
+            <div class="w-12 h-12 rounded-2xl bg-white/15 flex items-center justify-center">
+                <i data-lucide="users" class="w-6 h-6"></i>
+            </div>
+
+            <div>
+                <p class="text-sm text-emerald-100">
+                    Pengunjung Hari Ini
+                </p>
+
+                <h3 class="text-2xl font-extrabold leading-none">
+                    {{ number_format($visitorStats['today'] ?? 0) }}
+                </h3>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@endif
+
+{{-- ================= FLOATING COMPLAINT ================= --}}
+<div class="fixed right-4 bottom-5 z-50">
+
+    <button
+        type="button"
+        onclick="toggleComplaintPanel()"
+        class="group rounded-2xl bg-rose-500 hover:bg-rose-600 text-white shadow-2xl px-5 py-4 transition">
+
+        <div class="flex items-center gap-3">
+
+            <div class="w-11 h-11 rounded-xl bg-white/15 flex items-center justify-center">
+                <i data-lucide="headphones" class="w-5 h-5"></i>
+            </div>
+
+            <div class="text-left hidden sm:block">
+                <p class="text-sm text-rose-100">
+                    Layanan
+                </p>
+
+                <p class="font-bold leading-none">
+                    Pengaduan
+                </p>
+            </div>
+
+        </div>
+
+    </button>
+
+</div>
+
+{{-- ================= PANEL PENGADUAN ================= --}}
+<div id="complaintPanel"
+     class="hidden fixed right-4 bottom-24 z-[999] w-[380px] max-w-[calc(100vw-2rem)] rounded-[30px] bg-white border border-slate-200 shadow-2xl overflow-hidden">
+
+    {{-- HEADER --}}
+    <div class="bg-gradient-to-r from-emerald-700 to-emerald-600 text-white px-6 py-5 flex items-start justify-between gap-4">
+
+        <div>
+            <h3 class="text-lg font-bold">
+                Form Pengaduan
+            </h3>
+
+            <p class="text-sm text-emerald-100 mt-1">
+                Sampaikan aspirasi atau laporan masyarakat.
+            </p>
+        </div>
+
         <button
             type="button"
             onclick="toggleComplaintPanel()"
-            class="rounded-2xl bg-rose-500/90 text-white border border-white/30 shadow-2xl backdrop-blur px-5 py-4 hover:bg-rose-600 transition">
-            <div class="flex items-center gap-3">
-                <span class="text-2xl">🎧</span>
-                <span class="font-bold">Pengaduan</span>
-            </div>
+            class="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center">
+
+            <i data-lucide="x" class="w-4 h-4"></i>
+
         </button>
+
     </div>
 
-    {{-- PANEL PENGADUAN --}}
-    <div id="complaintPanel"
-        class="fixed right-5 bottom-24 z-50 hidden w-[360px] max-w-[calc(100vw-2rem)] rounded-3xl bg-white border border-slate-200 shadow-2xl overflow-hidden">
+    {{-- BODY --}}
+    <form
+        method="POST"
+        action="{{ route('public.complaints.store') }}"
+        enctype="multipart/form-data"
+        class="p-6 space-y-5 max-h-[75vh] overflow-y-auto">
 
-        <div class="bg-emerald-700 text-white px-5 py-4 flex items-center justify-between">
-            <div>
-                <h3 class="font-bold">Form Pengaduan</h3>
-                <p class="text-xs text-emerald-100">Sampaikan aspirasi atau laporan Anda.</p>
+        @csrf
+
+        @if(session('complaint_success'))
+
+            <div class="rounded-2xl bg-emerald-50 border border-emerald-200 px-4 py-3 text-sm text-emerald-700">
+                {{ session('complaint_success') }}
             </div>
 
-            <button type="button" onclick="toggleComplaintPanel()" class="text-white text-xl">
-                ×
-            </button>
+        @endif
+
+        @if ($errors->any())
+
+            <div class="rounded-2xl bg-rose-50 border border-rose-200 px-4 py-3 text-sm text-rose-700">
+
+                <p class="font-semibold">
+                    Pengaduan belum bisa dikirim.
+                </p>
+
+                <ul class="mt-2 list-disc list-inside space-y-1">
+
+                    @foreach ($errors->all() as $error)
+
+                        <li>{{ $error }}</li>
+
+                    @endforeach
+
+                </ul>
+
+            </div>
+
+        @endif
+
+        {{-- INPUT --}}
+        <div>
+            <label class="block text-sm font-semibold mb-2">
+                Nama
+            </label>
+
+            <input
+                type="text"
+                name="name"
+                value="{{ old('name') }}"
+                class="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                placeholder="Masukkan nama">
         </div>
 
-        <form method="POST"
-            action="{{ route('public.complaints.store') }}"
-            enctype="multipart/form-data"
-            class="p-5 space-y-4">
-            @csrf
+        <div>
+            <label class="block text-sm font-semibold mb-2">
+                Nomor Telepon
+            </label>
 
-            @if(session('complaint_success'))
-                <div class="rounded-xl bg-emerald-50 border border-emerald-200 px-4 py-3 text-sm text-emerald-700">
-                    {{ session('complaint_success') }}
-                </div>
-            @endif
+            <input
+                type="text"
+                name="phone"
+                value="{{ old('phone') }}"
+                class="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                placeholder="08xxxxxxxxxx">
+        </div>
 
-            @if ($errors->any())
-                <div class="rounded-xl bg-rose-50 border border-rose-200 px-4 py-3 text-sm text-rose-700">
-                    <p class="font-semibold">Pengaduan belum bisa dikirim.</p>
-                    <ul class="mt-2 list-disc list-inside space-y-1">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
+        <div>
+            <label class="block text-sm font-semibold mb-2">
+                Kategori
+            </label>
 
-            <div>
-                <label class="block text-sm font-semibold text-slate-700 mb-2">
-                    Nama <span class="text-rose-500">*</span>
-                </label>
-                <input
-                    type="text"
-                    name="name"
-                    value="{{ old('name') }}"
-                    class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    placeholder="Masukkan nama Anda"
-                >
-            </div>
+            <select
+                name="category"
+                class="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
 
-            <div>
-                <label class="block text-sm font-semibold text-slate-700 mb-2">
-                    Nomor Telepon/WA <span class="text-rose-500">*</span>
-                </label>
-                <input
-                    type="text"
-                    name="phone"
-                    value="{{ old('phone') }}"
-                    class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    placeholder="Masukkan nomor HP/WhatsApp"
-                >
-            </div>
+                <option value="">Pilih kategori</option>
 
-            <div>
-                <label class="block text-sm font-semibold text-slate-700 mb-2">
-                    Kategori Pengaduan <span class="text-rose-500">*</span>
-                </label>
-                <select
-                    name="category"
-                    class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                >
-                    <option value="">Pilih kategori pengaduan</option>
-                    @foreach (['Umum', 'Sosial', 'Keamanan', 'Kesehatan', 'Kebersihan', 'Permintaan'] as $category)
-                        <option value="{{ $category }}" {{ old('category') === $category ? 'selected' : '' }}>
-                            {{ $category }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
+                @foreach (['Umum', 'Sosial', 'Keamanan', 'Kesehatan', 'Kebersihan', 'Permintaan'] as $category)
 
-            <div>
-                <label class="block text-sm font-semibold text-slate-700 mb-2">
-                    Pengaduan <span class="text-rose-500">*</span>
-                </label>
-                <textarea
-                    name="message"
-                    rows="4"
-                    class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm leading-6 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    placeholder="Masukkan pesan, informasi, atau detail aduan Anda"
-                >{{ old('message') }}</textarea>
-            </div>
+                    <option value="{{ $category }}"
+                        {{ old('category') === $category ? 'selected' : '' }}>
 
-            <div>
-                <label class="block text-sm font-semibold text-slate-700 mb-2">
-                    Lampiran
-                </label>
-                <input
-                    type="file"
-                    name="attachment"
-                    accept=".jpg,.jpeg,.png,.pdf"
-                    class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm"
-                >
-                <p class="mt-1 text-xs text-slate-500">Format: JPG, PNG, PDF. Maksimal 2MB.</p>
-            </div>
+                        {{ $category }}
 
-            <div class="flex justify-end pt-2">
-                <button
-                    type="submit"
-                    class="rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-700 transition">
-                    Kirim
-                </button>
-            </div>
-        </form>
-    </div>
+                    </option>
 
-    <script>
-        function toggleComplaintPanel() {
-            const panel = document.getElementById('complaintPanel');
-            if (!panel) return;
+                @endforeach
 
-            panel.classList.toggle('hidden');
+            </select>
+        </div>
+
+        <div>
+            <label class="block text-sm font-semibold mb-2">
+                Pengaduan
+            </label>
+
+            <textarea
+                name="message"
+                rows="5"
+                class="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm leading-7 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                placeholder="Masukkan isi pengaduan">{{ old('message') }}</textarea>
+        </div>
+
+        <div>
+            <label class="block text-sm font-semibold mb-2">
+                Lampiran
+            </label>
+
+            <input
+                type="file"
+                name="attachment"
+                class="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm">
+        </div>
+
+        <button
+            type="submit"
+            class="w-full rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white py-3 font-semibold transition">
+
+            Kirim Pengaduan
+
+        </button>
+
+    </form>
+
+</div>
+
+{{-- ================= SCRIPT ================= --}}
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+        lucide.createIcons();
+    });
+
+    // MOBILE MENU
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    if (menuBtn) {
+        menuBtn.addEventListener('click', function () {
+            mobileMenu.classList.toggle('hidden');
+        });
+    }
+
+    // COMPLAINT PANEL
+    function toggleComplaintPanel() {
+
+        const panel = document.getElementById('complaintPanel');
+
+        if (!panel) return;
+
+        panel.classList.toggle('hidden');
+    }
+
+    // AUTO OPEN
+    document.addEventListener('DOMContentLoaded', function () {
+
+        const hasComplaintFeedback =
+            @json(session()->has('complaint_success') || $errors->any());
+
+        if (hasComplaintFeedback) {
+
+            document
+                .getElementById('complaintPanel')
+                ?.classList.remove('hidden');
+
         }
 
-        document.addEventListener('DOMContentLoaded', function () {
-            const hasComplaintFeedback =
-                @json(session()->has('complaint_success') || $errors->any());
+    });
 
-            if (hasComplaintFeedback) {
-                const panel = document.getElementById('complaintPanel');
-                if (panel) {
-                    panel.classList.remove('hidden');
+    // ANIMATION
+    document.addEventListener("DOMContentLoaded", () => {
+
+        const elements = document.querySelectorAll(".fade-up");
+
+        const observer = new IntersectionObserver(entries => {
+
+            entries.forEach(entry => {
+
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("show");
                 }
-            }
-        });
-    </script>
 
-    {{-- ================= SCRIPT ================= --}}
-    <script>
-        // MOBILE MENU
-        const menuBtn = document.getElementById('menuBtn');
-        const mobileMenu = document.getElementById('mobileMenu');
-
-        if (menuBtn) {
-            menuBtn.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
-        }
-
-        // ANIMASI SCROLL
-        document.addEventListener("DOMContentLoaded", () => {
-            const elements = document.querySelectorAll(".fade-up");
-
-            const observer = new IntersectionObserver(entries => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add("show");
-                    }
-                });
             });
 
-            elements.forEach(el => observer.observe(el));
+        }, {
+            threshold: 0.1
         });
-    </script>
-    @stack('scripts')
+
+        elements.forEach(el => observer.observe(el));
+
+    });
+
+</script>
+
+@stack('scripts')
+
 </body>
 </html>

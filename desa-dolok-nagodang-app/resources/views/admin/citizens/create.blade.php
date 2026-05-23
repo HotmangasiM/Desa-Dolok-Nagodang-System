@@ -28,8 +28,8 @@
         </div>
     @endif
 
-    <form action="{{ route('admin.citizens.store') }}" method="POST" class="space-y-6">
-        @csrf
+    <form id="formPenduduk" action="{{ route('admin.citizens.store') }}" method="POST" class="space-y-6">
+    @csrf
 
         <!-- Data Utama -->
         <div class="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
@@ -262,11 +262,75 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (!form) return;
 
+    const form = document.querySelector('form');
+
+    Swal.fire({
+        title: 'Konfirmasi Tambah Data',
+        text: 'Apakah Anda yakin ingin menyimpan data penduduk?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, simpan',
+        cancelButtonText: 'Batal',
+        confirmButtonColor: '#10b981',
+        cancelButtonColor: '#6b7280',
+        reverseButtons: true,
+        customClass: {
+            popup: 'rounded-2xl',
+            confirmButton: 'rounded-lg px-4 py-2',
+            cancelButton: 'rounded-lg px-4 py-2'
+        }
+    }).then((result) => {
+
+        if (result.isConfirmed) {
+
+         @push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const btnSubmit = document.getElementById('btnSubmit');
+    const form = document.getElementById('formPenduduk');
+
+    if (!btnSubmit || !form) {
+        console.error('Button atau form tidak ditemukan!');
+        return;
+    }
+
+    btnSubmit.addEventListener('click', function (e) {
+
+        e.preventDefault();
+
+        Swal.fire({
+            title: 'Konfirmasi Tambah Data',
+            text: 'Apakah Anda yakin ingin menyimpan data penduduk?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Simpan',
+            cancelButtonText: 'Batal',
+            confirmButtonColor: '#10b981',
+            cancelButtonColor: '#6b7280',
+            reverseButtons: true
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+
+                Swal.fire({
+                    title: 'Menyimpan...',
+                    text: 'Mohon tunggu',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                form.submit();
+            }
+
+        });
     form.addEventListener('submit', function (e) {
         if (form.dataset.confirmed === 'true') {
             return;
         }
-
         if (typeof Swal === 'undefined') {
             return; // fallback: submit normal
         }
@@ -290,6 +354,10 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
+<<<<<<< HEAD
+
+=======
+>>>>>>> be742c3934aae12d01b0c0f28ed6f88823803e8a
 });
 </script>
 @endpush
