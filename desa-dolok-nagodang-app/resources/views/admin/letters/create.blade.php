@@ -160,32 +160,25 @@
                 </div> -->
 
                 {{-- SKTM --}}
-                <!-- <div data-letter-fields="SKTM" class="letter-fields hidden grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div data-letter-fields="SKTM" class="letter-fields hidden grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div class="md:col-span-2">
                         <label class="block text-sm font-semibold text-slate-700 mb-2">
-                            Keperluan Surat
+                            No. KK <span class="text-rose-500">*</span>
                         </label>
                         <input
                             type="text"
-                            name="payload[purpose]"
-                            value="{{ old('payload.purpose') }}"
+                            name="payload[family_card_number]"
+                            value="{{ old('payload.family_card_number') }}"
+                            maxlength="16"
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                             class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                            placeholder="Contoh: Permohonan bantuan pendidikan"
+                            placeholder="Masukkan 16 digit Nomor KK"
                         >
+                        <p class="mt-1 text-xs text-slate-400">
+                            Nomor KK diisi manual karena belum tersedia di data penduduk.
+                        </p>
                     </div>
-
-                    <div class="md:col-span-2">
-                        <label class="block text-sm font-semibold text-slate-700 mb-2">
-                            Keterangan Tambahan
-                        </label>
-                        <textarea
-                            name="payload[additional_notes]"
-                            rows="3"
-                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm leading-6 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                            placeholder="Opsional"
-                        >{{ old('payload.additional_notes') }}</textarea>
-                    </div>
-                </div> -->
+                </div>
 
                 {{-- YTM --}}
                 <div data-letter-fields="YTM" class="letter-fields hidden space-y-8">
