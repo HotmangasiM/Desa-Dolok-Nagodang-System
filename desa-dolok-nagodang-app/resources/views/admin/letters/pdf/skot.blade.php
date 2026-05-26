@@ -196,6 +196,7 @@
 
 <div class="signature">
     <p>{{ $issued_location }}, {{ $issuedDateIndo }}</p>
+    <br>
     <p>Kepala Desa Dolok Nagodang</p>
 
     <div class="sign-space"></div>

@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>Surat Keterangan Usaha</title>
+
     <style>
         @page {
             margin: 30px 65px 40px 65px;
@@ -69,40 +70,43 @@
         .title .main {
             text-decoration: underline;
             font-size: 13px;
+            font-weight: bold;
         }
 
         .content {
             text-align: justify;
         }
 
-        .data-table {
+        .data-table,
+        .official-table,
+        .business-table {
             margin-left: 86px;
             border-collapse: collapse;
         }
 
-        .data-table td {
-            padding: 1px 4px;
+        .official-table {
+            margin-top: 8px;
+            margin-bottom: 20px;
+        }
+
+        .business-table {
+            margin-top: 16px;
+        }
+
+        .data-table td,
+        .official-table td,
+        .business-table td {
+            padding: 2px 4px;
             vertical-align: top;
         }
 
         .label {
             width: 160px;
+            white-space: nowrap;
         }
 
         .colon {
             width: 10px;
-        }
-
-        .official-table {
-            margin-left: 86px;
-            border-collapse: collapse;
-            margin-top: 8px;
-            margin-bottom: 20px;
-        }
-
-        .official-table td {
-            padding: 1px 4px;
-            vertical-align: top;
         }
 
         .paragraph {
@@ -110,22 +114,16 @@
             text-align: justify;
         }
 
-        .business-table {
-            margin-left: 86px;
-            margin-top: 16px;
-            border-collapse: collapse;
-        }
-
-        .business-table td {
-            padding: 2px 4px;
-            vertical-align: top;
-        }
-
         .signature {
             width: 260px;
             margin-left: auto;
-            margin-top: 90px;
+            margin-top: 70px;
             text-align: left;
+            line-height: 1.4;
+        }
+
+        .signature-center {
+            text-align: center;
         }
 
         .signature-name {
@@ -135,9 +133,12 @@
         }
     </style>
 </head>
+
 <body>
 
 @php
+    \Carbon\Carbon::setLocale('id');
+
     $birthDate = $citizen->birth_date
         ? \Carbon\Carbon::parse($citizen->birth_date)->format('d-m-Y')
         : '-';
@@ -147,7 +148,17 @@
     $businessAddress = $payload['business_address'] ?? '-';
     $businessPurpose = $payload['business_purpose'] ?? 'persyaratan administrasi';
 
-    $issuedDate = now()->translatedFormat('F Y');
+    $issuedDateIndo = now()->translatedFormat('d F Y');
+
+    if (!empty($issued_date)) {
+        try {
+            $issuedDateIndo = \Carbon\Carbon::parse($issued_date)->translatedFormat('d F Y');
+        } catch (\Throwable $e) {
+            $issuedDateIndo = $issued_date;
+        }
+    } elseif (!empty($letter->submission_date)) {
+        $issuedDateIndo = \Carbon\Carbon::parse($letter->submission_date)->translatedFormat('d F Y');
+    }
 @endphp
 
 <div class="kop">
@@ -156,12 +167,14 @@
             <td class="logo-cell">
                 <img src="{{ public_path('images/logo.png') }}" class="logo">
             </td>
+
             <td class="kop-title">
                 <div class="line-1">PEMERINTAH KABUPATEN TOBA</div>
                 <div class="line-2">KECAMATAN ULUAN</div>
                 <div class="line-3">DESA DOLOK NAGODANG</div>
             </td>
-            <td style="width: 120px;"></td>
+
+            <td style="width:120px;"></td>
         </tr>
     </table>
 </div>
@@ -172,6 +185,7 @@
 </div>
 
 <div class="content">
+
     <p>Yang bertanda tangan dibawah ini :</p>
 
     <table class="official-table">
@@ -180,11 +194,13 @@
             <td class="colon">:</td>
             <td>{{ $signer_name ?? 'BANGKIT MANURUNG' }}</td>
         </tr>
+
         <tr>
             <td class="label">Jabatan</td>
             <td class="colon">:</td>
-            <td>Kepala Desa</td>
+            <td>{{ $signer_position ?? 'Kepala Desa' }}</td>
         </tr>
+
         <tr>
             <td class="label">Alamat</td>
             <td class="colon">:</td>
@@ -200,26 +216,31 @@
             <td class="colon">:</td>
             <td>{{ $citizen->full_name ?? '-' }}</td>
         </tr>
+
         <tr>
             <td class="label">NIK</td>
             <td class="colon">:</td>
             <td>{{ $citizen->nik ?? '-' }}</td>
         </tr>
+
         <tr>
             <td class="label">Tempat/Tgl Lahir</td>
             <td class="colon">:</td>
             <td>{{ $citizen->birth_place ?? '-' }}, {{ $birthDate }}</td>
         </tr>
+
         <tr>
             <td class="label">Warga Negara/Agama</td>
             <td class="colon">:</td>
             <td>Indonesia / {{ $citizen->religion ?? '-' }}</td>
         </tr>
+
         <tr>
             <td class="label">Pekerjaan</td>
             <td class="colon">:</td>
             <td>{{ $citizen->occupation ?? '-' }}</td>
         </tr>
+
         <tr>
             <td class="label">Alamat</td>
             <td class="colon">:</td>
@@ -228,8 +249,9 @@
     </table>
 
     <p class="paragraph">
-        Selanjutnya diterangkan bahwa nama tersebut diatas benar Penduduk Desa Dolok Nagodang,
-        Kecamatan Uluan, Kabupaten Toba dan benar mempunyai usaha sebagai berikut:
+        Selanjutnya diterangkan bahwa nama tersebut diatas benar Penduduk Desa
+        Dolok Nagodang, Kecamatan Uluan, Kabupaten Toba dan benar mempunyai
+        usaha sebagai berikut:
     </p>
 
     <table class="business-table">
@@ -238,30 +260,40 @@
             <td class="colon">:</td>
             <td>{{ $businessName }}</td>
         </tr>
+
         <tr>
             <td class="label">Usaha Tambahan</td>
             <td class="colon">:</td>
             <td>{{ $businessType }}</td>
         </tr>
-        <!-- <tr>
+
+        {{-- OPTIONAL --}}
+        {{-- 
+        <tr>
             <td class="label">Alamat Usaha</td>
             <td class="colon">:</td>
             <td>{{ $businessAddress }}</td>
-        </tr> -->
+        </tr>
+        --}}
     </table>
 
     <p class="paragraph">
-        Demikian Surat Keterangan ini dibuat sebagai {{ $businessPurpose }},
-        dan dapat dipergunakan sebagaimana mestinya.
+        Demikian Surat Keterangan ini dibuat sebagai
+        {{ $businessPurpose }}, dan dapat dipergunakan
+        sebagaimana mestinya.
     </p>
+
 </div>
 
 <div class="signature">
-    <div>Dolok Nagodang, &nbsp;&nbsp; {{ $issuedDate }}</div>
-    <div>Kepala Desa Dolok Nagodang</div>
+    <div>Dolok Nagodang, {{ $issuedDateIndo }}</div>
+
+    <div class="signature-center">
+        Kepala Desa Dolok Nagodang
+    </div>
 
     <div class="signature-name">
-        BANGKIT MANURUNG
+        {{ $signer_name ?? 'BANGKIT MANURUNG' }}
     </div>
 </div>
 
