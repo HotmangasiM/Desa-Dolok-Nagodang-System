@@ -135,7 +135,15 @@
 
     $domicileAddress = $payload['domicile_address'] ?? '........................................';
 
-    $issuedDate = now()->translatedFormat('F Y');
+    $issuedDateIndo = now()->translatedFormat('d F Y');
+
+    if (!empty($issued_date)) {
+    try {
+        $issuedDateIndo = \Carbon\Carbon::parse($issued_date)->translatedFormat('F Y');
+    } catch (\Throwable $e) {
+        $issuedDateIndo = $issued_date;
+    }
+}
 @endphp
 
 <div class="kop">
@@ -221,7 +229,7 @@
 </div>
 
 <div class="signature">
-    <div>Dolok Nagodang, &nbsp;&nbsp; {{ $issuedDate }}</div>
+    <div>Dolok Nagodang, &nbsp;&nbsp; {{ $issuedDateIndo }}</div>
     <div>Kepala Desa Dolok Nagodang</div>
 
     <div class="signature-name">
