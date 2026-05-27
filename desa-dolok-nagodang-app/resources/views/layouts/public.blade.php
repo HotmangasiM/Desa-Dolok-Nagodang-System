@@ -441,7 +441,7 @@
     </div>
 
     {{-- SHORT --}}
-    <div class="rounded-3xl bg-emerald-600 text-white shadow-2xl px-5 py-4 cursor-pointer">
+    <div class="rounded-3xl bg-emerald-600/70 backdrop-blur-md text-white shadow-lg shadow-emerald-900/10 px-5 py-4 cursor-pointer border border-white/10">
 
         <div class="flex items-center gap-4">
 
@@ -473,7 +473,7 @@
     <button
         type="button"
         onclick="toggleComplaintPanel()"
-        class="group rounded-2xl bg-rose-500 hover:bg-rose-600 text-white shadow-2xl px-5 py-4 transition">
+        class="group rounded-2xl bg-rose-500/70 hover:bg-rose-500/85 backdrop-blur-md text-white shadow-lg shadow-rose-900/10 px-5 py-4 transition border border-white/10">
 
         <div class="flex items-center gap-3">
 
