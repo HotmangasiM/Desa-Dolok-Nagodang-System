@@ -11,7 +11,7 @@
             {{-- SLIDE 1 --}}
             <div class="swiper-slide relative">
                 <img
-                    src="{{ asset('storage/sliders/dusun1.jpg') }}"
+                    src="{{ asset('storage/sliders/slide1.jpg') }}"
                     class="absolute inset-0 w-full h-full object-cover"
                 >
 
@@ -50,7 +50,7 @@
             {{-- SLIDE 2 --}}
             <div class="swiper-slide relative">
                 <img
-                    src="{{ asset('storage/sliders/dusun2.jpg') }}"
+                    src="{{ asset('storage/sliders/slide2.jpg') }}"
                     class="absolute inset-0 w-full h-full object-cover"
                 >
 
@@ -77,7 +77,7 @@
             {{-- SLIDE 3 --}}
             <div class="swiper-slide relative">
                 <img
-                    src="{{ asset('storage/sliders/dusun3.jpg') }}"
+                    src="{{ asset('storage/sliders/slide3.jpg') }}"
                     class="absolute inset-0 w-full h-full object-cover"
                 >
 
@@ -120,6 +120,92 @@
     </div>
 
 </section>
+
+{{-- VIDEO DESA --}}
+<section class="relative py-16 md:py-20 overflow-hidden bg-black">
+
+    {{-- BACKGROUND --}}
+    <div class="absolute inset-0 bg-gradient-to-b from-black via-slate-950 to-black"></div>
+
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-emerald-500/10 blur-3xl rounded-full"></div>
+
+    <div class="relative max-w-7xl mx-auto px-4">
+
+        {{-- HEADER --}}
+        <div class="text-center max-w-3xl mx-auto">
+
+            <h2 class="mt-4 text-4xl md:text-6xl font-extrabold text-white leading-tight">
+
+                Explore
+                <span class="text-emerald-400">
+                    Dolok Nagodang
+                </span>
+
+            </h2>
+
+            <p class="mt-6 text-slate-300 leading-8 text-base md:text-lg">
+                Panorama udara Desa Dolok Nagodang yang menampilkan
+                keindahan alam, suasana masyarakat, dan perkembangan desa.
+            </p>
+
+        </div>
+
+        {{-- VIDEO --}}
+        <div class="mt-12">
+
+            <div class="relative rounded-[36px] overflow-hidden border border-white/10 shadow-[0_25px_80px_rgba(0,0,0,0.65)] bg-black">
+
+                {{-- CINEMATIC OVERLAY --}}
+                <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-black/70 to-transparent z-20 pointer-events-none"></div>
+
+                <div class="absolute bottom-0 left-0 w-full h-40 bg-gradient-to-t from-black/80 to-transparent z-20 pointer-events-none"></div>
+
+                <div class="absolute inset-0 shadow-[inset_0_0_120px_rgba(0,0,0,0.75)] z-20 pointer-events-none"></div>
+
+                {{-- CONTENT --}}
+                <div class="absolute bottom-0 left-0 z-30 p-6 md:p-10">
+
+                    <div class="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur px-4 py-2 border border-white/10">
+
+                        <span class="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></span>
+
+                        <span class="text-xs tracking-[0.2em] uppercase text-white/80">
+                            Drone Footage
+                        </span>
+
+                    </div>
+
+                    <h3 class="mt-5 text-2xl md:text-4xl font-bold text-white">
+                        Desa Dolok Nagodang
+                    </h3>
+
+                    <p class="mt-3 text-sm md:text-base text-slate-200 max-w-2xl leading-7">
+                        Menampilkan pesona desa, alam, budaya,
+                        dan pembangunan masyarakat secara modern.
+                    </p>
+
+                </div>
+
+                {{-- VIDEO --}}
+                <div class="aspect-video">
+
+                    <iframe
+                        src="https://drive.google.com/file/d/1xDa79v0ODryUl6I6YtTLCtTqpkYaKJgo/preview?autoplay=1&mute=1"
+                        class="w-full h-full scale-[1.01]"
+                        allow="autoplay"
+                        allowfullscreen>
+                    </iframe>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
 
 {{-- QUICK MENU --}}
 <section class="max-w-7xl mx-auto px-4 mt-8 md:mt-10 relative z-10">
@@ -250,7 +336,7 @@
                 <div class="mt-8">
 
                     <h2 class="text-2xl sm:text-3xl lg:text-3xl font-bold text-slate-800 leading-snug">
-                        {{ $villageHead->name ?? 'HOTMAN SIHOTANG' }}
+                        {{ $villageHead->name ?? 'BANGKIT MANURUNG' }}
                     </h2>
 
                     <p class="mt-3 text-base sm:text-lg text-slate-500 font-medium">
@@ -595,6 +681,185 @@
             </div>
         @endforelse
     </div>
+</section>
+
+{{-- ===================================================== --}}
+{{-- PEMBANGUNAN DESA --}}
+
+<section class="bg-slate-100/80 py-14 md:py-16 overflow-hidden">
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        {{-- HEADER --}}
+        <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5">
+
+            <div class="max-w-2xl">
+
+                <span class="inline-flex items-center rounded-full bg-emerald-100 px-4 py-2 text-sm font-semibold text-emerald-700">
+                    Pembangunan Desa
+                </span>
+
+                <h2 class="mt-4 text-3xl md:text-4xl font-bold tracking-tight text-slate-800">
+                    Infrastruktur Desa Dolok Nagodang
+                </h2>
+
+                <p class="mt-4 text-slate-500 leading-8 text-[15px] md:text-base">
+                    Informasi pembangunan dan infrastruktur desa akan
+                    ditampilkan pada halaman ini.
+                </p>
+
+            </div>
+
+            {{-- BUTTON --}}
+            <div>
+
+                <a href=""
+                   class="inline-flex items-center gap-2 rounded-2xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-600/20 transition hover:bg-emerald-700">
+
+                    Lihat Semua
+
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         class="h-4 w-4"
+                         fill="none"
+                         viewBox="0 0 24 24"
+                         stroke="currentColor"
+                         stroke-width="2">
+
+                        <path stroke-linecap="round"
+                              stroke-linejoin="round"
+                              d="M9 5l7 7-7 7" />
+
+                    </svg>
+
+                </a>
+
+            </div>
+
+        </div>
+
+        {{-- GRID --}}
+        <div class="mt-10 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+
+            {{-- CARD --}}
+            @for ($i = 1; $i <= 3; $i++)
+
+                <div class="group overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl">
+
+                    {{-- IMAGE --}}
+                    <div class="relative overflow-hidden">
+
+                        <div class="h-64 w-full bg-gradient-to-br from-slate-200 to-slate-100 flex items-center justify-center">
+
+                            <div class="text-center">
+
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     class="mx-auto h-14 w-14 text-slate-400"
+                                     fill="none"
+                                     viewBox="0 0 24 24"
+                                     stroke="currentColor"
+                                     stroke-width="1.5">
+
+                                    <path stroke-linecap="round"
+                                          stroke-linejoin="round"
+                                          d="M3 7l9-4 9 4-9 4-9-4zm0 0v10l9 4 9-4V7" />
+
+                                </svg>
+
+                                <p class="mt-4 text-sm font-medium text-slate-500">
+                                    Foto pembangunan
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        {{-- BADGE --}}
+                        <div class="absolute top-4 left-4">
+
+                            <span class="rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-slate-700 backdrop-blur">
+                                Infrastruktur
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    {{-- CONTENT --}}
+                    <div class="p-6">
+
+                        {{-- META --}}
+                        <div class="flex items-center gap-2 text-xs text-slate-500">
+
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 class="h-4 w-4"
+                                 fill="none"
+                                 viewBox="0 0 24 24"
+                                 stroke="currentColor"
+                                 stroke-width="2">
+
+                                <path stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      d="M8 7V3m8 4V3m-9 8h10m-11 9h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v11a2 2 0 002 2z" />
+
+                            </svg>
+
+                            <span>Data pembangunan desa</span>
+
+                        </div>
+
+                        {{-- TITLE --}}
+                        <h3 class="mt-4 text-xl font-bold leading-snug text-slate-800">
+
+                            Infrastruktur Desa
+
+                        </h3>
+
+                        {{-- DESCRIPTION --}}
+                        <p class="mt-3 text-sm leading-7 text-slate-500">
+
+                            Dokumentasi pembangunan desa akan ditampilkan
+                            pada bagian ini setelah data tersedia.
+
+                        </p>
+
+                        {{-- FOOTER --}}
+                        <div class="mt-6 flex items-center justify-between border-t border-slate-100 pt-5">
+
+                            <div>
+
+                            </div>
+
+                            <div class="inline-flex items-center gap-2 text-sm font-semibold text-slate-400">
+
+                                Detail
+
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     class="h-4 w-4"
+                                     fill="none"
+                                     viewBox="0 0 24 24"
+                                     stroke="currentColor"
+                                     stroke-width="2">
+
+                                    <path stroke-linecap="round"
+                                          stroke-linejoin="round"
+                                          d="M9 5l7 7-7 7" />
+
+                                </svg>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            @endfor
+
+        </div>
+
+    </div>
+
 </section>
 
 {{-- LAYANAN SURAT --}}

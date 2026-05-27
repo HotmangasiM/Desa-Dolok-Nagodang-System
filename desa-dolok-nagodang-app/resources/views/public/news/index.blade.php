@@ -17,7 +17,7 @@
     </div>
 </section>
 
-<section class="max-w-7xl mx-auto px-4 -mt-8 relative z-10">
+<section class="max-w-7xl mx-auto px-4 mt-8 relative z-10">
     <div class="rounded-3xl bg-white border border-slate-200 p-5 shadow-sm">
         <form method="GET" action="{{ route('public.news.index') }}" class="flex flex-col md:flex-row gap-3">
             <input
