@@ -150,7 +150,7 @@
 <p>Yang bertanda tangan dibawah ini:</p>
 
 <table class="data-table">
-    <tr><td class="label">Nama</td><td class="colon">:</td><td class="value">{{ $signer_name }}</td></tr>
+    <tr><td class="label">Nama</td><td class="colon">:</td><td class="value"><strong>{{ strtoupper($signer_name) }}</strong></td></tr>
     <tr><td class="label">Jabatan</td><td class="colon">:</td><td class="value">{{ $signer_position }}</td></tr>
     <tr><td class="label">Alamat</td><td class="colon">:</td><td class="value">{{ $signer_address }}</td></tr>
 </table>
@@ -158,7 +158,7 @@
 <p class="section">Menerangkan dengan sebenarnya bahwa:</p>
 
 <table class="data-table">
-    <tr><td class="label">Nama</td><td class="colon">:</td><td class="value">{{ $father['name'] }}</td></tr>
+    <tr><td class="label">Nama</td><td class="colon">:</td><td class="value"><strong>{{ strtoupper($father['name']) }}</strong></td></tr>
     <tr><td class="label">Tempat/Tgl Lahir</td><td class="colon">:</td><td class="value">{{ $father['birth'] }}</td></tr>
     <tr><td class="label">Agama</td><td class="colon">:</td><td class="value">{{ $father['religion'] }}</td></tr>
     <tr><td class="label">Pekerjaan</td><td class="colon">:</td><td class="value">{{ $father['job'] }}</td></tr>
@@ -169,7 +169,7 @@
 <div class="spacer"></div>
 
 <table class="data-table">
-    <tr><td class="label">Nama</td><td class="colon">:</td><td class="value">{{ $mother['name'] }}</td></tr>
+    <tr><td class="label">Nama</td><td class="colon">:</td><td class="value"><strong>{{ strtoupper($mother['name']) }}</strong></td></tr>
     <tr><td class="label">Tempat/Tgl Lahir</td><td class="colon">:</td><td class="value">{{ $mother['birth'] }}</td></tr>
     <tr><td class="label">Jenis Kelamin</td><td class="colon">:</td><td class="value">{{ $mother['gender'] }}</td></tr>
     <tr><td class="label">Pekerjaan</td><td class="colon">:</td><td class="value">{{ $mother['job'] }}</td></tr>
@@ -182,7 +182,7 @@
 </p>
 
 <table class="data-table">
-    <tr><td class="label">Nama Lengkap</td><td class="colon">:</td><td class="value">{{ $child['name'] }}</td></tr>
+    <tr><td class="label">Nama Lengkap</td><td class="colon">:</td><td class="value"><strong>{{ strtoupper($child['name']) }}</strong></td></tr>
     <tr><td class="label">Tempat/Tanggal Lahir</td><td class="colon">:</td><td class="value">{{ $child['birth'] }}</td></tr>
     <tr><td class="label">Jenis Kelamin</td><td class="colon">:</td><td class="value">{{ $child['gender'] }}</td></tr>
     <tr><td class="label">Pekerjaan</td><td class="colon">:</td><td class="value">{{ $child['job'] }}</td></tr>
@@ -196,9 +196,8 @@
 
 <div class="signature">
     <p>{{ $issued_location }}, {{ $issuedDateIndo }}</p>
-    <br>
     <p>Kepala Desa Dolok Nagodang</p>
-
+    <br>
     <div class="sign-space"></div>
 
     <strong>{{ $signer_name }}</strong>

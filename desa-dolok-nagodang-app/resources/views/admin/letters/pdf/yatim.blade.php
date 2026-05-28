@@ -248,7 +248,7 @@
 </div>
 
 <div class="signature">
-    <div>Dolok Nagodang, {{ $issuedDateIndo }}</div>
+    <div class="signature-center">Dolok Nagodang, {{ $issuedDateIndo }}</div>
 
     <div class="signature-center">
         Kepala Desa Dolok Nagodang

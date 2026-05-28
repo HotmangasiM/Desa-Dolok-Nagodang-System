@@ -192,7 +192,7 @@
         <tr>
             <td class="label">Nama</td>
             <td class="colon">:</td>
-            <td>{{ $signer_name ?? 'BANGKIT MANURUNG' }}</td>
+            <td><strong>{{ $signer_name ?? 'BANGKIT MANURUNG' }}</strong></td>
         </tr>
 
         <tr>
@@ -214,7 +214,7 @@
         <tr>
             <td class="label">Nama</td>
             <td class="colon">:</td>
-            <td>{{ $citizen->full_name ?? '-' }}</td>
+            <td><strong>{{ strtoupper($citizen->full_name ?? '-') }}</strong></td>
         </tr>
 
         <tr>
@@ -250,8 +250,8 @@
 
     <p class="paragraph">
         Selanjutnya diterangkan bahwa nama tersebut diatas benar Penduduk Desa
-        Dolok Nagodang, Kecamatan Uluan, Kabupaten Toba dan benar mempunyai
-        usaha sebagai berikut:
+        Dolok Nagodang, Kecamatan Uluan, Kabupaten Toba dan benar Mempunyai
+        Usaha Sebagai Berikut:
     </p>
 
     <table class="business-table">
@@ -286,7 +286,7 @@
 </div>
 
 <div class="signature">
-    <div>Dolok Nagodang, {{ $issuedDateIndo }}</div>
+    <div class="signature-center">Dolok Nagodang, {{ $issuedDateIndo }}</div>
 
     <div class="signature-center">
         Kepala Desa Dolok Nagodang
