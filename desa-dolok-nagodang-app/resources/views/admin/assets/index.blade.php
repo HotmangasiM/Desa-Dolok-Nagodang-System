@@ -73,12 +73,17 @@
 
         <form method="GET" action="{{ route('admin.assets.index') }}" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4">
             <div class="xl:col-span-2">
-                <label class="block text-sm font-semibold text-slate-700 mb-2">Cari Inventaris</label>
+                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                    Cari Inventaris
+                </label>
+
                 <input
                     type="text"
                     name="search"
                     value="{{ $filters['search'] ?? '' }}"
                     placeholder="Cari nama barang, kode, atau kategori"
+                    maxlength="100"
+                    oninput="this.value = this.value.replace(/[^a-zA-Z0-9\s]/g, '')"
                     class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                 >
             </div>
