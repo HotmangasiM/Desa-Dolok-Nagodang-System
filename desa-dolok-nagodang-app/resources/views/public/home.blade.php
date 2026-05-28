@@ -127,59 +127,52 @@
     {{-- BACKGROUND --}}
     <div class="absolute inset-0 bg-gradient-to-b from-black via-slate-950 to-black"></div>
 
-    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-emerald-500/10 blur-3xl rounded-full"></div>
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] max-w-full h-[300px] bg-emerald-500/10 blur-3xl rounded-full"></div>
 
     <div class="relative max-w-7xl mx-auto px-4">
 
         {{-- HEADER --}}
         <div class="text-center max-w-3xl mx-auto">
-
-            <h2 class="mt-4 text-4xl md:text-6xl font-extrabold text-white leading-tight">
-
+            <h2 class="mt-4 text-3xl md:text-6xl font-extrabold text-white leading-tight">
                 Explore
                 <span class="text-emerald-400">
                     Dolok Nagodang
                 </span>
-
             </h2>
 
-            <p class="mt-6 text-slate-300 leading-8 text-base md:text-lg">
+            <p class="mt-6 text-slate-300 leading-relaxed md:leading-8 text-base md:text-lg">
                 Panorama udara Desa Dolok Nagodang yang menampilkan
                 keindahan alam, suasana masyarakat, dan perkembangan desa.
             </p>
-
         </div>
 
-        {{-- VIDEO --}}
+        {{-- VIDEO CONTAINER --}}
         <div class="mt-12">
 
-            <div class="relative rounded-[36px] overflow-hidden border border-white/10 shadow-[0_25px_80px_rgba(0,0,0,0.65)] bg-black">
+            <div class="relative rounded-2xl md:rounded-[36px] overflow-hidden border border-white/10 shadow-[0_25px_80px_rgba(0,0,0,0.65)] bg-black">
 
                 {{-- CINEMATIC OVERLAY --}}
-                <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-black/70 to-transparent z-20 pointer-events-none"></div>
+                <div class="absolute top-0 left-0 w-full h-20 md:h-32 bg-gradient-to-b from-black/70 to-transparent z-20 pointer-events-none"></div>
 
-                <div class="absolute bottom-0 left-0 w-full h-40 bg-gradient-to-t from-black/80 to-transparent z-20 pointer-events-none"></div>
+                <div class="hidden md:block absolute bottom-0 left-0 w-full h-40 bg-gradient-to-t from-black/80 to-transparent z-20 pointer-events-none"></div>
 
                 <div class="absolute inset-0 shadow-[inset_0_0_120px_rgba(0,0,0,0.75)] z-20 pointer-events-none"></div>
 
-                {{-- CONTENT --}}
-                <div class="absolute bottom-0 left-0 z-30 p-6 md:p-10">
+                {{-- CONTENT (TEXT OVERLAY & DETAILS) --}}
+                <div class="relative md:absolute md:bottom-0 md:left-0 z-30 p-5 md:p-10 bg-gradient-to-t from-slate-950 via-slate-950 to-transparent md:bg-none">
 
                     <div class="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur px-4 py-2 border border-white/10">
-
                         <span class="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></span>
-
                         <span class="text-xs tracking-[0.2em] uppercase text-white/80">
                             Drone Footage
                         </span>
-
                     </div>
 
-                    <h3 class="mt-5 text-2xl md:text-4xl font-bold text-white">
+                    <h3 class="mt-4 md:mt-5 text-xl md:text-4xl font-bold text-white">
                         Desa Dolok Nagodang
                     </h3>
 
-                    <p class="mt-3 text-sm md:text-base text-slate-200 max-w-2xl leading-7">
+                    <p class="mt-2 md:mt-3 text-sm md:text-base text-slate-300 md:text-slate-200 max-w-2xl leading-relaxed">
                         Menampilkan pesona desa, alam, budaya,
                         dan pembangunan masyarakat secara modern.
                     </p>
@@ -187,15 +180,13 @@
                 </div>
 
                 {{-- VIDEO --}}
-                <div class="aspect-video">
-
+                <div class="aspect-[4/3] md:aspect-video w-full">
                     <iframe
                         src="https://drive.google.com/file/d/1xDa79v0ODryUl6I6YtTLCtTqpkYaKJgo/preview?autoplay=1&mute=1"
                         class="w-full h-full scale-[1.01]"
                         allow="autoplay"
                         allowfullscreen>
-                    </iframe>
-
+                     iframe>
                 </div>
 
             </div>
@@ -205,7 +196,6 @@
     </div>
 
 </section>
-
 
 {{-- QUICK MENU --}}
 <section class="max-w-7xl mx-auto px-4 mt-8 md:mt-10 relative z-10">
