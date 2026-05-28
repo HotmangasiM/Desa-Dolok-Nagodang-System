@@ -41,10 +41,13 @@
                     <label class="block text-sm font-semibold text-slate-700 mb-2">
                         Nama <span class="text-rose-500">*</span>
                     </label>
+
                     <input
                         type="text"
                         name="name"
                         value="{{ old('name') }}"
+                        maxlength="100"
+                        oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '')"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         placeholder="Masukkan nama aparat"
                     >
@@ -54,10 +57,13 @@
                     <label class="block text-sm font-semibold text-slate-700 mb-2">
                         Jabatan <span class="text-rose-500">*</span>
                     </label>
+
                     <input
                         type="text"
                         name="position"
                         value="{{ old('position') }}"
+                        maxlength="100"
+                        oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '')"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         placeholder="Contoh: Kepala Desa"
                     >
@@ -78,11 +84,17 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">No. HP</label>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">
+                        No. HP
+                    </label>
+
                     <input
                         type="text"
                         name="phone"
                         value="{{ old('phone') }}"
+                        maxlength="15"
+                        inputmode="numeric"
+                        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         placeholder="Masukkan nomor telepon"
                     >
@@ -100,11 +112,16 @@
                 </div>
 
                 <div class="md:col-span-2 xl:col-span-1">
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">Alamat</label>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">
+                        Alamat
+                    </label>
+
                     <input
                         type="text"
                         name="address"
                         value="{{ old('address') }}"
+                        maxlength="255"
+                        oninput="this.value = this.value.replace(/[^a-zA-Z0-9\s.,\/-]/g, '')"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         placeholder="Masukkan alamat"
                     >
@@ -134,10 +151,14 @@
                     <label class="block text-sm font-semibold text-slate-700 mb-2">
                         Urutan Tampil
                     </label>
+
                     <input
                         type="number"
                         name="sort_order"
                         value="{{ old('sort_order', $official->sort_order ?? 0) }}"
+                        min="0"
+                        step="1"
+                        onkeydown="return false;"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         placeholder="Semakin kecil, tampil lebih atas"
                     >

@@ -66,7 +66,7 @@
                 </div>
 
                 <div class="xl:col-span-3">
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">Thumbnail / Image</label>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Thumbnail / Gambar</label>
 
                     <div class="mb-3">
                         @if($news->image)
@@ -102,7 +102,7 @@
                 </div>
 
                 <div class="xl:col-span-3">
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">Published At</label>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Diunggah</label>
                     <input
                         type="datetime-local"
                         name="published_at"

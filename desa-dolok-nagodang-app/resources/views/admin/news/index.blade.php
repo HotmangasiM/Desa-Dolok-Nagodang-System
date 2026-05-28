@@ -128,7 +128,7 @@
                         <th class="px-5 py-4 text-left font-semibold">Judul</th>
                         <th class="px-5 py-4 text-left font-semibold">Slug</th>
                         <th class="px-5 py-4 text-left font-semibold">Status</th>
-                        <th class="px-5 py-4 text-left font-semibold">Published At</th>
+                        <th class="px-5 py-4 text-left font-semibold">Diunggah</th>
                         <th class="px-5 py-4 text-center font-semibold">Aksi</th>
                     </tr>
                 </thead>
