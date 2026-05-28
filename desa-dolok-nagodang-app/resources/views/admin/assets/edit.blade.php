@@ -135,14 +135,23 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">Nilai Aset</label>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">
+                        Nilai Aset
+                    </label>
+
                     <input
-                        type="number"
-                        step="0.01"
+                        type="text"
                         name="asset_value"
-                        value="{{ old('asset_value', $asset->asset_value) }}"
+                        value="{{ old('asset_value') }}"
+                        inputmode="numeric"
+                        oninput="
+                            let value = this.value.replace(/[^0-9]/g, '');
+                            this.value = value
+                                ? 'Rp ' + new Intl.NumberFormat('id-ID').format(value)
+                                : '';
+                        "
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                        placeholder="Contoh: 15000000"
+                        placeholder="Contoh: Rp 100.000.000"
                     >
                 </div>
 

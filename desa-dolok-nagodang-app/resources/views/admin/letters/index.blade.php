@@ -202,15 +202,15 @@
 
                             <td class="px-5 py-4">
                                 <div class="flex items-center justify-center gap-2 flex-wrap">
-                                    <a href="{{ route('admin.letters.edit', $letter->id) }}"
+                                    <!-- <a href="{{ route('admin.letters.edit', $letter->id) }}"
                                        class="rounded-lg bg-sky-50 px-3 py-2 text-sky-700 font-medium hover:bg-sky-100 transition text-xs">
                                         Edit
-                                    </a>
+                                    </a> -->
 
                                     <a href="{{ route('admin.letters.preview-pdf', $letter->id) }}"
                                        target="_blank"
                                        class="rounded-lg bg-violet-50 px-3 py-2 text-violet-700 font-medium hover:bg-violet-100 transition text-xs">
-                                        Preview
+                                        Lihat
                                     </a>
 
                                     @if($letter->result_file)
@@ -220,14 +220,14 @@
                                             Download File
                                         </a>
 
-                                        <a href="{{ route('admin.letters.download-pdf', $letter->id) }}"
+                                        <!-- <a href="{{ route('admin.letters.download-pdf', $letter->id) }}"
                                            class="rounded-lg bg-amber-50 px-3 py-2 text-amber-700 font-medium hover:bg-amber-100 transition text-xs">
                                             Regenerate
-                                        </a>
+                                        </a> -->
                                     @else
                                         <a href="{{ route('admin.letters.download-pdf', $letter->id) }}"
                                            class="rounded-lg bg-emerald-50 px-3 py-2 text-emerald-700 font-medium hover:bg-emerald-100 transition text-xs">
-                                            Generate PDF
+                                            Download PDF
                                         </a>
                                     @endif
 

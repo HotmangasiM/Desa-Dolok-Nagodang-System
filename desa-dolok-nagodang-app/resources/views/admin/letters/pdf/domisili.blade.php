@@ -115,6 +115,10 @@
             text-align: center;
             font-weight: bold;
         }
+
+        .signature-center {
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -237,9 +241,9 @@
 </div>
 
 <div class="signature">
-    <div>Dolok Nagodang, {{ $issuedDateIndo }}</div>
-    <div>Kepala Desa Dolok Nagodang</div>
-
+    <div class="signature-center">Dolok Nagodang, {{ $issuedDateIndo }}</div>
+    <div class="signature-center">Kepala Desa Dolok Nagodang</div>
+    <br>
     <div class="signature-name">
         BANGKIT MANURUNG
     </div>
