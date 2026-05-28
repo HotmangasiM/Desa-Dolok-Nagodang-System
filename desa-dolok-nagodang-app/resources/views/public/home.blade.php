@@ -153,7 +153,7 @@
         {{-- VIDEO --}}
         <div class="mt-12">
 
-            <div class="relative rounded-[36px] overflow-hidden border border-white/10 shadow-[0_25px_80px_rgba(0,0,0,0.65)] bg-black">
+            <div class="relative rounded-2xl md:rounded-[36px] overflow-hidden border border-white/10 shadow-[0_25px_80px_rgba(0,0,0,0.65)] bg-black">
 
                 {{-- CINEMATIC OVERLAY --}}
                 <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-black/70 to-transparent z-20 pointer-events-none"></div>
@@ -163,35 +163,60 @@
                 <div class="absolute inset-0 shadow-[inset_0_0_120px_rgba(0,0,0,0.75)] z-20 pointer-events-none"></div>
 
                 {{-- CONTENT --}}
-                <div class="absolute bottom-0 left-0 z-30 p-6 md:p-10">
+                {{-- OVERLAY DESKTOP --}}
+<div class="hidden md:block absolute bottom-0 left-0 z-30 p-10">
 
-                    <div class="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur px-4 py-2 border border-white/10">
+    <div class="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur px-4 py-2 border border-white/10">
 
-                        <span class="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></span>
+        <span class="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></span>
 
-                        <span class="text-xs tracking-[0.2em] uppercase text-white/80">
-                            Drone Footage
-                        </span>
+        <span class="text-xs tracking-[0.2em] uppercase text-white/80">
+            Drone Footage
+        </span>
 
-                    </div>
+    </div>
 
-                    <h3 class="mt-5 text-2xl md:text-4xl font-bold text-white">
-                        Desa Dolok Nagodang
-                    </h3>
+    <h3 class="mt-5 text-4xl font-bold text-white">
+        Desa Dolok Nagodang
+    </h3>
 
-                    <p class="mt-3 text-sm md:text-base text-slate-200 max-w-2xl leading-7">
-                        Menampilkan pesona desa, alam, budaya,
-                        dan pembangunan masyarakat secara modern.
-                    </p>
+    <p class="mt-3 text-base text-slate-200 max-w-2xl leading-7">
+        Menampilkan pesona desa, alam, budaya,
+        dan pembangunan masyarakat secara modern.
+    </p>
 
-                </div>
+</div>
+
+{{-- MOBILE CONTENT --}}
+<div class="block md:hidden bg-black px-5 py-5">
+
+    <div class="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-2 border border-white/10">
+
+        <span class="w-2 h-2 rounded-full bg-red-500"></span>
+
+        <span class="text-[10px] tracking-[0.18em] uppercase text-white/70">
+            Drone Footage
+        </span>
+
+    </div>
+
+    <h3 class="mt-4 text-2xl font-bold text-white leading-tight">
+        Desa Dolok Nagodang
+    </h3>
+
+    <p class="mt-2 text-sm text-slate-300 leading-6">
+        Menampilkan pesona desa, alam, budaya,
+        dan pembangunan masyarakat secara modern.
+    </p>
+
+</div>
 
                 {{-- VIDEO --}}
-                <div class="aspect-video">
+                <div class="aspect-[16/10] sm:aspect-video">
 
                     <iframe
                         src="https://drive.google.com/file/d/1xDa79v0ODryUl6I6YtTLCtTqpkYaKJgo/preview?autoplay=1&mute=1"
-                        class="w-full h-full scale-[1.01]"
+                        class="w-full h-full scale-[1.01] object-cover"
                         allow="autoplay"
                         allowfullscreen>
                     </iframe>
