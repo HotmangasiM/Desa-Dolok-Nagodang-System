@@ -120,6 +120,8 @@
 <body>
 
 @php
+    \Carbon\Carbon::setLocale('id');
+
     $birthDate = $citizen->birth_date
         ? \Carbon\Carbon::parse($citizen->birth_date)->format('d-m-Y')
         : '-';
@@ -131,19 +133,25 @@
         'cerai_mati' => 'Cerai Mati',
     ];
 
-    $maritalStatus = $maritalStatusMap[$citizen->marital_status] ?? ($citizen->marital_status ?? '-');
+    $maritalStatus = $maritalStatusMap[$citizen->marital_status]
+        ?? ($citizen->marital_status ?? '-');
 
-    $domicileAddress = $payload['domicile_address'] ?? '........................................';
+    $domicileAddress = $payload['domicile_address']
+        ?? '........................................';
 
     $issuedDateIndo = now()->translatedFormat('d F Y');
 
     if (!empty($issued_date)) {
-    try {
-        $issuedDateIndo = \Carbon\Carbon::parse($issued_date)->translatedFormat('F Y');
-    } catch (\Throwable $e) {
-        $issuedDateIndo = $issued_date;
+        try {
+            $issuedDateIndo = \Carbon\Carbon::parse($issued_date)
+                ->translatedFormat('d F Y');
+        } catch (\Throwable $e) {
+            $issuedDateIndo = $issued_date;
+        }
+    } elseif (!empty($letter->submission_date)) {
+        $issuedDateIndo = \Carbon\Carbon::parse($letter->submission_date)
+            ->translatedFormat('d F Y');
     }
-}
 @endphp
 
 <div class="kop">
@@ -229,7 +237,7 @@
 </div>
 
 <div class="signature">
-    <div>Dolok Nagodang, &nbsp;&nbsp; {{ $issuedDateIndo }}</div>
+    <div>Dolok Nagodang, {{ $issuedDateIndo }}</div>
     <div>Kepala Desa Dolok Nagodang</div>
 
     <div class="signature-name">
