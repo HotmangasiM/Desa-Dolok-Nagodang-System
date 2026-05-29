@@ -2,20 +2,6 @@
 
 @section('content')
 <div class="space-y-6">
-    <!-- <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-        <div>
-            <a href="{{ route('admin.assets.index') }}"
-               class="inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-slate-700 mb-3">
-                ← Kembali ke Inventaris Desa
-            </a>
-
-            <h1 class="text-3xl font-bold tracking-tight text-slate-800">Tambah Inventaris Desa</h1>
-            <p class="text-sm text-slate-500 mt-2">
-                Lengkapi form berikut untuk menambahkan data inventaris baru.
-            </p>
-        </div>
-    </div> -->
-
     @if ($errors->any())
         <div class="rounded-2xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-700">
             <div class="font-semibold mb-2">Terjadi kesalahan pada input:</div>
@@ -91,13 +77,14 @@
                     <label class="block text-sm font-semibold text-slate-700 mb-2">
                         Kondisi <span class="text-rose-500">*</span>
                     </label>
+
                     <select
                         name="condition"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     >
                         <option value="">Pilih Kondisi</option>
-                        <option value="good" {{ old('condition') === 'good' ? 'selected' : '' }}>good</option>
-                        <option value="damaged" {{ old('condition') === 'damaged' ? 'selected' : '' }}>damaged</option>
+                        <option value="good" {{ old('condition') === 'good' ? 'selected' : '' }}>Baik</option>
+                        <option value="damaged" {{ old('condition') === 'damaged' ? 'selected' : '' }}>Rusak</option>
                     </select>
                 </div>
 
@@ -139,16 +126,17 @@
                     </label>
 
                     <input
-                        type="text"
+                        type="hidden"
                         name="asset_value"
+                        id="asset_value"
                         value="{{ old('asset_value') }}"
+                    >
+
+                    <input
+                        type="text"
+                        id="asset_value_display"
+                        value="{{ old('asset_value') ? 'Rp ' . number_format((float) old('asset_value'), 0, ',', '.') : '' }}"
                         inputmode="numeric"
-                        oninput="
-                            let value = this.value.replace(/[^0-9]/g, '');
-                            this.value = value
-                                ? 'Rp ' + new Intl.NumberFormat('id-ID').format(value)
-                                : '';
-                        "
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         placeholder="Contoh: Rp 100.000.000"
                     >
@@ -171,10 +159,9 @@
                         Format: JPG, PNG, JPEG (max 2MB)
                     </p>
 
-                    <!-- Preview -->
                     <div class="mt-4">
                         <img id="assetPreview"
-                            class="hidden w-40 h-28 object-cover rounded-xl border border-slate-200 shadow-sm">
+                             class="hidden w-40 h-28 object-cover rounded-xl border border-slate-200 shadow-sm">
                     </div>
                 </div>
 
@@ -236,18 +223,51 @@ function previewAssetImage(event) {
     reader.readAsDataURL(input.files[0]);
 }
 
+function formatRupiah(value) {
+    const numericValue = value.replace(/[^0-9]/g, '');
+
+    if (!numericValue) {
+        return {
+            raw: '',
+            formatted: ''
+        };
+    }
+
+    return {
+        raw: numericValue,
+        formatted: 'Rp ' + new Intl.NumberFormat('id-ID').format(numericValue)
+    };
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.querySelector('form[action*="assets"]');
+    const assetValue = document.getElementById('asset_value');
+    const assetValueDisplay = document.getElementById('asset_value_display');
+
+    if (assetValueDisplay && assetValue) {
+        assetValueDisplay.addEventListener('input', function () {
+            const result = formatRupiah(this.value);
+
+            assetValue.value = result.raw;
+            this.value = result.formatted;
+        });
+    }
 
     if (!form) return;
 
     form.addEventListener('submit', function (e) {
+        if (assetValueDisplay && assetValue) {
+            const result = formatRupiah(assetValueDisplay.value);
+            assetValue.value = result.raw;
+            assetValueDisplay.value = result.formatted;
+        }
+
         if (form.dataset.confirmed === 'true') {
             return;
         }
 
         if (typeof Swal === 'undefined') {
-            return; // fallback: submit normal kalau SweetAlert gagal load
+            return;
         }
 
         e.preventDefault();
