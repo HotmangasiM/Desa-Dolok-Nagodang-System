@@ -32,4 +32,16 @@ class Asset extends Model
         'asset_value' => 'decimal:2',
         'quantity' => 'integer',
     ];
+
+    /**
+     * Label kondisi untuk ditampilkan di UI.
+     */
+    public function getConditionLabelAttribute(): string
+    {
+        return match ($this->condition) {
+            'good' => 'Baik',
+            'damaged' => 'Rusak',
+            default => '-',
+        };
+    }
 }

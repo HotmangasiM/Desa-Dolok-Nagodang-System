@@ -190,11 +190,15 @@
                             <td class="px-5 py-4">
                                 @if ($asset->condition === 'good')
                                     <span class="inline-flex rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
-                                        Baik
+                                        {{ $asset->condition_label }}
+                                    </span>
+                                @elseif ($asset->condition === 'damaged')
+                                    <span class="inline-flex rounded-full bg-rose-100 px-3 py-1 text-xs font-semibold text-rose-700">
+                                        {{ $asset->condition_label }}
                                     </span>
                                 @else
-                                    <span class="inline-flex rounded-full bg-rose-100 px-3 py-1 text-xs font-semibold text-rose-700">
-                                        Rusak
+                                    <span class="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
+                                        -
                                     </span>
                                 @endif
                             </td>
