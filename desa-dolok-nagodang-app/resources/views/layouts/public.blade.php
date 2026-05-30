@@ -423,23 +423,29 @@
 {{-- ================= VISITOR STATS ================= --}}
 @if(isset($visitorStats))
 
-<div class="fixed left-4 bottom-5 z-50 hidden xl:block group">
+<div class="fixed left-3 bottom-3 z-50 hidden lg:block group">
 
     {{-- DETAIL --}}
-    <div class="absolute bottom-24 left-0 w-80 rounded-3xl bg-slate-900/95 border border-white/10 text-white p-6 shadow-2xl backdrop-blur-xl
-                opacity-0 invisible translate-y-3 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300">
+    <div class="absolute bottom-16 left-0 w-72 rounded-2xl bg-slate-900/95 border border-white/10 text-white p-4 shadow-2xl backdrop-blur-xl
+                opacity-0 invisible translate-y-2
+                group-hover:opacity-100
+                group-hover:visible
+                group-hover:translate-y-0
+                transition-all duration-300">
 
-        <div class="flex items-center justify-between mb-5">
-            <h3 class="font-bold text-lg">
+        <div class="flex items-center justify-between mb-4">
+
+            <h3 class="font-semibold text-base">
                 Statistik Pengunjung
             </h3>
 
-            <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
-                <i data-lucide="activity" class="w-5 h-5 text-emerald-400"></i>
+            <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center">
+                <i data-lucide="activity" class="w-4 h-4 text-emerald-400"></i>
             </div>
+
         </div>
 
-        <div class="space-y-3 text-sm">
+        <div class="space-y-2 text-sm">
 
             @php
                 $stats = [
@@ -454,23 +460,23 @@
 
             @foreach($stats as $label => $value)
 
-            <div class="flex items-center justify-between border-b border-white/10 pb-2">
+                <div class="flex justify-between border-b border-white/10 pb-2">
 
-                <span class="text-slate-300">
-                    {{ $label }}
-                </span>
+                    <span class="text-slate-300">
+                        {{ $label }}
+                    </span>
 
-                <span class="font-bold text-white">
-                    {{ number_format($value) }}
-                </span>
+                    <span class="font-semibold">
+                        {{ number_format($value) }}
+                    </span>
 
-            </div>
+                </div>
 
             @endforeach
 
-            <div class="flex items-center justify-between pt-2">
+            <div class="flex justify-between pt-2">
 
-                <span class="text-slate-300 font-semibold">
+                <span class="font-semibold">
                     Total
                 </span>
 
@@ -484,56 +490,56 @@
 
     </div>
 
-    {{-- SHORT --}}
-    <div class="rounded-3xl bg-emerald-600/70 backdrop-blur-md text-white shadow-lg shadow-emerald-900/10 px-5 py-4 cursor-pointer border border-white/10">
+   {{-- MINI VISITOR --}}
+<div class="bg-emerald-600 text-white rounded-full shadow-lg px-4 py-2.5 cursor-pointer border border-emerald-500">
 
-        <div class="flex items-center gap-4">
+    <div class="flex items-center gap-2">
 
-            <div class="w-12 h-12 rounded-2xl bg-white/15 flex items-center justify-center">
-                <i data-lucide="users" class="w-6 h-6"></i>
-            </div>
+        <i data-lucide="users" class="w-4 h-4"></i>
 
-            <div>
-                <p class="text-sm text-emerald-100">
-                    Pengunjung Hari Ini
-                </p>
+        <span class="text-xs text-emerald-100">
+            Pengunjung Hari Ini
+        </span>
 
-                <h3 class="text-2xl font-extrabold leading-none">
-                    {{ number_format($visitorStats['today'] ?? 0) }}
-                </h3>
-            </div>
-
-        </div>
+        <span class="font-bold text-sm">
+            {{ number_format($visitorStats['today'] ?? 0) }}
+        </span>
 
     </div>
+
+</div>
 
 </div>
 
 @endif
 
 {{-- ================= FLOATING COMPLAINT ================= --}}
-<div class="fixed right-4 bottom-5 z-50">
+<div class="fixed right-3 bottom-3 z-50">
 
     <button
         type="button"
         onclick="toggleComplaintPanel()"
-        class="group rounded-2xl bg-rose-500/70 hover:bg-rose-500/85 backdrop-blur-md text-white shadow-lg shadow-rose-900/10 px-5 py-4 transition border border-white/10">
+        class="w-12 h-12 md:w-auto md:h-auto
+               md:px-4 md:py-3
+               rounded-full md:rounded-xl
+               bg-rose-500 hover:bg-rose-600
+               text-white
+               shadow-lg
+               border border-white/10
+               flex items-center justify-center gap-3
+               transition-all duration-300">
 
-        <div class="flex items-center gap-3">
+        <i data-lucide="headphones" class="w-5 h-5"></i>
 
-            <div class="w-11 h-11 rounded-xl bg-white/15 flex items-center justify-center">
-                <i data-lucide="headphones" class="w-5 h-5"></i>
-            </div>
+        <div class="hidden md:block text-left">
 
-            <div class="text-left hidden sm:block">
-                <p class="text-sm text-rose-100">
-                    Layanan
-                </p>
+            <p class="text-xs text-rose-100">
+                Layanan
+            </p>
 
-                <p class="font-bold leading-none">
-                    Pengaduan
-                </p>
-            </div>
+            <p class="font-semibold leading-none text-sm">
+                Pengaduan
+            </p>
 
         </div>
 
@@ -543,7 +549,18 @@
 
 {{-- ================= PANEL PENGADUAN ================= --}}
 <div id="complaintPanel"
-     class="hidden fixed right-4 bottom-24 z-[999] w-[380px] max-w-[calc(100vw-2rem)] rounded-[30px] bg-white border border-slate-200 shadow-2xl overflow-hidden">
+     class="hidden fixed
+            right-3
+            bottom-16
+            z-[999]
+            w-[calc(100vw-24px)]
+            sm:w-[360px]
+            md:w-[380px]
+            rounded-3xl
+            bg-white
+            border border-slate-200
+            shadow-2xl
+            overflow-hidden"> max-w-[calc(100vw-2rem)] rounded-[30px] bg-white border border-slate-200 shadow-2xl overflow-hidden">
 
     {{-- HEADER --}}
     <div class="bg-gradient-to-r from-emerald-700 to-emerald-600 text-white px-6 py-5 flex items-start justify-between gap-4">
@@ -574,7 +591,7 @@
         method="POST"
         action="{{ route('public.complaints.store') }}"
         enctype="multipart/form-data"
-        class="p-6 space-y-5 max-h-[75vh] overflow-y-auto">
+        class="p-4 sm:p-5 space-y-4 max-h-[70vh] overflow-y-auto">
 
         @csrf
 
