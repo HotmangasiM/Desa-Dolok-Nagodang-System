@@ -115,11 +115,17 @@
             text-align: center;
             font-weight: bold;
         }
+
+        .signature-center {
+            text-align: center;
+        }
     </style>
 </head>
 <body>
 
 @php
+    \Carbon\Carbon::setLocale('id');
+
     $birthDate = $citizen->birth_date
         ? \Carbon\Carbon::parse($citizen->birth_date)->format('d-m-Y')
         : '-';
@@ -131,11 +137,25 @@
         'cerai_mati' => 'Cerai Mati',
     ];
 
-    $maritalStatus = $maritalStatusMap[$citizen->marital_status] ?? ($citizen->marital_status ?? '-');
+    $maritalStatus = $maritalStatusMap[$citizen->marital_status]
+        ?? ($citizen->marital_status ?? '-');
 
-    $domicileAddress = $payload['domicile_address'] ?? '........................................';
+    $domicileAddress = $payload['domicile_address']
+        ?? '........................................';
 
-    $issuedDate = now()->translatedFormat('F Y');
+    $issuedDateIndo = now()->translatedFormat('d F Y');
+
+    if (!empty($issued_date)) {
+        try {
+            $issuedDateIndo = \Carbon\Carbon::parse($issued_date)
+                ->translatedFormat('d F Y');
+        } catch (\Throwable $e) {
+            $issuedDateIndo = $issued_date;
+        }
+    } elseif (!empty($letter->submission_date)) {
+        $issuedDateIndo = \Carbon\Carbon::parse($letter->submission_date)
+            ->translatedFormat('d F Y');
+    }
 @endphp
 
 <div class="kop">
@@ -143,7 +163,7 @@
         <tr>
             <td class="logo-cell">
                 {{-- Simpan logo di public/images/logo-toba.png --}}
-                <img src="{{ public_path('images/logo-kab-toba.jpg') }}" class="logo">
+                <img src="{{ public_path('images/logo.png') }}" class="logo">
             </td>
             <td class="kop-title">
                 <div class="line-1">PEMERINTAH KABUPATEN TOBA</div>
@@ -221,9 +241,9 @@
 </div>
 
 <div class="signature">
-    <div>Dolok Nagodang, &nbsp;&nbsp; {{ $issuedDate }}</div>
-    <div>Kepala Desa Dolok Nagodang</div>
-
+    <div class="signature-center">Dolok Nagodang, {{ $issuedDateIndo }}</div>
+    <div class="signature-center">Kepala Desa Dolok Nagodang</div>
+    <br>
     <div class="signature-name">
         BANGKIT MANURUNG
     </div>

@@ -2,20 +2,6 @@
 
 @section('content')
 <div class="space-y-6">
-    <!-- <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-        <div>
-            <a href="{{ route('admin.assets.index') }}"
-               class="inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-slate-700 mb-3">
-                ← Kembali ke Inventaris Desa
-            </a>
-
-            <h1 class="text-3xl font-bold tracking-tight text-slate-800">Edit Inventaris Desa</h1>
-            <p class="text-sm text-slate-500 mt-2">
-                Perbarui informasi inventaris yang sudah tersimpan di sistem.
-            </p>
-        </div>
-    </div> -->
-
     @if ($errors->any())
         <div class="rounded-2xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-700">
             <div class="font-semibold mb-2">Terjadi kesalahan pada input:</div>
@@ -42,121 +28,102 @@
                     <label class="block text-sm font-semibold text-slate-700 mb-2">
                         Nama Barang <span class="text-rose-500">*</span>
                     </label>
-                    <input
-                        type="text"
-                        name="item_name"
-                        value="{{ old('item_name', $asset->item_name) }}"
+                    <input type="text" name="item_name" value="{{ old('item_name', $asset->item_name) }}"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                        placeholder="Masukkan nama barang"
-                    >
+                        placeholder="Masukkan nama barang">
                 </div>
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">
                         Kode Barang <span class="text-rose-500">*</span>
                     </label>
-                    <input
-                        type="text"
-                        name="item_code"
-                        value="{{ old('item_code', $asset->item_code) }}"
+                    <input type="text" name="item_code" value="{{ old('item_code', $asset->item_code) }}"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                        placeholder="Masukkan kode barang"
-                    >
+                        placeholder="Masukkan kode barang">
                 </div>
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Kategori</label>
-                    <input
-                        type="text"
-                        name="category"
-                        value="{{ old('category', $asset->category) }}"
+                    <input type="text" name="category" value="{{ old('category', $asset->category) }}"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                        placeholder="Contoh: Elektronik"
-                    >
+                        placeholder="Contoh: Elektronik">
                 </div>
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">
                         Jumlah <span class="text-rose-500">*</span>
                     </label>
-                    <input
-                        type="number"
-                        name="quantity"
-                        min="0"
-                        value="{{ old('quantity', $asset->quantity) }}"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    >
+                    <input type="number" name="quantity" min="0" value="{{ old('quantity', $asset->quantity) }}"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
                 </div>
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">
                         Kondisi <span class="text-rose-500">*</span>
                     </label>
-                    <select
-                        name="condition"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    >
+                    <select name="condition"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
                         <option value="">Pilih Kondisi</option>
-                        <option value="good" {{ old('condition', $asset->condition) === 'good' ? 'selected' : '' }}>good</option>
-                        <option value="damaged" {{ old('condition', $asset->condition) === 'damaged' ? 'selected' : '' }}>damaged</option>
+                        <option value="good" {{ old('condition', $asset->condition) === 'good' ? 'selected' : '' }}>Baik</option>
+                        <option value="damaged" {{ old('condition', $asset->condition) === 'damaged' ? 'selected' : '' }}>Rusak</option>
                     </select>
                 </div>
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Lokasi</label>
-                    <input
-                        type="text"
-                        name="location"
-                        value="{{ old('location', $asset->location) }}"
+                    <input type="text" name="location" value="{{ old('location', $asset->location) }}"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                        placeholder="Contoh: Ruang Admin"
-                    >
+                        placeholder="Contoh: Ruang Admin">
                 </div>
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Tanggal Perolehan</label>
-                    <input
-                        type="date"
-                        name="acquisition_date"
+                    <input type="date" name="acquisition_date"
                         value="{{ old('acquisition_date', $asset->acquisition_date ? $asset->acquisition_date->format('Y-m-d') : '') }}"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    >
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
                 </div>
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Sumber</label>
-                    <input
-                        type="text"
-                        name="source"
-                        value="{{ old('source', $asset->source) }}"
+                    <input type="text" name="source" value="{{ old('source', $asset->source) }}"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                        placeholder="Contoh: Dana Desa"
-                    >
+                        placeholder="Contoh: Dana Desa">
                 </div>
 
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">Nilai Aset</label>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">
+                        Nilai Aset
+                    </label>
+
                     <input
-                        type="number"
-                        step="0.01"
+                        type="hidden"
                         name="asset_value"
-                        value="{{ old('asset_value', $asset->asset_value) }}"
+                        id="asset_value"
+                        value="{{ old('asset_value', (int) $asset->asset_value) }}"
+                    >
+
+                    <input
+                        type="text"
+                        id="asset_value_display"
+                        value="{{ old('asset_value')
+                            ? 'Rp ' . number_format((int) old('asset_value'), 0, ',', '.')
+                            : ($asset->asset_value
+                                ? 'Rp ' . number_format((int) $asset->asset_value, 0, ',', '.')
+                                : '') }}"
+                        inputmode="numeric"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                        placeholder="Contoh: 15000000"
+                        placeholder="Contoh: Rp 100.000.000"
                     >
                 </div>
 
                 <div class="md:col-span-2 xl:col-span-2">
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Foto Aset</label>
 
-                    {{-- Preview lama --}}
                     <div class="mb-3">
                         @if($asset->asset_photo)
-                            <img
-                                src="{{ asset('storage/' . $asset->asset_photo) }}"
+                            <img src="{{ asset('storage/' . $asset->asset_photo) }}"
                                 alt="{{ $asset->item_name }}"
-                                class="w-40 h-28 rounded-xl object-cover border border-slate-200 shadow-sm"
-                            >
+                                class="w-40 h-28 rounded-xl object-cover border border-slate-200 shadow-sm">
                             <p class="mt-2 text-xs text-slate-500">Foto saat ini</p>
                         @else
                             <div class="w-40 h-28 rounded-xl bg-slate-100 text-slate-400 flex items-center justify-center text-sm border border-slate-200">
@@ -165,56 +132,40 @@
                         @endif
                     </div>
 
-                    {{-- Upload --}}
-                    <input
-                        type="file"
-                        name="asset_photo"
-                        accept="image/*"
-                        onchange="previewAssetImage(event)"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    >
+                    <input type="file" name="asset_photo" accept="image/*" onchange="previewAssetImage(event)"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
 
                     <p class="text-xs text-slate-500 mt-2">
                         Kosongkan jika tidak ingin mengganti foto. Format: JPG, PNG, JPEG max 2MB.
                     </p>
 
-                    {{-- Preview baru --}}
-                    <img
-                        id="assetImagePreview"
-                        class="hidden mt-3 w-40 h-28 rounded-xl object-cover border border-slate-200 shadow-sm"
-                    >
+                    <img id="assetImagePreview"
+                        class="hidden mt-3 w-40 h-28 rounded-xl object-cover border border-slate-200 shadow-sm">
                 </div>
 
                 <div class="xl:col-span-3">
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Catatan</label>
-                    <textarea
-                        name="notes"
-                        rows="3"
+                    <textarea name="notes" rows="3"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm leading-6 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                        placeholder="Catatan tambahan inventaris..."
-                    >{{ old('notes', $asset->notes) }}</textarea>
+                        placeholder="Catatan tambahan inventaris...">{{ old('notes', $asset->notes) }}</textarea>
                 </div>
 
                 <div class="xl:col-span-3">
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Deskripsi</label>
-                    <textarea
-                        name="description"
-                        rows="4"
+                    <textarea name="description" rows="4"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm leading-6 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                        placeholder="Deskripsi detail aset inventaris..."
-                    >{{ old('description', $asset->description) }}</textarea>
+                        placeholder="Deskripsi detail aset inventaris...">{{ old('description', $asset->description) }}</textarea>
                 </div>
             </div>
         </div>
 
         <div class="flex flex-col sm:flex-row items-center justify-end gap-3">
             <a href="{{ route('admin.assets.index') }}"
-               class="w-full sm:w-auto inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 transition">
+                class="w-full sm:w-auto inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 transition">
                 Batal
             </a>
 
-            <button
-                type="submit"
+            <button type="submit"
                 class="w-full sm:w-auto inline-flex items-center justify-center rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-700 shadow-lg shadow-emerald-600/20 transition">
                 Simpan Perubahan
             </button>
@@ -240,25 +191,52 @@ function previewAssetImage(event) {
         reader.readAsDataURL(input.files[0]);
     }
 }
-</script>
 
-<script>
+function formatRupiah(value) {
+    const numericValue = value.replace(/[^0-9]/g, '');
+
+    if (!numericValue) {
+        return {
+            raw: '',
+            formatted: ''
+        };
+    }
+
+    return {
+        raw: numericValue,
+        formatted: 'Rp ' + new Intl.NumberFormat('id-ID').format(numericValue)
+    };
+}
+
 document.addEventListener('DOMContentLoaded', function () {
+    const assetValue = document.getElementById('asset_value');
+    const assetValueDisplay = document.getElementById('asset_value_display');
+
+    if (assetValue && assetValueDisplay) {
+        assetValueDisplay.addEventListener('input', function () {
+            const result = formatRupiah(this.value);
+
+            assetValue.value = result.raw;
+            this.value = result.formatted;
+        });
+    }
 
     if (typeof Swal === 'undefined') {
         console.error('SweetAlert tidak ter-load!');
         return;
     }
 
-    // gunakan EVENT DELEGATION (lebih stabil)
     document.addEventListener('submit', function (e) {
-
         const form = e.target;
 
-        // pastikan ini form edit (PUT)
         if (!form.action.includes('assets')) return;
 
-        // cegah submit dulu
+        if (assetValue && assetValueDisplay) {
+            const result = formatRupiah(assetValueDisplay.value);
+            assetValue.value = result.raw;
+            assetValueDisplay.value = result.formatted;
+        }
+
         if (form.dataset.confirmed === 'true') return;
 
         e.preventDefault();
@@ -276,15 +254,14 @@ document.addEventListener('DOMContentLoaded', function () {
             cancelButtonColor: '#6b7280',
             reverseButtons: true
         }).then((result) => {
-
             if (result.isConfirmed) {
-
                 form.dataset.confirmed = 'true';
 
                 Swal.fire({
                     title: 'Menyimpan...',
                     text: 'Mohon tunggu',
                     allowOutsideClick: false,
+                    showConfirmButton: false,
                     didOpen: () => {
                         Swal.showLoading();
                     }
@@ -292,11 +269,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 form.submit();
             }
-
         });
-
     });
-
 });
 </script>
 @endpush

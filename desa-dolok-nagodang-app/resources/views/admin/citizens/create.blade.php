@@ -251,51 +251,24 @@
 </div>
 @endsection
 
-
-
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    const form = document.querySelector('form[action*="citizens"]');
 
-    if (!form) return;
-
-    const form = document.querySelector('form');
-
-    Swal.fire({
-        title: 'Konfirmasi Tambah Data',
-        text: 'Apakah Anda yakin ingin menyimpan data penduduk?',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'Ya, simpan',
-        cancelButtonText: 'Batal',
-        confirmButtonColor: '#10b981',
-        cancelButtonColor: '#6b7280',
-        reverseButtons: true,
-        customClass: {
-            popup: 'rounded-2xl',
-            confirmButton: 'rounded-lg px-4 py-2',
-            cancelButton: 'rounded-lg px-4 py-2'
-        }
-    }).then((result) => {
-
-        if (result.isConfirmed) {
-
-         @push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-
-    const btnSubmit = document.getElementById('btnSubmit');
     const form = document.getElementById('formPenduduk');
 
-    if (!btnSubmit || !form) {
-        console.error('Button atau form tidak ditemukan!');
+    if (!form) {
+        console.error('Form tidak ditemukan!');
         return;
     }
 
-    btnSubmit.addEventListener('click', function (e) {
+    form.addEventListener('submit', function (e) {
+
+        if (form.dataset.confirmed === 'true') {
+            return;
+        }
 
         e.preventDefault();
 
@@ -313,6 +286,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (result.isConfirmed) {
 
+                form.dataset.confirmed = 'true';
+
                 Swal.fire({
                     title: 'Menyimpan...',
                     text: 'Mohon tunggu',
@@ -327,37 +302,9 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
         });
-    form.addEventListener('submit', function (e) {
-        if (form.dataset.confirmed === 'true') {
-            return;
-        }
-        if (typeof Swal === 'undefined') {
-            return; // fallback: submit normal
-        }
 
-        e.preventDefault();
-
-        Swal.fire({
-            title: 'Konfirmasi Tambah Data',
-            text: 'Apakah Anda yakin ingin menyimpan data penduduk?',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: 'Ya, simpan',
-            cancelButtonText: 'Batal',
-            confirmButtonColor: '#10b981',
-            cancelButtonColor: '#6b7280',
-            reverseButtons: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-                form.dataset.confirmed = 'true';
-                form.submit();
-            }
-        });
     });
-<<<<<<< HEAD
 
-=======
->>>>>>> be742c3934aae12d01b0c0f28ed6f88823803e8a
 });
 </script>
 @endpush

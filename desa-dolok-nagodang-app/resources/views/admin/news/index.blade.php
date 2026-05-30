@@ -39,7 +39,7 @@
         <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm">
             <div class="flex items-start justify-between">
                 <div>
-                    <p class="text-sm font-medium text-slate-500">Draft</p>
+                    <p class="text-sm font-medium text-slate-500">Draf</p>
                     <h3 class="mt-3 text-3xl font-bold text-slate-800">{{ number_format($draftNews) }}</h3>
                 </div>
                 <div class="w-12 h-12 rounded-2xl bg-amber-100 flex items-center justify-center text-2xl">
@@ -52,7 +52,7 @@
         <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm">
             <div class="flex items-start justify-between">
                 <div>
-                    <p class="text-sm font-medium text-slate-500">Published</p>
+                    <p class="text-sm font-medium text-slate-500">Diunggah</p>
                     <h3 class="mt-3 text-3xl font-bold text-slate-800">{{ number_format($publishedNews) }}</h3>
                 </div>
                 <div class="w-12 h-12 rounded-2xl bg-sky-100 flex items-center justify-center text-2xl">
@@ -85,14 +85,25 @@
             </div>
 
             <div>
-                <label class="block text-sm font-semibold text-slate-700 mb-2">Status</label>
+                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                    Status
+                </label>
+
                 <select
                     name="status"
                     class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                 >
                     <option value="">Semua</option>
-                    <option value="draft" {{ ($filters['status'] ?? '') === 'draft' ? 'selected' : '' }}>draft</option>
-                    <option value="published" {{ ($filters['status'] ?? '') === 'published' ? 'selected' : '' }}>published</option>
+
+                    <option value="draft"
+                        {{ ($filters['status'] ?? '') === 'draft' ? 'selected' : '' }}>
+                        Draf
+                    </option>
+
+                    <option value="published"
+                        {{ ($filters['status'] ?? '') === 'published' ? 'selected' : '' }}>
+                        Diunggah
+                    </option>
                 </select>
             </div>
 
@@ -128,7 +139,7 @@
                         <th class="px-5 py-4 text-left font-semibold">Judul</th>
                         <th class="px-5 py-4 text-left font-semibold">Slug</th>
                         <th class="px-5 py-4 text-left font-semibold">Status</th>
-                        <th class="px-5 py-4 text-left font-semibold">Published At</th>
+                        <th class="px-5 py-4 text-left font-semibold">Diunggah</th>
                         <th class="px-5 py-4 text-center font-semibold">Aksi</th>
                     </tr>
                 </thead>
@@ -164,13 +175,13 @@
                             </td>
 
                             <td class="px-5 py-4">
-                                @if ($item->status === 'published')
+                                @if($item->status === 'published')
                                     <span class="inline-flex rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
-                                        published
+                                        Diunggah
                                     </span>
                                 @else
                                     <span class="inline-flex rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700">
-                                        draft
+                                        Draf
                                     </span>
                                 @endif
                             </td>
@@ -270,7 +281,6 @@
 </div>
 @endsection
 
-@push('scripts')
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function () {

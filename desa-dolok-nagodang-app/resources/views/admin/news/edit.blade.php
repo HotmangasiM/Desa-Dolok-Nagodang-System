@@ -2,20 +2,6 @@
 
 @section('content')
 <div class="space-y-6">
-    <!-- <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-        <div>
-            <a href="{{ route('admin.news.index') }}"
-               class="inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-slate-700 mb-3">
-                ← Kembali ke Berita Desa
-            </a>
-
-            <h1 class="text-3xl font-bold tracking-tight text-slate-800">Edit Berita Desa</h1>
-            <p class="text-sm text-slate-500 mt-2">
-                Perbarui informasi berita yang sudah tersimpan di sistem.
-            </p>
-        </div>
-    </div> -->
-
     @if ($errors->any())
         <div class="rounded-2xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-700">
             <div class="font-semibold mb-2">Terjadi kesalahan pada input:</div>
@@ -60,13 +46,17 @@
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     >
                         <option value="">Pilih Status</option>
-                        <option value="draft" {{ old('status', $news->status) === 'draft' ? 'selected' : '' }}>draft</option>
-                        <option value="published" {{ old('status', $news->status) === 'published' ? 'selected' : '' }}>published</option>
+                        <option value="draft" {{ old('status', $news->status) === 'draft' ? 'selected' : '' }}>
+                            Draf
+                        </option>
+                        <option value="published" {{ old('status', $news->status) === 'published' ? 'selected' : '' }}>
+                            Diunggah
+                        </option>
                     </select>
                 </div>
 
                 <div class="xl:col-span-3">
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">Thumbnail / Image</label>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Thumbnail / Gambar</label>
 
                     <div class="mb-3">
                         @if($news->image)
@@ -102,7 +92,7 @@
                 </div>
 
                 <div class="xl:col-span-3">
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">Published At</label>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Diunggah</label>
                     <input
                         type="datetime-local"
                         name="published_at"
@@ -143,21 +133,33 @@
 
 @push('scripts')
 <script>
-document.addEventListener('DOMContentLoaded', function () {
+function previewNewsImage(event) {
+    const input = event.target;
+    const preview = document.getElementById('newsImagePreview');
 
+    if (!input.files || !input.files[0] || !preview) return;
+
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+        preview.src = e.target.result;
+        preview.classList.remove('hidden');
+    };
+
+    reader.readAsDataURL(input.files[0]);
+}
+
+document.addEventListener('DOMContentLoaded', function () {
     if (typeof Swal === 'undefined') {
         console.error('SweetAlert tidak ter-load!');
         return;
     }
 
     document.addEventListener('submit', function (e) {
-
         const form = e.target;
 
-        // 🔥 target khusus form edit berita
         if (!form.action.includes('news')) return;
 
-        // kalau sudah dikonfirmasi, lanjut submit
         if (form.dataset.confirmed === 'true') return;
 
         e.preventDefault();
@@ -175,15 +177,14 @@ document.addEventListener('DOMContentLoaded', function () {
             cancelButtonColor: '#6b7280',
             reverseButtons: true
         }).then((result) => {
-
             if (result.isConfirmed) {
-
                 form.dataset.confirmed = 'true';
 
                 Swal.fire({
                     title: 'Menyimpan...',
                     text: 'Mohon tunggu',
                     allowOutsideClick: false,
+                    showConfirmButton: false,
                     didOpen: () => {
                         Swal.showLoading();
                     }
@@ -191,11 +192,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 form.submit();
             }
-
         });
-
     });
-
 });
 </script>
 @endpush

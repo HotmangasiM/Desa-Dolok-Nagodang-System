@@ -92,6 +92,7 @@
 
         .label {
             width: 145px;
+            white-space: nowrap;
         }
 
         .colon {
@@ -108,6 +109,11 @@
             margin-left: auto;
             margin-top: 42px;
             text-align: left;
+            line-height: 1.35;
+        }
+
+        .signature-center {
+            text-align: center;
         }
 
         .signature-name {
@@ -120,6 +126,8 @@
 <body>
 
 @php
+    \Carbon\Carbon::setLocale('id');
+
     $birthDate = $citizen->birth_date
         ? \Carbon\Carbon::parse($citizen->birth_date)->format('d-m-Y')
         : '-';
@@ -128,13 +136,25 @@
     $motherName = $orphan['mother_name'] ?? '-';
     $guardianName = $orphan['guardian_name'] ?? '-';
     $guardianAddress = $orphan['guardian_address'] ?? '-';
+
+    $issuedDateIndo = now()->translatedFormat('d F Y');
+
+    if (!empty($issued_date)) {
+        try {
+            $issuedDateIndo = \Carbon\Carbon::parse($issued_date)->translatedFormat('d F Y');
+        } catch (\Throwable $e) {
+            $issuedDateIndo = $issued_date;
+        }
+    } elseif (!empty($letter->submission_date)) {
+        $issuedDateIndo = \Carbon\Carbon::parse($letter->submission_date)->translatedFormat('d F Y');
+    }
 @endphp
 
 <div class="kop">
     <table class="kop-table">
         <tr>
             <td class="logo-cell">
-                <img src="{{ public_path('images/logo-kab-toba.jpg') }}" class="logo">
+                <img src="{{ public_path('images/logo.png') }}" class="logo">
             </td>
             <td class="kop-title">
                 <div class="line-1">{{ $government_name }}</div>
@@ -228,11 +248,14 @@
 </div>
 
 <div class="signature">
-    <div>Dolok Nagodang, &nbsp;&nbsp; {{ $issued_month_year }}</div>
-    <div>Kepala Desa Dolok Nagodang</div>
+    <div class="signature-center">Dolok Nagodang, {{ $issuedDateIndo }}</div>
+
+    <div class="signature-center">
+        Kepala Desa Dolok Nagodang
+    </div>
 
     <div class="signature-name">
-        BANGKIT MANURUNG
+        {{ $signer_name ?? 'BANGKIT MANURUNG' }}
     </div>
 </div>
 

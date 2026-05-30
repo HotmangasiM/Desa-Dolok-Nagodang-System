@@ -45,17 +45,9 @@
             line-height: 1.25;
         }
 
-        .kop-title .line-1 {
-            font-size: 17px;
-        }
-
-        .kop-title .line-2 {
-            font-size: 16px;
-        }
-
-        .kop-title .line-3 {
-            font-size: 18px;
-        }
+        .kop-title .line-1 { font-size: 17px; }
+        .kop-title .line-2 { font-size: 16px; }
+        .kop-title .line-3 { font-size: 18px; }
 
         .title {
             text-align: center;
@@ -86,6 +78,7 @@
 
         .label {
             width: 130px;
+            white-space: nowrap;
         }
 
         .colon {
@@ -118,18 +111,35 @@
 <body>
 
 @php
+    \Carbon\Carbon::setLocale('id');
+
     $birthDate = $citizen->birth_date
         ? \Carbon\Carbon::parse($citizen->birth_date)->format('d-m-Y')
         : '-';
 
-    $familyCardNumber = $citizen->family_card_number ?? '-';
+    $familyCardNumber = $sktm['family_card_number']
+        ?? $payload['family_card_number']
+        ?? $citizen->family_card_number
+        ?? '-';
+
+    $issuedDateIndo = now()->translatedFormat('d F Y');
+
+    if (!empty($issued_date)) {
+        try {
+            $issuedDateIndo = \Carbon\Carbon::parse($issued_date)->translatedFormat('d F Y');
+        } catch (\Throwable $e) {
+            $issuedDateIndo = $issued_date;
+        }
+    } elseif (!empty($letter->submission_date)) {
+        $issuedDateIndo = \Carbon\Carbon::parse($letter->submission_date)->translatedFormat('d F Y');
+    }
 @endphp
 
 <div class="kop">
     <table class="kop-table">
         <tr>
             <td class="logo-cell">
-                <img src="{{ public_path('images/logo-kab-toba.jpg') }}" class="logo">
+                <img src="{{ public_path('images/logo.png') }}" class="logo">
             </td>
             <td class="kop-title">
                 <div class="line-1">{{ $government_name }}</div>
@@ -158,7 +168,7 @@
         <tr>
             <td class="label">Jabatan</td>
             <td class="colon">:</td>
-            <td>Kepala Desa</td>
+            <td>{{ $signer_position ?? 'Kepala Desa' }}</td>
         </tr>
         <tr>
             <td class="label">Desa</td>
@@ -223,18 +233,6 @@
         <strong>Keluarga tidak mampu.</strong>
     </p>
 
-    @if(!empty($sktm['purpose']))
-        <p class="paragraph">
-            Surat ini dipergunakan untuk {{ $sktm['purpose'] }}.
-        </p>
-    @endif
-
-    @if(!empty($sktm['additional_notes']))
-        <p class="paragraph">
-            {{ $sktm['additional_notes'] }}
-        </p>
-    @endif
-
     <p class="paragraph">
         Demikian Surat Keterangan ini dibuat dengan sebenarnya untuk dapat dipergunakan
         untuk seperlunya.
@@ -243,14 +241,14 @@
 
 <div class="signature">
     <div>Dikeluarkan di : Desa Dolok Nagodang</div>
-    <div>Pada Tanggal&nbsp;&nbsp;: {{ $issued_month_year }}</div>
+    <div>Pada Tanggal&nbsp;&nbsp;: {{ $issuedDateIndo }}</div>
 
     <br>
 
     <div class="signature-center">Kepala Desa Dolok Nagodang</div>
 
     <div class="signature-name">
-        BANGKIT MANURUNG
+        {{ $signer_name ?? 'BANGKIT MANURUNG' }}
     </div>
 </div>
 
