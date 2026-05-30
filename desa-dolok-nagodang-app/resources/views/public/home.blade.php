@@ -162,7 +162,6 @@
 
                 <div class="absolute inset-0 shadow-[inset_0_0_120px_rgba(0,0,0,0.75)] z-20 pointer-events-none"></div>
 
-                {{-- CONTENT --}}
                 {{-- OVERLAY DESKTOP --}}
 <div class="hidden md:block absolute bottom-0 left-0 z-30 p-10">
 
@@ -225,7 +224,7 @@
                     poster="{{ asset('storage/sliders/slide1.jpg') }}"
                 >
                     <source
-                        src="{{ asset('storage/video/View1.mp4') }}"
+                        src="{{ asset('storage/video/view-desa.mp4') }}"
                         type="video/mp4">
 
                     Browser tidak mendukung video.
