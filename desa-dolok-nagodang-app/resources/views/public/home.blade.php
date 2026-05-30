@@ -212,16 +212,26 @@
 </div>
 
                 {{-- VIDEO --}}
-                <div class="aspect-[16/10] sm:aspect-video">
+                 <div class="aspect-[16/10] sm:aspect-video bg-black">
 
-                    <iframe
-                        src="https://drive.google.com/file/d/1xDa79v0ODryUl6I6YtTLCtTqpkYaKJgo/preview?autoplay=1&mute=1"
-                        class="w-full h-full scale-[1.01] object-cover"
-                        allow="autoplay"
-                        allowfullscreen>
-                    </iframe>
+                <video
+                    class="w-full h-full object-cover"
+                    autoplay
+                    muted
+                    loop
+                    playsinline
+                    controls
+                    preload="metadata"
+                    poster="{{ asset('storage/sliders/slide1.jpg') }}"
+                >
+                    <source
+                        src="{{ asset('storage/video/View1.mp4') }}"
+                        type="video/mp4">
 
-                </div>
+                    Browser tidak mendukung video.
+                </video>
+
+            </div>
 
             </div>
 
@@ -376,6 +386,10 @@
                     <p class="text-xl font-semibold text-slate-800">
                         Horas,
                     </p>
+                    <!-- <p class="text-xl font-semibold text-slate-800">
+                        ᯂᯬᯒᯘ᯲,
+                    </p> -->
+
 
                     <p>
                         Selamat datang di Website Resmi Desa Dolok Nagodang.
@@ -708,9 +722,7 @@
     </div>
 </section>
 
-{{-- ===================================================== --}}
 {{-- PEMBANGUNAN DESA --}}
-
 <section class="bg-slate-100/80 py-14 md:py-16 overflow-hidden">
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -729,8 +741,8 @@
                 </h2>
 
                 <p class="mt-4 text-slate-500 leading-8 text-[15px] md:text-base">
-                    Informasi pembangunan dan infrastruktur desa akan
-                    ditampilkan pada halaman ini.
+                    Informasi pembangunan, fasilitas desa,
+                    dan dokumentasi infrastruktur terbaru.
                 </p>
 
             </div>
@@ -738,7 +750,7 @@
             {{-- BUTTON --}}
             <div>
 
-                <a href=""
+                <a href="{{ route('public.infrastruktur.index') }}"
                    class="inline-flex items-center gap-2 rounded-2xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-600/20 transition hover:bg-emerald-700">
 
                     Lihat Semua
@@ -765,38 +777,51 @@
         {{-- GRID --}}
         <div class="mt-10 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
 
-            {{-- CARD --}}
-            @for ($i = 1; $i <= 3; $i++)
+            @forelse ($latestInfrastructures as $item)
 
-                <div class="group overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl">
+                {{-- CARD --}}
+                <a href="{{ route('public.infrastructure.show', $item->slug) }}"
+                   class="group overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl block">
 
                     {{-- IMAGE --}}
                     <div class="relative overflow-hidden">
 
-                        <div class="h-64 w-full bg-gradient-to-br from-slate-200 to-slate-100 flex items-center justify-center">
+                        @if($item->image)
 
-                            <div class="text-center">
+                            <img
+                                src="{{ asset('storage/' . $item->image) }}"
+                                alt="{{ $item->title }}"
+                                class="h-64 w-full object-cover transition duration-500 group-hover:scale-105"
+                            >
 
-                                <svg xmlns="http://www.w3.org/2000/svg"
-                                     class="mx-auto h-14 w-14 text-slate-400"
-                                     fill="none"
-                                     viewBox="0 0 24 24"
-                                     stroke="currentColor"
-                                     stroke-width="1.5">
+                        @else
 
-                                    <path stroke-linecap="round"
-                                          stroke-linejoin="round"
-                                          d="M3 7l9-4 9 4-9 4-9-4zm0 0v10l9 4 9-4V7" />
+                            <div class="h-64 w-full bg-gradient-to-br from-slate-200 to-slate-100 flex items-center justify-center">
 
-                                </svg>
+                                <div class="text-center">
 
-                                <p class="mt-4 text-sm font-medium text-slate-500">
-                                    Foto pembangunan
-                                </p>
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                         class="mx-auto h-14 w-14 text-slate-400"
+                                         fill="none"
+                                         viewBox="0 0 24 24"
+                                         stroke="currentColor"
+                                         stroke-width="1.5">
+
+                                        <path stroke-linecap="round"
+                                              stroke-linejoin="round"
+                                              d="M3 7l9-4 9 4-9 4-9-4zm0 0v10l9 4 9-4V7" />
+
+                                    </svg>
+
+                                    <p class="mt-4 text-sm font-medium text-slate-500">
+                                        Foto pembangunan
+                                    </p>
+
+                                </div>
 
                             </div>
 
-                        </div>
+                        @endif
 
                         {{-- BADGE --}}
                         <div class="absolute top-4 left-4">
@@ -828,33 +853,32 @@
 
                             </svg>
 
-                            <span>Data pembangunan desa</span>
+                            <span>
+                                {{ $item->created_at->format('d M Y') }}
+                            </span>
 
                         </div>
 
                         {{-- TITLE --}}
-                        <h3 class="mt-4 text-xl font-bold leading-snug text-slate-800">
+                        <h3 class="mt-4 text-xl font-bold leading-snug text-slate-800 group-hover:text-emerald-700 transition">
 
-                            Infrastruktur Desa
+                            {{ $item->title }}
 
                         </h3>
 
                         {{-- DESCRIPTION --}}
                         <p class="mt-3 text-sm leading-7 text-slate-500">
 
-                            Dokumentasi pembangunan desa akan ditampilkan
-                            pada bagian ini setelah data tersedia.
+                            {{ \Illuminate\Support\Str::limit(strip_tags($item->content), 120) }}
 
                         </p>
 
                         {{-- FOOTER --}}
                         <div class="mt-6 flex items-center justify-between border-t border-slate-100 pt-5">
 
-                            <div>
+                            <div></div>
 
-                            </div>
-
-                            <div class="inline-flex items-center gap-2 text-sm font-semibold text-slate-400">
+                            <div class="inline-flex items-center gap-2 text-sm font-semibold text-emerald-600 group-hover:translate-x-1 transition">
 
                                 Detail
 
@@ -877,9 +901,40 @@
 
                     </div>
 
+                </a>
+
+            @empty
+
+                <div class="col-span-full rounded-3xl border border-dashed border-slate-300 bg-white p-10 text-center">
+
+                    <div class="mx-auto w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center">
+
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             class="w-8 h-8 text-slate-400"
+                             fill="none"
+                             viewBox="0 0 24 24"
+                             stroke="currentColor"
+                             stroke-width="1.5">
+
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M3 7l9-4 9 4-9 4-9-4zm0 0v10l9 4 9-4V7" />
+
+                        </svg>
+
+                    </div>
+
+                    <h3 class="mt-5 text-lg font-bold text-slate-700">
+                        Belum Ada Data Infrastruktur
+                    </h3>
+
+                    <p class="mt-2 text-sm text-slate-500">
+                        Data pembangunan desa akan ditampilkan setelah tersedia.
+                    </p>
+
                 </div>
 
-            @endfor
+            @endforelse
 
         </div>
 

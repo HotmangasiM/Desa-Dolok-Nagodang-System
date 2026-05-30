@@ -16,6 +16,8 @@ use App\Http\Controllers\PublicOfficialController;
 use App\Http\Controllers\PublicVillageProfileController;
 use App\Http\Controllers\PublicLetterServiceController;
 use App\Http\Controllers\PublicComplaintController;
+use App\Http\Controllers\PublicInfrastructureController;
+
 
 Route::middleware('auth')->prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
@@ -87,6 +89,16 @@ Route::middleware('track.visitor')->group(function () {
     Route::post('/pengaduan', [PublicComplaintController::class, 'store'])
     ->name('public.complaints.store');
     
+});
+
+Route::prefix('infrastruktur')->name('public.infrastruktur.')->group(function () {
+
+    Route::get('/', [PublicInfrastructureController::class, 'index'])
+        ->name('index');
+
+    Route::get('/{slug}', [PublicInfrastructureController::class, 'show'])
+        ->name('show');
+
 });
 
 require __DIR__.'/auth.php';
