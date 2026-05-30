@@ -191,11 +191,6 @@
             <span class="text-sm font-semibold text-emerald-700">
                 Sejarah Desa
             </span>
-
-            <h2 class="mt-2 text-3xl font-bold tracking-tight text-slate-800">
-                Legenda dan Sejarah Desa
-            </h2>
-
         </div>
 
         <div class="mt-8 rounded-[28px] bg-white border border-slate-200 p-6 md:p-8 shadow-sm">
