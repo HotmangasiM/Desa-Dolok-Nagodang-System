@@ -6,6 +6,7 @@ use App\Models\Citizen;
 use App\Models\LetterType;
 use App\Models\News;
 use App\Models\Official;
+use App\Models\Infrastructure;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use App\Models\VisitorLog;
@@ -42,6 +43,11 @@ class PublicHomeController extends Controller
             ->get();
 
         $totalPublishedNews = News::where('status', 'published')->count();
+
+        // Infrastuktur terbaru
+        $latestInfrastructures = Infrastructure::latest()
+            ->take(3)
+            ->get();
 
         // Aparat desa
         $officials = Official::orderBy('sort_order')
@@ -116,6 +122,10 @@ class PublicHomeController extends Controller
 
             'latestNews' => $latestNews,
             'totalPublishedNews' => $totalPublishedNews,
+
+            'latestInfrastructures' => $latestInfrastructures,
+            'officials' => $officials,
+            'villageHead' => $villageHead,
 
             'officials' => $officials,
             'villageHead' => $villageHead,

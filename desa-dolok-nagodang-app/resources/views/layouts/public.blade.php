@@ -55,108 +55,112 @@
 {{-- ================= HEADER ================= --}}
 <header class="sticky top-0 z-[999] bg-white/90 backdrop-blur-xl border-b border-slate-200/80 shadow-sm">
 
-    <div class="max-w-7xl mx-auto px-4 lg:px-6">
+    {{-- NAVIGATION --}}
+    @php
+        $navItems = [
+            [
+                'label' => 'Beranda',
+                'route' => 'public.home',
+                'active' => 'public.home',
+                'icon' => 'home',
+            ],
+            [
+                'label' => 'Profil',
+                'route' => 'public.profile',
+                'active' => 'public.profile',
+                'icon' => 'building-2',
+            ],
+            [
+                'label' => 'Berita',
+                'route' => 'public.news.index',
+                'active' => 'public.news.*',
+                'icon' => 'newspaper',
+            ],
+            [
+                'label' => 'Aparat',
+                'route' => 'public.officials',
+                'active' => 'public.officials',
+                'icon' => 'users',
+            ],
+            [
+                'label' => 'Layanan',
+                'route' => 'public.letters',
+                'active' => 'public.letters*',
+                'icon' => 'file-text',
+            ],
+            [
+                'label' => 'Infrastruktur',
+                'route' => 'public.infrastruktur.index',
+                'active' => 'public.infrastruktur*',
+                'icon' => 'construction',
+            ],
+        ];
+    @endphp
 
-        <div class="h-20 flex items-center justify-between gap-4">
+    <div class="w-full px-4 lg:px-8 xl:px-10">
+
+        <div class="h-20 flex items-center gap-6">
 
             {{-- LOGO --}}
             <a href="{{ route('public.home') }}"
-               class="flex items-center gap-3 min-w-0">
+               class="flex items-center gap-3 shrink-0">
 
-                <div class="w-12 h-12 rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden flex items-center justify-center shrink-0">
+                <div class="w-12 h-12 rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden flex items-center justify-center">
+
                     <img
                         src="{{ asset('images/logo.png') }}"
                         alt="Logo Desa"
-                        class="w-full h-full object-contain"
-                    >
+                        class="w-full h-full object-contain">
+
                 </div>
 
-                <div class="leading-tight min-w-0">
-                    <h1 class="text-sm md:text-base font-bold text-slate-800 truncate">
+                <div class="leading-tight hidden sm:block">
+
+                    <h1 class="text-sm md:text-base font-bold text-slate-800">
                         Desa Dolok Nagodang
                     </h1>
 
-                    <p class="text-xs text-slate-500 truncate">
+                    <p class="text-xs text-slate-500">
                         Kabupaten Toba • Sumatera Utara
                     </p>
+
                 </div>
+
             </a>
 
-            {{-- NAVIGATION --}}
-            @php
-                $navItems = [
-                    [
-                        'label' => 'Beranda',
-                        'route' => 'public.home',
-                        'active' => 'public.home',
-                        'icon' => 'home',
-                    ],
-                    [
-                        'label' => 'Profil',
-                        'route' => 'public.profile',
-                        'active' => 'public.profile',
-                        'icon' => 'building-2',
-                    ],
-                    [
-                        'label' => 'Berita',
-                        'route' => 'public.news.index',
-                        'active' => 'public.news.*',
-                        'icon' => 'newspaper',
-                    ],
-                    [
-                        'label' => 'Aparat',
-                        'route' => 'public.officials',
-                        'active' => 'public.officials',
-                        'icon' => 'users',
-                    ],
-                    [
-                        'label' => 'Layanan',
-                        'route' => 'public.letters',
-                        'active' => 'public.letters*',
-                        'icon' => 'file-text',
-                    ],
-                ];
-            @endphp
-
             {{-- DESKTOP MENU --}}
-            <nav class="hidden lg:flex items-center gap-2">
+            <div class="hidden lg:flex flex-1 justify-end">
 
-                @foreach ($navItems as $item)
+                <nav class="flex items-center gap-2">
 
-                    <a href="{{ route($item['route']) }}"
-                       class="relative px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300
+                    @foreach ($navItems as $item)
 
-                       {{ request()->routeIs($item['active'])
-                            ? 'bg-emerald-600 text-white shadow-md'
-                            : 'text-slate-700 hover:bg-slate-100 hover:text-emerald-700'
-                       }}">
-                        {{ $item['label'] }}
-                    </a>
+                        <a href="{{ route($item['route']) }}"
+                           class="relative px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300
 
-                @endforeach
+                           {{ request()->routeIs($item['active'])
+                                ? 'bg-emerald-600 text-white shadow-md'
+                                : 'text-slate-700 hover:bg-slate-100 hover:text-emerald-700'
+                           }}">
 
-            </nav>
+                            {{ $item['label'] }}
 
-            {{-- RIGHT --}}
-            <div class="flex items-center gap-3">
+                        </a>
 
-                {{-- BUTTON --}}
-                <!-- <a href="{{ route('public.letters') }}"
-                   class="hidden md:inline-flex items-center gap-2 rounded-2xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-600/20 hover:bg-emerald-700 transition">
-                    <i data-lucide="file-plus-2" class="w-4 h-4"></i>
-                    Layanan
-                </a> -->
+                    @endforeach
 
-                {{-- MOBILE BUTTON --}}
-                <button
-                    id="menuBtn"
-                    class="lg:hidden w-11 h-11 rounded-2xl border border-slate-200 bg-white shadow-sm flex items-center justify-center">
-
-                    <i data-lucide="menu" class="w-5 h-5"></i>
-
-                </button>
+                </nav>
 
             </div>
+
+            {{-- MOBILE BUTTON --}}
+            <button
+                id="menuBtn"
+                class="lg:hidden ml-auto w-11 h-11 rounded-2xl border border-slate-200 bg-white shadow-sm flex items-center justify-center">
+
+                <i data-lucide="menu" class="w-5 h-5"></i>
+
+            </button>
 
         </div>
 
@@ -186,24 +190,12 @@
 
             @endforeach
 
-            <div class="pt-3">
-
-                <a href="{{ route('login') }}"
-                   class="flex items-center justify-center gap-2 rounded-2xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-100 transition">
-
-                    <i data-lucide="shield-check" class="w-4 h-4"></i>
-
-                    Login Admin
-
-                </a>
-
-            </div>
-
         </div>
 
     </div>
 
 </header>
+
 
 {{-- ================= MAIN ================= --}}
 <main class="min-h-screen">
@@ -219,25 +211,25 @@
         <div class="absolute bottom-0 right-0 w-80 h-80 bg-cyan-500 rounded-full blur-3xl"></div>
     </div>
 
-    <div class="relative max-w-7xl mx-auto px-4 lg:px-6 py-14">
+    <div class="relative max-w-7xl mx-auto px-4 lg:px-6 py-10">
 
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-10">
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
 
             {{-- PROFILE --}}
             <div class="xl:col-span-2">
 
                 <div class="flex items-center gap-4">
 
-                    <div class="w-14 h-14 rounded-2xl bg-white overflow-hidden flex items-center justify-center">
+                    <div class="w-12 h-12 rounded-2xl bg-white overflow-hidden flex items-center justify-center shadow-sm">
                         <img
                             src="{{ asset('images/logo.png') }}"
-                            alt="Logo"
+                            alt="Logo Desa"
                             class="w-full h-full object-contain"
                         >
                     </div>
 
                     <div>
-                        <h3 class="text-xl font-bold text-white">
+                        <h3 class="text-lg font-bold text-white">
                             Desa Dolok Nagodang
                         </h3>
 
@@ -248,9 +240,9 @@
 
                 </div>
 
-                <p class="mt-5 text-sm leading-7 text-slate-400 max-w-xl">
+                <p class="mt-4 text-sm leading-7 text-slate-400 max-w-xl">
                     Website resmi Pemerintah Desa Dolok Nagodang sebagai pusat informasi,
-                    pelayanan administrasi, berita kegiatan desa, dan transparansi publik
+                    pelayanan administrasi, berita desa, dan transparansi publik
                     kepada masyarakat.
                 </p>
 
@@ -259,34 +251,46 @@
             {{-- MENU --}}
             <div>
 
-                <h3 class="text-white font-bold text-lg">
+                <h3 class="text-white font-bold text-base">
                     Menu Utama
                 </h3>
 
-                <div class="mt-5 space-y-3 text-sm">
+                <div class="mt-4 space-y-2.5 text-sm">
 
                     <a href="{{ route('public.home') }}"
-                       class="flex items-center gap-3 hover:text-white transition">
+                       class="flex items-center gap-2 text-slate-400 hover:text-white transition">
+
                         <i data-lucide="chevron-right" class="w-4 h-4"></i>
+
                         Beranda
+
                     </a>
 
                     <a href="{{ route('public.profile') }}"
-                       class="flex items-center gap-3 hover:text-white transition">
+                       class="flex items-center gap-2 text-slate-400 hover:text-white transition">
+
                         <i data-lucide="chevron-right" class="w-4 h-4"></i>
+
                         Profil Desa
+
                     </a>
 
                     <a href="{{ route('public.news.index') }}"
-                       class="flex items-center gap-3 hover:text-white transition">
+                       class="flex items-center gap-2 text-slate-400 hover:text-white transition">
+
                         <i data-lucide="chevron-right" class="w-4 h-4"></i>
+
                         Berita Desa
+
                     </a>
 
                     <a href="{{ route('public.letters') }}"
-                       class="flex items-center gap-3 hover:text-white transition">
+                       class="flex items-center gap-2 text-slate-400 hover:text-white transition">
+
                         <i data-lucide="chevron-right" class="w-4 h-4"></i>
+
                         Layanan Surat
+
                     </a>
 
                 </div>
@@ -296,58 +300,95 @@
             {{-- CONTACT --}}
             <div>
 
-                <h3 class="text-white font-bold text-lg">
+                <h3 class="text-white font-bold text-base">
                     Informasi Desa
                 </h3>
 
-                <div class="mt-5 space-y-5 text-sm">
+                <div class="mt-4 space-y-3 text-sm">
 
+                    {{-- ALAMAT --}}
                     <div class="flex gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
+
+                        <div class="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
+
                             <i data-lucide="map-pin" class="w-4 h-4 text-emerald-400"></i>
+
                         </div>
 
                         <div>
-                            <p class="font-semibold text-white">Alamat</p>
+                            <p class="font-semibold text-white">
+                                Alamat
+                            </p>
+
                             <p class="text-slate-400 leading-6">
                                 Desa Dolok Nagodang, Kecamatan Uluan, Kabupaten Toba
                             </p>
                         </div>
+
                     </div>
 
+                    {{-- JAM --}}
                     <div class="flex gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
+
+                        <div class="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
+
                             <i data-lucide="clock-3" class="w-4 h-4 text-emerald-400"></i>
+
                         </div>
 
                         <div>
-                            <p class="font-semibold text-white">Jam Layanan</p>
+                            <p class="font-semibold text-white">
+                                Jam Layanan
+                            </p>
+
                             <p class="text-slate-400">
-                                Senin - Jumat, 08.00 - 15.00
+                                Senin - Jumat, 08.00 - 15.00 WIB
                             </p>
                         </div>
+
                     </div>
 
+                    {{-- TELEPON --}}
                     <div class="flex gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
+
+                        <div class="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
+
                             <i data-lucide="phone" class="w-4 h-4 text-emerald-400"></i>
+
                         </div>
 
                         <div>
-                            <p class="font-semibold text-white">Telepon</p>
+                            <p class="font-semibold text-white">
+                                Telepon
+                            </p>
+
                             <p class="text-slate-400">
                                 08xxxxxxxxxx
                             </p>
                         </div>
+
                     </div>
+
+                    {{-- EMAIL --}}
                     <div class="flex gap-3">
-                     <div class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
-                        <i data-lucide="mail" class="w-4 h-4 text-emerald-400"></i>
+
+                        <div class="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
+
+                            <i data-lucide="mail" class="w-4 h-4 text-emerald-400"></i>
+
+                        </div>
+
+                        <div>
+                            <p class="font-semibold text-white">
+                                Email
+                            </p>
+
+                            <p class="text-slate-400">
+                                desa@email.com
+                            </p>
+                        </div>
+
                     </div>
-                    <p>
-                        desa@email.com
-                    </p>
-                </div>
 
                 </div>
 
@@ -360,14 +401,17 @@
     {{-- COPYRIGHT --}}
     <div class="border-t border-white/10">
 
-        <div class="max-w-7xl mx-auto px-4 lg:px-6 py-5 flex flex-col md:flex-row items-center justify-between gap-3 text-sm text-slate-500">
+        <div class="max-w-7xl mx-auto px-4 lg:px-6 py-3 flex flex-col items-center justify-center gap-1 text-sm text-slate-500 text-center">
 
             <p>
-                © {{ date('Y') }} Desa Dolok Nagodang. All rights reserved.
+                © {{ date('Y') }} Pemerintah Desa Dolok Nagodang
             </p>
 
             <p>
-                Dikelola oleh Pemerintah Desa Dolok Nagodang
+                Design & Development by
+                <span class="font-semibold text-white">
+                    Marsidapari 
+                </span>
             </p>
 
         </div>

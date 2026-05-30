@@ -31,7 +31,7 @@
 
         <form
             method="GET"
-            action="{{ route('infrastruktur.index') }}"
+            action="{{ route('public.infrastruktur.index') }}"
             class="flex flex-col md:flex-row gap-3"
         >
 
@@ -52,7 +52,7 @@
 
             @if(request('search'))
                 <a
-                    href="{{ route('infrastruktur.index') }}"
+                    href="{{ route('public.infrastruktur.index') }}"
                     class="rounded-xl border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700 text-center hover:bg-slate-50 transition"
                 >
                     Reset
