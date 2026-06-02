@@ -129,14 +129,25 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">Status Hidup</label>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">
+                        Status Hidup
+                    </label>
+
                     <select
                         name="life_status"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                     >
                         <option value="">Semua</option>
-                        <option value="alive" {{ ($filters['life_status'] ?? '') === 'alive' ? 'selected' : '' }}>alive</option>
-                        <option value="deceased" {{ ($filters['life_status'] ?? '') === 'deceased' ? 'selected' : '' }}>deceased</option>
+
+                        <option value="alive"
+                            {{ ($filters['life_status'] ?? '') === 'alive' ? 'selected' : '' }}>
+                            Hidup
+                        </option>
+
+                        <option value="deceased"
+                            {{ ($filters['life_status'] ?? '') === 'deceased' ? 'selected' : '' }}>
+                            Meninggal Dunia
+                        </option>
                     </select>
                 </div>
 
