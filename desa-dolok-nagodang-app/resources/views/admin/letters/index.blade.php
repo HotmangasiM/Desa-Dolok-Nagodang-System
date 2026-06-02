@@ -39,7 +39,7 @@
         <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm">
             <div class="flex items-start justify-between">
                 <div>
-                    <p class="text-sm font-medium text-slate-500">Submitted</p>
+                    <p class="text-sm font-medium text-slate-500">Diajukan</p>
                     <h3 class="mt-3 text-3xl font-bold text-slate-800">{{ number_format($submittedLetters) }}</h3>
                 </div>
                 <div class="w-12 h-12 rounded-2xl bg-amber-100 flex items-center justify-center text-2xl">
@@ -52,7 +52,7 @@
         <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm">
             <div class="flex items-start justify-between">
                 <div>
-                    <p class="text-sm font-medium text-slate-500">Completed</p>
+                    <p class="text-sm font-medium text-slate-500">Selesai</p>
                     <h3 class="mt-3 text-3xl font-bold text-slate-800">{{ number_format($completedLetters) }}</h3>
                 </div>
                 <div class="w-12 h-12 rounded-2xl bg-sky-100 flex items-center justify-center text-2xl">
@@ -100,15 +100,23 @@
             </div>
 
             <div>
-                <label class="block text-sm font-semibold text-slate-700 mb-2">Status</label>
+                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                    Status
+                </label>
+
                 <select
                     name="status"
                     class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                 >
                     <option value="">Semua</option>
-                    <option value="submitted" {{ ($filters['status'] ?? '') === 'submitted' ? 'selected' : '' }}>submitted</option>
-                    <option value="processed" {{ ($filters['status'] ?? '') === 'processed' ? 'selected' : '' }}>processed</option>
-                    <option value="completed" {{ ($filters['status'] ?? '') === 'completed' ? 'selected' : '' }}>completed</option>
+
+                    <option value="submitted" {{ ($filters['status'] ?? '') === 'submitted' ? 'selected' : '' }}>
+                        Diajukan
+                    </option>
+
+                    <option value="completed" {{ ($filters['status'] ?? '') === 'completed' ? 'selected' : '' }}>
+                        Selesai
+                    </option>
                 </select>
             </div>
 
@@ -177,21 +185,17 @@
                             </td>
 
                             <td class="px-5 py-4">
-                                @if ($letter->status === 'COMPLETED')
+                                @if (strtolower($letter->status) === 'completed')
                                     <span class="inline-flex rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
-                                        COMPLETED
+                                        Selesai
                                     </span>
-                                @elseif ($letter->status === 'SUBMITTED')
+                                @elseif (strtolower($letter->status) === 'submitted')
                                     <span class="inline-flex rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700">
-                                        SUBMITTED
-                                    </span>
-                                @elseif ($letter->status === 'PROCESSING')
-                                    <span class="inline-flex rounded-full bg-sky-100 px-3 py-1 text-xs font-semibold text-sky-700">
-                                        PROCESSING
+                                        Diajukan
                                     </span>
                                 @else
                                     <span class="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
-                                        {{ $letter->status ?? '-' }}
+                                        -
                                     </span>
                                 @endif
                             </td>
