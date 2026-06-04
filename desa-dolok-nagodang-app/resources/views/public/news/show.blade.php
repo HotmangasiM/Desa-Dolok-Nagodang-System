@@ -168,16 +168,16 @@
 
 
                 {{-- ARTICLE --}}
-                <article class="mt-8">
+                <!-- <article class="mt-8"> -->
 
                     {{-- Lead --}}
-                    <div>
+                    <!-- <div>
 
                         <p class="text-xl leading-9 text-slate-600">
                             {{ \Illuminate\Support\Str::limit(strip_tags($newsItem->content), 220) }}
                         </p>
 
-                    </div>
+                    </div> -->
 
 
                     {{-- Content --}}

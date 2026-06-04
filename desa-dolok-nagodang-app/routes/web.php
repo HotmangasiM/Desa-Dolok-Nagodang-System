@@ -10,6 +10,10 @@ use App\Http\Controllers\AdminOfficialPageController;
 use App\Http\Controllers\AdminLetterPageController;
 use App\Http\Controllers\AdminLetterPdfController;
 
+//tambahan untuk infrastruktur
+use App\Http\Controllers\Admin\InfrastructureController;
+
+
 use App\Http\Controllers\PublicHomeController;
 use App\Http\Controllers\PublicNewsController;
 use App\Http\Controllers\PublicOfficialController;
@@ -90,6 +94,20 @@ Route::middleware('track.visitor')->group(function () {
     ->name('public.complaints.store');
     
 });
+
+//route baru untuk infrastruktur
+// Route::prefix('admin')->name('admin.')->group(function () {
+//     Route::resource('infrastructure', InfrastructureController::class);
+// });
+Route::prefix('admin/infrastructure')->name('admin.infrastructure.')->group(function () {
+    Route::get('/', [PublicInfrastructureController::class, 'adminIndex'])->name('index');
+    Route::get('/create', [PublicInfrastructureController::class, 'create'])->name('create');
+    Route::post('/', [PublicInfrastructureController::class, 'store'])->name('store');
+    Route::get('/{id}/edit', [PublicInfrastructureController::class, 'edit'])->name('edit');
+    Route::put('/{id}', [PublicInfrastructureController::class, 'update'])->name('update');
+    Route::delete('/{id}', [PublicInfrastructureController::class, 'destroy'])->name('destroy');
+});
+
 
 Route::prefix('infrastruktur')->name('public.infrastruktur.')->group(function () {
 
