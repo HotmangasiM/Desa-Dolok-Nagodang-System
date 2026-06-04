@@ -6,6 +6,7 @@ use App\Models\LetterType;
 use Illuminate\View\View;
 use App\Models\Citizen;
 use App\Models\Letter;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -136,6 +137,19 @@ class PublicLetterServiceController extends Controller
                 ]);
         }
 
+        $createdBy = User::query()
+            ->where('role', 'admin')
+            ->where('is_active', true)
+            ->value('id') ?? User::query()->value('id');
+
+        if (!$createdBy) {
+            return back()
+                ->withInput()
+                ->withErrors([
+                    'nik' => 'Pengajuan belum dapat diproses karena akun petugas belum tersedia.',
+                ]);
+        }
+
         Letter::create([
             'letter_number' => null,
             'letter_type_id' => $letterType->id,
@@ -150,9 +164,7 @@ class PublicLetterServiceController extends Controller
             'submission_date' => now(),
             'status' => 'SUBMITTED',
 
-            // sementara pakai admin/system user id
-            // pastikan user id 1 ada di tabel users
-            'created_by' => 3,
+            'created_by' => $createdBy,
         ]);
 
         return redirect()

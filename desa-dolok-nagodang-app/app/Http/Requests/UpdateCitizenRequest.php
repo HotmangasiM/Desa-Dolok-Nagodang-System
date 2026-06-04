@@ -19,11 +19,10 @@ class UpdateCitizenRequest extends FormRequest
         return [
             'nik' => [
                 'required',
-                'string',
-                'size:16',
+                'digits:16',
                 Rule::unique('citizens', 'nik')->ignore($id),
             ],
-            'full_name' => 'required|string|max:255',
+            'full_name' => ['required', 'string', 'max:255', 'regex:/^[\pL\s]+$/u'],
             'gender' => 'required|string|in:Laki-laki,Perempuan',
             'birth_place' => 'nullable|string|max:100',
             'birth_date' => 'nullable|date',
@@ -43,6 +42,14 @@ class UpdateCitizenRequest extends FormRequest
             'phone' => 'nullable|string|max:20',
             'email' => 'nullable|email|max:255',
             'life_status' => 'required|in:alive,deceased',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'nik.digits' => 'NIK harus berisi tepat 16 digit angka.',
+            'full_name.regex' => 'Nama lengkap hanya boleh berisi huruf dan spasi.',
         ];
     }
 }

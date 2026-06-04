@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Citizen extends Model
 {
+    use HasFactory, SoftDeletes;
+
     protected $fillable = [
         'nik',
         'full_name',
