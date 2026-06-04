@@ -292,8 +292,10 @@
                                     type="text"
                                     name="payload[father_income]"
                                     value="{{ old('payload.father_income') }}"
+                                    inputmode="numeric"
+                                    data-rupiah-income
                                     class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-500"
-                                    placeholder="Contoh: Rp. 1.000.000/Bulan"
+                                    placeholder="Contoh: Rp 1.000.000"
                                 >
                             </div>
                         </div>
@@ -327,8 +329,10 @@
                                     type="text"
                                     name="payload[mother_income]"
                                     value="{{ old('payload.mother_income') }}"
+                                    inputmode="numeric"
+                                    data-rupiah-income
                                     class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-500"
-                                    placeholder="Contoh: Rp. 500.000/Bulan"
+                                    placeholder="Contoh: Rp 500.000"
                                 >
                             </div>
                         </div>
@@ -466,6 +470,24 @@ document.addEventListener('DOMContentLoaded', function () {
         SKOT: 'Lengkapi data orang tua dan data anak untuk Surat Keterangan Orang Tua.',
         SKU: 'Lengkapi data usaha untuk Surat Keterangan Usaha.'
     };
+
+    function formatRupiah(value) {
+        const digits = (value || '').replace(/\D/g, '');
+
+        if (!digits) {
+            return '';
+        }
+
+        return 'Rp ' + digits.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    }
+
+    document.querySelectorAll('[data-rupiah-income]').forEach(function (input) {
+        input.value = formatRupiah(input.value);
+
+        input.addEventListener('input', function () {
+            input.value = formatRupiah(input.value);
+        });
+    });
 
     function getSelectedLetterOption() {
         if (!letterTypeSelect) return null;

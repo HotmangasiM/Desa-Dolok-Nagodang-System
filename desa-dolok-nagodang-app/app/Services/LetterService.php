@@ -62,7 +62,7 @@ class LetterService
         //Hardcode sementar untuk field created_by oleh admin
         $data['created_by'] = auth()->id();
 
-        $data['payload'] = $data['payload'] ?? [];
+        $data['payload'] = $this->normalizePayload($data['payload'] ?? []);
         unset($data['citizen_id']);
 
         Log::debug('Data final sebelum insert letter', $data);
@@ -94,7 +94,7 @@ class LetterService
             $data['status'] = $statusMap[$data['status']] ?? $data['status'];
         }
 
-        $data['payload'] = $data['payload'] ?? [];
+        $data['payload'] = $this->normalizePayload($data['payload'] ?? []);
 
         unset($data['citizen_id']);
 
@@ -125,6 +125,30 @@ class LetterService
         $romanMonth = $this->toRomanMonth($month);
 
         return "{$sequence}/{$code}/{$romanMonth}/{$year}";
+    }
+
+    protected function normalizePayload(array $payload): array
+    {
+        foreach (['father_income', 'mother_income'] as $field) {
+            if (!array_key_exists($field, $payload)) {
+                continue;
+            }
+
+            $payload[$field] = $this->formatRupiah($payload[$field]);
+        }
+
+        return $payload;
+    }
+
+    protected function formatRupiah(?string $value): ?string
+    {
+        $digits = preg_replace('/\D/', '', (string) $value);
+
+        if ($digits === '') {
+            return null;
+        }
+
+        return 'Rp ' . number_format((int) $digits, 0, ',', '.');
     }
 
     protected function toRomanMonth(int $month): string
