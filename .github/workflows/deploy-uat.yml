@@ -19,3 +19,5 @@ jobs:
           port: ${{ secrets.VPS_PORT }}
           script: |
             ~/deploy-desa.sh
+          timeout: 60s
+          command_timeout: 15m 
