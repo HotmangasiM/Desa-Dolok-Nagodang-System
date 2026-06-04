@@ -779,7 +779,7 @@
             @forelse ($latestInfrastructures as $item)
 
                 {{-- CARD --}}
-                <a href="{{ route('public.infrastructure.show', $item->slug) }}"
+                <a href="{{ route('public.infrastruktur.show', $item->slug) }}"
                    class="group overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl block">
 
                     {{-- IMAGE --}}

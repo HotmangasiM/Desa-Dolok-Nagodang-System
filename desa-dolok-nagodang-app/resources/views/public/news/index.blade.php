@@ -1,8 +1,9 @@
 @extends('layouts.public')
 
 @section('content')
+
 <section class="bg-emerald-950 text-white">
-    <div class="max-w-7xl mx-auto px-4 py-16">
+    <div class="max-w-7xl mx-auto px-4 py-10 md:py-12">
         <p class="inline-flex rounded-full bg-white/10 px-4 py-2 text-sm text-emerald-100 border border-white/10">
             Informasi Desa
         </p>
