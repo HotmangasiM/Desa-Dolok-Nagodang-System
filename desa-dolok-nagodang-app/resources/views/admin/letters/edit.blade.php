@@ -341,8 +341,10 @@
                                     type="text"
                                     name="payload[father_income]"
                                     value="{{ $payload['father_income'] ?? '' }}"
+                                    inputmode="numeric"
+                                    data-rupiah-income
                                     class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                                    placeholder="Contoh: Rp. 1.000.000/Bulan"
+                                    placeholder="Contoh: Rp 1.000.000"
                                 >
                             </div>
                         </div>
@@ -381,8 +383,10 @@
                                     type="text"
                                     name="payload[mother_income]"
                                     value="{{ $payload['mother_income'] ?? '' }}"
+                                    inputmode="numeric"
+                                    data-rupiah-income
                                     class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                                    placeholder="Contoh: Rp. 500.000/Bulan"
+                                    placeholder="Contoh: Rp 500.000"
                                 >
                             </div>
                         </div>
@@ -530,6 +534,23 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    function formatRupiah(value) {
+        const digits = (value || '').replace(/\D/g, '');
+
+        if (!digits) {
+            return '';
+        }
+
+        return 'Rp ' + digits.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    }
+
+    document.querySelectorAll('[data-rupiah-income]').forEach(function (input) {
+        input.value = formatRupiah(input.value);
+
+        input.addEventListener('input', function () {
+            input.value = formatRupiah(input.value);
+        });
+    });
 
     if (typeof Swal === 'undefined') {
         console.error('SweetAlert tidak ter-load!');
