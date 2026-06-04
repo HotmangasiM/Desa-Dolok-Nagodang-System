@@ -23,8 +23,8 @@ class StoreCitizenRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nik' => 'required|string|size:16|unique:citizens,nik',
-            'full_name' => 'required|string|max:255',
+            'nik' => 'required|digits:16|unique:citizens,nik',
+            'full_name' => ['required', 'string', 'max:255', 'regex:/^[\pL\s]+$/u'],
             'gender' => 'required|string|in:Laki-laki,Perempuan',
             'birth_place' => 'nullable|string|max:100',
             'birth_date' => 'nullable|date',
@@ -44,6 +44,14 @@ class StoreCitizenRequest extends FormRequest
             'phone' => 'nullable|string|max:20',
             'email' => 'nullable|email|max:255',
             'life_status' => 'required|in:alive,deceased',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'nik.digits' => 'NIK harus berisi tepat 16 digit angka.',
+            'full_name.regex' => 'Nama lengkap hanya boleh berisi huruf dan spasi.',
         ];
     }
 }

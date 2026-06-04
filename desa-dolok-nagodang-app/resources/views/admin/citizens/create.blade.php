@@ -42,6 +42,8 @@
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">NIK <span class="text-rose-500">*</span></label>
                     <input type="text" name="nik" value="{{ old('nik') }}"
+                           inputmode="numeric" maxlength="16" pattern="[0-9]{16}"
+                           oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 16)"
                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                            placeholder="Masukkan 16 digit NIK">
                 </div>
@@ -49,6 +51,7 @@
                 <div class="md:col-span-2">
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Nama Lengkap <span class="text-rose-500">*</span></label>
                     <input type="text" name="full_name" value="{{ old('full_name') }}"
+                           maxlength="255" oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')"
                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                            placeholder="Masukkan nama lengkap">
                 </div>
