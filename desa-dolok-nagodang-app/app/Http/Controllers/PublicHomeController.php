@@ -7,10 +7,8 @@ use App\Models\LetterType;
 use App\Models\News;
 use App\Models\Official;
 use App\Models\Infrastructure;
-use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use App\Models\VisitorLog;
-use Carbon\Carbon;
 
 class PublicHomeController extends Controller
 {
@@ -23,17 +21,20 @@ class PublicHomeController extends Controller
 
         $femaleCitizens = Citizen::where('gender', 'Perempuan')->count();
 
-        // Statistik dusun dari field address
-        $dusunStats = DB::table(function ($query) {
-            $query->selectRaw("SUBSTRING_INDEX(address, ' ', 2) as dusun")
-                ->from('citizens')
-                ->whereNotNull('address')
-                ->where('address', '!=', '');
-        }, 't')
-            ->select('dusun', DB::raw('COUNT(*) as total'))
-            ->groupBy('dusun')
-            ->orderBy('dusun')
-            ->get();
+        $dusunStats = Citizen::query()
+            ->whereNotNull('address')
+            ->pluck('address')
+            ->map(function (string $address): string {
+                return str($address)->squish()->explode(' ')->take(2)->implode(' ');
+            })
+            ->filter()
+            ->countBy()
+            ->sortKeys()
+            ->map(fn (int $total, string $dusun): object => (object) [
+                'dusun' => $dusun,
+                'total' => $total,
+            ])
+            ->values();
 
         // Berita terbaru
         $latestNews = News::where('status', 'published')
@@ -124,9 +125,6 @@ class PublicHomeController extends Controller
             'totalPublishedNews' => $totalPublishedNews,
 
             'latestInfrastructures' => $latestInfrastructures,
-            'officials' => $officials,
-            'villageHead' => $villageHead,
-
             'officials' => $officials,
             'villageHead' => $villageHead,
 
