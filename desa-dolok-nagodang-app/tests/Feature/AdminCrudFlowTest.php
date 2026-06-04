@@ -181,12 +181,18 @@ class AdminCrudFlowTest extends TestCase
             'subject' => 'Surat QA',
             'status' => 'submitted',
             'submission_date' => '2026-06-04',
-            'payload' => ['purpose' => 'Testing QA'],
+            'payload' => [
+                'purpose' => 'Testing QA',
+                'father_income' => '500000',
+                'mother_income' => 'Rp. 750.000/Bulan',
+            ],
         ])->assertRedirect(route('admin.letters.index'));
 
         $letter = Letter::where('subject', 'Surat QA')->firstOrFail();
         $this->assertSame('SUBMITTED', $letter->status);
         $this->assertSame($citizen->nik, $letter->applicant_national_id);
+        $this->assertSame('Rp 500.000', $letter->payload['father_income']);
+        $this->assertSame('Rp 750.000', $letter->payload['mother_income']);
 
         $this->put(route('admin.letters.update', $letter->id), [
             'letter_number' => $letter->letter_number,
@@ -195,14 +201,22 @@ class AdminCrudFlowTest extends TestCase
             'subject' => 'Surat QA Updated',
             'status' => 'completed',
             'submission_date' => '2026-06-04',
-            'payload' => ['purpose' => 'Testing QA Updated'],
+            'payload' => [
+                'purpose' => 'Testing QA Updated',
+                'father_income' => '1000000',
+                'mother_income' => '1250000',
+            ],
         ])->assertRedirect(route('admin.letters.index'));
+
+        $letter->refresh();
 
         $this->assertDatabaseHas('letters', [
             'id' => $letter->id,
             'subject' => 'Surat QA Updated',
             'status' => 'COMPLETED',
         ]);
+        $this->assertSame('Rp 1.000.000', $letter->payload['father_income']);
+        $this->assertSame('Rp 1.250.000', $letter->payload['mother_income']);
 
         $this->delete(route('admin.letters.destroy', $letter->id))
             ->assertRedirect(route('admin.letters.index'));
