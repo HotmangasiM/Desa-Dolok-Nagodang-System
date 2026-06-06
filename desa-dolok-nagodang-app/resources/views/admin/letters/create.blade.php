@@ -105,11 +105,13 @@
                     <input
                         type="date"
                         name="submission_date"
-                        value="{{ old('submission_date') }}"
+                        value="{{ old('submission_date', now()->toDateString()) }}"
+                        min="{{ now()->toDateString() }}"
+                        max="{{ now()->toDateString() }}"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     >
                     <p class="mt-1 text-xs text-slate-400">
-                        Jika dikosongkan, sistem dapat menggunakan tanggal hari ini.
+                        Tanggal pengajuan hanya dapat menggunakan tanggal hari ini.
                     </p>
                 </div>
             </div>

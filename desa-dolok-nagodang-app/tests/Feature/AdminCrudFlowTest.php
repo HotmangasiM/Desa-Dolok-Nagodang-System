@@ -171,6 +171,7 @@ class AdminCrudFlowTest extends TestCase
             'code' => 'QA',
             'is_active' => true,
         ]);
+        $today = now()->toDateString();
 
         $this->post(route('admin.news.store'), [
             'title' => 'QA News Title',
@@ -259,7 +260,7 @@ class AdminCrudFlowTest extends TestCase
             'citizen_id' => $citizen->id,
             'subject' => 'Surat QA Invalid',
             'status' => 'submitted',
-            'submission_date' => '2026-06-04',
+            'submission_date' => $today,
             'payload' => [
                 'child_name' => 'Anak 123!',
                 'child_birth' => 'Balige @ 2005_01_01',
@@ -290,9 +291,29 @@ class AdminCrudFlowTest extends TestCase
         $this->post(route('admin.letters.store'), [
             'letter_type_id' => $letterType->id,
             'citizen_id' => $citizen->id,
+            'subject' => 'Surat QA Invalid Date Past',
+            'status' => 'submitted',
+            'submission_date' => now()->subDay()->toDateString(),
+        ])->assertSessionHasErrors([
+            'submission_date',
+        ]);
+
+        $this->post(route('admin.letters.store'), [
+            'letter_type_id' => $letterType->id,
+            'citizen_id' => $citizen->id,
+            'subject' => 'Surat QA Invalid Date Future',
+            'status' => 'submitted',
+            'submission_date' => now()->addDay()->toDateString(),
+        ])->assertSessionHasErrors([
+            'submission_date',
+        ]);
+
+        $this->post(route('admin.letters.store'), [
+            'letter_type_id' => $letterType->id,
+            'citizen_id' => $citizen->id,
             'subject' => 'Surat QA',
             'status' => 'submitted',
-            'submission_date' => '2026-06-04',
+            'submission_date' => $today,
             'payload' => [
                 'purpose' => 'Testing QA',
                 'father_income' => '500000',
@@ -334,7 +355,7 @@ class AdminCrudFlowTest extends TestCase
             'citizen_id' => $citizen->id,
             'subject' => 'Surat QA Updated',
             'status' => 'completed',
-            'submission_date' => '2026-06-04',
+            'submission_date' => $today,
             'payload' => [
                 'purpose' => 'Testing QA Updated',
                 'father_income' => '1000000',
