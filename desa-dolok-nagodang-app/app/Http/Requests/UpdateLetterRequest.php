@@ -29,7 +29,7 @@ class UpdateLetterRequest extends FormRequest
             'description' => 'nullable|string',
             'payload' => 'nullable|array',
             'status' => 'required|in:submitted,processed,completed',
-            'submission_date' => 'nullable|date',
+            'submission_date' => 'nullable|date|date_equals:today',
             'result_file' => 'nullable|string|max:255',
             'notes' => 'nullable|string',
         ];
