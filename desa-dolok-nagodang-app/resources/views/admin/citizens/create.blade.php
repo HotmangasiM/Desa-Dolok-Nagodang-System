@@ -85,6 +85,8 @@
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">No. KK</label>
                     <input type="text" name="family_card_number" value="{{ old('family_card_number') }}"
+                           inputmode="numeric" maxlength="16" pattern="[0-9]{16}"
+                           oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 16)"
                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                            placeholder="Masukkan nomor kartu keluarga">
                 </div>
@@ -102,12 +104,14 @@
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Tempat Lahir</label>
                     <input type="text" name="birth_place" value="{{ old('birth_place') }}"
+                           maxlength="100" oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')"
                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
                 </div>
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Tanggal Lahir</label>
                     <input type="date" name="birth_date" value="{{ old('birth_date') }}"
+                           max="{{ now()->toDateString() }}"
                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
                 </div>
 

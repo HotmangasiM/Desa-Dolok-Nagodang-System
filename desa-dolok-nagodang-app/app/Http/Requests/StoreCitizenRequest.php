@@ -26,13 +26,13 @@ class StoreCitizenRequest extends FormRequest
             'nik' => 'required|digits:16|unique:citizens,nik',
             'full_name' => ['required', 'string', 'max:255', 'regex:/^[\pL\s]+$/u'],
             'gender' => 'required|string|in:Laki-laki,Perempuan',
-            'birth_place' => 'nullable|string|max:100',
-            'birth_date' => 'nullable|date',
+            'birth_place' => ['nullable', 'string', 'max:100', 'regex:/^[\pL\s]+$/u'],
+            'birth_date' => 'nullable|date|before_or_equal:today',
             'religion'  => 'nullable|string|max:100',
             'education' => 'nullable|string|max:100',
             'occupation' => 'nullable|string|max:100',
             'marital_status' => 'nullable|string|max:50',
-            'family_card_number' => 'nullable|string|max:20',
+            'family_card_number' => 'nullable|digits:16',
             'address' => 'nullable|string',
             'rt' => 'nullable|string|max:3',
             'rw' => 'nullable|string|max:3',
@@ -51,7 +51,10 @@ class StoreCitizenRequest extends FormRequest
     {
         return [
             'nik.digits' => 'NIK harus berisi tepat 16 digit angka.',
+            'family_card_number.digits' => 'No. KK harus berisi tepat 16 digit angka.',
             'full_name.regex' => 'Nama lengkap hanya boleh berisi huruf dan spasi.',
+            'birth_place.regex' => 'Tempat lahir hanya boleh berisi huruf dan spasi.',
+            'birth_date.before_or_equal' => 'Tanggal lahir tidak boleh melebihi hari ini.',
         ];
     }
 }
