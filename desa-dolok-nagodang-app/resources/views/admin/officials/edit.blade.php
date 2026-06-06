@@ -160,6 +160,7 @@
                     <input
                         type="date"
                         name="term_start"
+                        id="term_start"
                         value="{{ old('term_start', $official->term_start ? $official->term_start->format('Y-m-d') : '') }}"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     >
@@ -170,7 +171,9 @@
                     <input
                         type="date"
                         name="term_end"
+                        id="term_end"
                         value="{{ old('term_end', $official->term_end ? $official->term_end->format('Y-m-d') : '') }}"
+                        data-requires-term-start
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     >
                 </div>
@@ -215,6 +218,28 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    const termStartInput = document.getElementById('term_start');
+    const termEndInput = document.getElementById('term_end');
+
+    function syncTermEndState() {
+        if (!termStartInput || !termEndInput) return;
+
+        const hasStartDate = Boolean(termStartInput.value);
+
+        termEndInput.disabled = !hasStartDate;
+        termEndInput.min = hasStartDate ? termStartInput.value : '';
+
+        if (!hasStartDate) {
+            termEndInput.value = '';
+        }
+    }
+
+    syncTermEndState();
+
+    if (termStartInput) {
+        termStartInput.addEventListener('input', syncTermEndState);
+        termStartInput.addEventListener('change', syncTermEndState);
+    }
 
     if (typeof Swal === 'undefined') {
         console.error('SweetAlert tidak ter-load!');

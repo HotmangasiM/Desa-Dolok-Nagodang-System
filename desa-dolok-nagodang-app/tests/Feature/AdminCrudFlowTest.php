@@ -59,6 +59,8 @@ class AdminCrudFlowTest extends TestCase
             'regency' => 'Toba!',
             'province' => 'Sumut123',
             'postal_code' => 'ABCDE',
+            'phone' => '0812-ABC!',
+            'email' => 'emailtanpaat',
             'gender' => 'Laki-laki',
             'life_status' => 'alive',
         ])->assertSessionHasErrors([
@@ -76,6 +78,8 @@ class AdminCrudFlowTest extends TestCase
             'regency',
             'province',
             'postal_code',
+            'phone',
+            'email',
         ]);
 
         $this->post(route('admin.citizens.store'), [
@@ -96,6 +100,7 @@ class AdminCrudFlowTest extends TestCase
             'province' => 'Sumatera Utara',
             'postal_code' => '22386',
             'phone' => '081234567890',
+            'email' => 'qa.citizen@desa.test',
             'life_status' => 'alive',
         ])->assertRedirect(route('admin.citizens.index'));
 
@@ -121,6 +126,7 @@ class AdminCrudFlowTest extends TestCase
             'province' => 'Sumatera Utara',
             'postal_code' => '22381',
             'phone' => '081111111111',
+            'email' => 'qa.citizen.updated@desa.test',
             'life_status' => 'deceased',
         ])->assertRedirect(route('admin.citizens.index'));
 
@@ -138,6 +144,8 @@ class AdminCrudFlowTest extends TestCase
             'regency' => 'Toba',
             'province' => 'Sumatera Utara',
             'postal_code' => '22381',
+            'phone' => '081111111111',
+            'email' => 'qa.citizen.updated@desa.test',
             'life_status' => 'deceased',
         ]);
 
@@ -209,10 +217,20 @@ class AdminCrudFlowTest extends TestCase
         $this->assertSoftDeleted('assets', ['id' => $asset->id]);
 
         $this->post(route('admin.officials.store'), [
+            'name' => 'QA Official Invalid',
+            'position' => 'Kepala QA',
+            'term_end' => '2026-12-31',
+        ])->assertSessionHasErrors([
+            'term_end',
+        ]);
+
+        $this->post(route('admin.officials.store'), [
             'name' => 'QA Official',
             'position' => 'Kepala QA',
             'phone' => '080000000001',
             'email' => 'official@desa.test',
+            'term_start' => '2026-01-01',
+            'term_end' => '2026-12-31',
             'sort_order' => 1,
         ])->assertRedirect(route('admin.officials.index'));
 
@@ -222,12 +240,52 @@ class AdminCrudFlowTest extends TestCase
             'position' => 'Sekretaris QA',
             'phone' => '080000000002',
             'email' => 'official-updated@desa.test',
+            'term_start' => '2026-02-01',
+            'term_end' => '2026-11-30',
             'sort_order' => 2,
         ])->assertRedirect(route('admin.officials.index'));
-        $this->assertDatabaseHas('officials', ['id' => $official->id, 'phone' => '080000000002']);
+        $this->assertDatabaseHas('officials', [
+            'id' => $official->id,
+            'phone' => '080000000002',
+            'term_start' => '2026-02-01 00:00:00',
+            'term_end' => '2026-11-30 00:00:00',
+        ]);
 
         $this->delete(route('admin.officials.destroy', $official))->assertRedirect(route('admin.officials.index'));
         $this->assertSoftDeleted('officials', ['id' => $official->id]);
+
+        $this->post(route('admin.letters.store'), [
+            'letter_type_id' => $letterType->id,
+            'citizen_id' => $citizen->id,
+            'subject' => 'Surat QA Invalid',
+            'status' => 'submitted',
+            'submission_date' => '2026-06-04',
+            'payload' => [
+                'child_name' => 'Anak 123!',
+                'child_birth' => 'Balige @ 2005_01_01',
+                'child_gender' => 'Laki-laki1',
+                'child_job' => 'Pelajar123!',
+                'child_religion' => 'Islam@',
+                'child_address' => 'Dusun QA #1',
+                'business_name' => 'Warung 123!',
+                'business_type' => 'Perdagangan @Pasar',
+                'father_name' => 'Ayah 123!',
+                'mother_name' => 'Ibu @QA',
+                'guardian_name' => 'Wali #1',
+            ],
+        ])->assertSessionHasErrors([
+            'payload.child_name',
+            'payload.child_birth',
+            'payload.child_gender',
+            'payload.child_job',
+            'payload.child_religion',
+            'payload.child_address',
+            'payload.business_name',
+            'payload.business_type',
+            'payload.father_name',
+            'payload.mother_name',
+            'payload.guardian_name',
+        ]);
 
         $this->post(route('admin.letters.store'), [
             'letter_type_id' => $letterType->id,
@@ -239,6 +297,17 @@ class AdminCrudFlowTest extends TestCase
                 'purpose' => 'Testing QA',
                 'father_income' => '500000',
                 'mother_income' => 'Rp. 750.000/Bulan',
+                'child_name' => 'Anak QA',
+                'child_birth' => 'Balige, 2005-01-01',
+                'child_gender' => 'Laki laki',
+                'child_job' => 'Pelajar',
+                'child_religion' => 'Islam',
+                'child_address' => 'Dusun QA, RT 1/RW 2',
+                'business_name' => 'Warung Sembako',
+                'business_type' => 'Perdagangan',
+                'father_name' => 'Ayah QA',
+                'mother_name' => 'Ibu QA',
+                'guardian_name' => 'Wali QA',
             ],
         ])->assertRedirect(route('admin.letters.index'));
 
@@ -247,6 +316,17 @@ class AdminCrudFlowTest extends TestCase
         $this->assertSame($citizen->nik, $letter->applicant_national_id);
         $this->assertSame('Rp 500.000', $letter->payload['father_income']);
         $this->assertSame('Rp 750.000', $letter->payload['mother_income']);
+        $this->assertSame('Anak QA', $letter->payload['child_name']);
+        $this->assertSame('Balige, 2005-01-01', $letter->payload['child_birth']);
+        $this->assertSame('Laki laki', $letter->payload['child_gender']);
+        $this->assertSame('Pelajar', $letter->payload['child_job']);
+        $this->assertSame('Islam', $letter->payload['child_religion']);
+        $this->assertSame('Dusun QA, RT 1/RW 2', $letter->payload['child_address']);
+        $this->assertSame('Warung Sembako', $letter->payload['business_name']);
+        $this->assertSame('Perdagangan', $letter->payload['business_type']);
+        $this->assertSame('Ayah QA', $letter->payload['father_name']);
+        $this->assertSame('Ibu QA', $letter->payload['mother_name']);
+        $this->assertSame('Wali QA', $letter->payload['guardian_name']);
 
         $this->put(route('admin.letters.update', $letter->id), [
             'letter_number' => $letter->letter_number,
@@ -259,6 +339,17 @@ class AdminCrudFlowTest extends TestCase
                 'purpose' => 'Testing QA Updated',
                 'father_income' => '1000000',
                 'mother_income' => '1250000',
+                'child_name' => 'Anak QA Update',
+                'child_birth' => 'Balige, 2005-02-02',
+                'child_gender' => 'Perempuan',
+                'child_job' => 'Mahasiswa',
+                'child_religion' => 'Kristen',
+                'child_address' => 'Dusun QA Baru, RT 3/RW 4',
+                'business_name' => 'Kedai Kopi',
+                'business_type' => 'Jasa',
+                'father_name' => 'Ayah QA Update',
+                'mother_name' => 'Ibu QA Update',
+                'guardian_name' => 'Wali QA Update',
             ],
         ])->assertRedirect(route('admin.letters.index'));
 
@@ -271,6 +362,17 @@ class AdminCrudFlowTest extends TestCase
         ]);
         $this->assertSame('Rp 1.000.000', $letter->payload['father_income']);
         $this->assertSame('Rp 1.250.000', $letter->payload['mother_income']);
+        $this->assertSame('Anak QA Update', $letter->payload['child_name']);
+        $this->assertSame('Balige, 2005-02-02', $letter->payload['child_birth']);
+        $this->assertSame('Perempuan', $letter->payload['child_gender']);
+        $this->assertSame('Mahasiswa', $letter->payload['child_job']);
+        $this->assertSame('Kristen', $letter->payload['child_religion']);
+        $this->assertSame('Dusun QA Baru, RT 3/RW 4', $letter->payload['child_address']);
+        $this->assertSame('Kedai Kopi', $letter->payload['business_name']);
+        $this->assertSame('Jasa', $letter->payload['business_type']);
+        $this->assertSame('Ayah QA Update', $letter->payload['father_name']);
+        $this->assertSame('Ibu QA Update', $letter->payload['mother_name']);
+        $this->assertSame('Wali QA Update', $letter->payload['guardian_name']);
 
         $this->delete(route('admin.letters.destroy', $letter->id))
             ->assertRedirect(route('admin.letters.index'));

@@ -191,6 +191,8 @@
                                     type="text"
                                     name="payload[father_name]"
                                     value="{{ old('payload.father_name') }}"
+                                    maxlength="255"
+                                    oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')"
                                     class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                                 >
                             </div>
@@ -201,6 +203,8 @@
                                     type="text"
                                     name="payload[mother_name]"
                                     value="{{ old('payload.mother_name') }}"
+                                    maxlength="255"
+                                    oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')"
                                     class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                                 >
                             </div>
@@ -234,6 +238,8 @@
                                     type="text"
                                     name="payload[guardian_name]"
                                     value="{{ old('payload.guardian_name') }}"
+                                    maxlength="255"
+                                    oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')"
                                     class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                                     placeholder="Contoh: Nama ibu / wali"
                                 >
@@ -345,6 +351,8 @@
                                 <label class="block text-sm font-semibold text-slate-700 mb-2">Nama Anak</label>
                                 <input id="payload_child_name" type="text" name="payload[child_name]"
                                     value="{{ old('payload.child_name') }}"
+                                    readonly
+                                    maxlength="255" oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')"
                                     class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm">
                             </div>
 
@@ -352,6 +360,8 @@
                                 <label class="block text-sm font-semibold text-slate-700 mb-2">TTL Anak</label>
                                 <input id="payload_child_birth" type="text" name="payload[child_birth]"
                                     value="{{ old('payload.child_birth') }}"
+                                    readonly
+                                    maxlength="255" oninput="this.value = this.value.replace(/[^A-Za-z0-9\s,.\-\/]/g, '')"
                                     class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm">
                             </div>
 
@@ -359,6 +369,8 @@
                                 <label class="block text-sm font-semibold text-slate-700 mb-2">Jenis Kelamin</label>
                                 <input id="payload_child_gender" type="text" name="payload[child_gender]"
                                     value="{{ old('payload.child_gender') }}"
+                                    readonly
+                                    maxlength="50" oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')"
                                     class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm">
                             </div>
 
@@ -366,6 +378,8 @@
                                 <label class="block text-sm font-semibold text-slate-700 mb-2">Pekerjaan</label>
                                 <input id="payload_child_job" type="text" name="payload[child_job]"
                                     value="{{ old('payload.child_job') }}"
+                                    readonly
+                                    maxlength="100" oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')"
                                     class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm">
                             </div>
 
@@ -373,6 +387,8 @@
                                 <label class="block text-sm font-semibold text-slate-700 mb-2">Agama</label>
                                 <input id="payload_child_religion" type="text" name="payload[child_religion]"
                                     value="{{ old('payload.child_religion') }}"
+                                    readonly
+                                    maxlength="100" oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')"
                                     class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm">
                             </div>
 
@@ -380,6 +396,8 @@
                                 <label class="block text-sm font-semibold text-slate-700 mb-2">Alamat</label>
                                 <input id="payload_child_address" type="text" name="payload[child_address]"
                                     value="{{ old('payload.child_address') }}"
+                                    readonly
+                                    maxlength="255" oninput="this.value = this.value.replace(/[^A-Za-z0-9\s,.\-\/]/g, '')"
                                     class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm">
                             </div>
                         </div>
@@ -394,6 +412,8 @@
                             type="text"
                             name="payload[business_name]"
                             value="{{ old('payload.business_name') }}"
+                            maxlength="255"
+                            oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')"
                             class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                             placeholder="Contoh: Warung Sembako"
                         >
@@ -405,6 +425,8 @@
                             type="text"
                             name="payload[business_type]"
                             value="{{ old('payload.business_type') }}"
+                            maxlength="255"
+                            oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')"
                             class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                             placeholder="Contoh: Perdagangan"
                         >
