@@ -47,11 +47,17 @@ class AdminCrudFlowTest extends TestCase
         $this->post(route('admin.citizens.store'), [
             'nik' => 'ABC4567890123456',
             'full_name' => 'QA Citizen 123!',
+            'family_card_number' => 'KK-1234567890ABC',
+            'birth_place' => 'Medan-123!',
+            'birth_date' => now()->addDay()->toDateString(),
             'gender' => 'Laki-laki',
             'life_status' => 'alive',
         ])->assertSessionHasErrors([
             'nik',
             'full_name',
+            'family_card_number',
+            'birth_place',
+            'birth_date',
         ]);
 
         $this->post(route('admin.citizens.store'), [
@@ -60,6 +66,7 @@ class AdminCrudFlowTest extends TestCase
             'gender' => 'Laki-laki',
             'birth_place' => 'Dolok Nagodang',
             'birth_date' => '1990-01-01',
+            'family_card_number' => '1234567890123450',
             'address' => 'Dusun QA',
             'phone' => '081234567890',
             'life_status' => 'alive',
@@ -75,6 +82,7 @@ class AdminCrudFlowTest extends TestCase
             'nik' => '1234567890123456',
             'full_name' => 'QA Citizen Updated',
             'gender' => 'Perempuan',
+            'family_card_number' => '1234567890123451',
             'address' => 'Dusun QA Updated',
             'phone' => '081111111111',
             'life_status' => 'deceased',
@@ -84,6 +92,7 @@ class AdminCrudFlowTest extends TestCase
             'id' => $citizen->id,
             'full_name' => 'QA Citizen Updated',
             'gender' => 'Perempuan',
+            'family_card_number' => '1234567890123451',
             'life_status' => 'deceased',
         ]);
 
