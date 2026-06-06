@@ -41,7 +41,7 @@ class StoreCitizenRequest extends FormRequest
             'regency' => ['nullable', 'string', 'max:100', 'regex:/^[\pL\s]+$/u'],
             'province' => ['nullable', 'string', 'max:100', 'regex:/^[\pL\s]+$/u'],
             'postal_code' => 'nullable|digits:5',
-            'phone' => 'nullable|string|max:20',
+            'phone' => 'nullable|digits_between:10,20',
             'email' => 'nullable|email|max:255',
             'life_status' => 'required|in:alive,deceased',
         ];
@@ -64,6 +64,8 @@ class StoreCitizenRequest extends FormRequest
             'regency.regex' => 'Kabupaten hanya boleh berisi huruf dan spasi.',
             'province.regex' => 'Provinsi hanya boleh berisi huruf dan spasi.',
             'postal_code.digits' => 'Kode Pos harus berisi tepat 5 digit angka.',
+            'phone.digits_between' => 'No. HP hanya boleh berisi angka dengan panjang 10 sampai 20 digit.',
+            'email.email' => 'Email harus mengandung tanda @ dan menggunakan format email yang valid.',
         ];
     }
 }

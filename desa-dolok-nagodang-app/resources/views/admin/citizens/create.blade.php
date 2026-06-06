@@ -243,12 +243,16 @@
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">No. HP</label>
                     <input type="text" name="phone" value="{{ old('phone') }}"
+                           inputmode="numeric" maxlength="20"
+                           oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 20)"
                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
                 </div>
 
                 <div class="md:col-span-2 xl:col-span-2">
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Email</label>
                     <input type="email" name="email" value="{{ old('email') }}"
+                           maxlength="255" pattern="[^@\s]+@[^@\s]+"
+                           title="Email harus mengandung tanda @, contoh: nama@example.com"
                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
                 </div>
             </div>
@@ -317,7 +321,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 });
 
-                form.submit();
+                if (form.requestSubmit) {
+                    form.requestSubmit();
+                } else {
+                    form.submit();
+                }
             }
 
         });
