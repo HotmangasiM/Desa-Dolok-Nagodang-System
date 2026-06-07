@@ -30,23 +30,25 @@ class PublicNewsController extends Controller
         ]);
     }
 
-    public function show(string $slug): View
-    {
-        $newsItem = News::where('status', 'published')
-            ->where('slug', $slug)
-            ->firstOrFail();
+   public function show(string $slug): View
+{
+    $newsItem = News::where('status', 'published')
+        ->where('slug', $slug)
+        ->firstOrFail();
 
-        $relatedNews = News::where('status', 'published')
-            ->where('id', '!=', $newsItem->id)
-            ->latest('published_at')
-            ->latest('id')
-            ->take(3)
-            ->get();
+    $newsItem->increment('views');
 
-        return view('public.news.show', [
-            'title' => $newsItem->title,
-            'newsItem' => $newsItem,
-            'relatedNews' => $relatedNews,
-        ]);
-    }
+    $relatedNews = News::where('status', 'published')
+        ->where('id', '!=', $newsItem->id)
+        ->latest('published_at')
+        ->latest('id')
+        ->take(3)
+        ->get();
+
+    return view('public.news.show', [
+        'title' => $newsItem->title,
+        'newsItem' => $newsItem->fresh(),
+        'relatedNews' => $relatedNews,
+    ]);
+}
 }
