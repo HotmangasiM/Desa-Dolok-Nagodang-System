@@ -7,7 +7,6 @@ use App\Models\Citizen;
 use App\Models\Letter;
 use App\Models\News;
 use App\Models\Official;
-use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class AdminDashboardController extends Controller
@@ -57,12 +56,11 @@ class AdminDashboardController extends Controller
         // =============================
         $currentYear = now()->year;
 
-        $lettersByMonth = Letter::selectRaw('MONTH(submission_date) as month, COUNT(*) as total')
+        $lettersByMonth = Letter::query()
             ->whereYear('submission_date', $currentYear)
             ->whereNotNull('submission_date')
-            ->groupBy(DB::raw('MONTH(submission_date)'))
-            ->orderBy(DB::raw('MONTH(submission_date)'))
-            ->pluck('total', 'month');
+            ->pluck('submission_date')
+            ->countBy(fn ($date): int => (int) $date->format('n'));
 
         $monthlyLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
         $monthlyData = [];
@@ -71,17 +69,20 @@ class AdminDashboardController extends Controller
             $monthlyData[] = (int) ($lettersByMonth[$i] ?? 0);
         }
 
-        // =============================
-        // 🔥 DUSUN STATS (DARI ADDRESS)
-        // =============================
-        $dusunStats = DB::table(function ($query) {
-            $query->selectRaw("SUBSTRING_INDEX(address, ' ', 2) as dusun")
-                  ->from('citizens');
-        }, 't')
-        ->select('dusun', DB::raw('COUNT(*) as total'))
-        ->groupBy('dusun')
-        ->orderBy('dusun')
-        ->get();
+        $dusunStats = Citizen::query()
+            ->whereNotNull('address')
+            ->pluck('address')
+            ->map(function (string $address): string {
+                return str($address)->squish()->explode(' ')->take(2)->implode(' ');
+            })
+            ->filter()
+            ->countBy()
+            ->sortKeys()
+            ->map(fn (int $total, string $dusun): object => (object) [
+                'dusun' => $dusun,
+                'total' => $total,
+            ])
+            ->values();
 
         // format untuk chart
         $dusunLabels = $dusunStats->pluck('dusun');

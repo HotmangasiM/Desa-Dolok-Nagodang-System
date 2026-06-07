@@ -141,7 +141,9 @@
                     <input
                         type="date"
                         name="submission_date"
-                        value="{{ old('submission_date', $letter->submission_date ? $letter->submission_date->format('Y-m-d') : '') }}"
+                        value="{{ old('submission_date', now()->toDateString()) }}"
+                        min="{{ now()->toDateString() }}"
+                        max="{{ now()->toDateString() }}"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     >
                 </div>
@@ -235,6 +237,8 @@
                                     type="text"
                                     name="payload[father_name]"
                                     value="{{ $payload['father_name'] ?? '' }}"
+                                    maxlength="255"
+                                    oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')"
                                     class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                                 >
                             </div>
@@ -245,6 +249,8 @@
                                     type="text"
                                     name="payload[mother_name]"
                                     value="{{ $payload['mother_name'] ?? '' }}"
+                                    maxlength="255"
+                                    oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')"
                                     class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                                 >
                             </div>
@@ -276,7 +282,9 @@
                                 <input
                                     type="text"
                                     name="payload[guardian_name]"
-                                    value="{{ old('payload.guardian_name') }}"
+                                    value="{{ old('payload.guardian_name', $payload['guardian_name'] ?? '') }}"
+                                    maxlength="255"
+                                    oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')"
                                     class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                                     placeholder="Contoh: Nama ibu / wali"
                                 >
@@ -341,8 +349,10 @@
                                     type="text"
                                     name="payload[father_income]"
                                     value="{{ $payload['father_income'] ?? '' }}"
+                                    inputmode="numeric"
+                                    data-rupiah-income
                                     class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                                    placeholder="Contoh: Rp. 1.000.000/Bulan"
+                                    placeholder="Contoh: Rp 1.000.000"
                                 >
                             </div>
                         </div>
@@ -381,8 +391,10 @@
                                     type="text"
                                     name="payload[mother_income]"
                                     value="{{ $payload['mother_income'] ?? '' }}"
+                                    inputmode="numeric"
+                                    data-rupiah-income
                                     class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                                    placeholder="Contoh: Rp. 500.000/Bulan"
+                                    placeholder="Contoh: Rp 500.000"
                                 >
                             </div>
                         </div>
@@ -400,6 +412,8 @@
                                     type="text"
                                     name="payload[child_name]"
                                     value="{{ $payload['child_name'] ?? '' }}"
+                                    readonly
+                                    maxlength="255" oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')"
                                     class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                                 >
                             </div>
@@ -411,6 +425,8 @@
                                     type="text"
                                     name="payload[child_birth]"
                                     value="{{ $payload['child_birth'] ?? '' }}"
+                                    readonly
+                                    maxlength="255" oninput="this.value = this.value.replace(/[^A-Za-z0-9\s,.\-\/]/g, '')"
                                     class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                                 >
                             </div>
@@ -422,6 +438,8 @@
                                     type="text"
                                     name="payload[child_gender]"
                                     value="{{ $payload['child_gender'] ?? '' }}"
+                                    readonly
+                                    maxlength="50" oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')"
                                     class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                                 >
                             </div>
@@ -433,6 +451,8 @@
                                     type="text"
                                     name="payload[child_job]"
                                     value="{{ $payload['child_job'] ?? '' }}"
+                                    readonly
+                                    maxlength="100" oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')"
                                     class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                                 >
                             </div>
@@ -444,6 +464,8 @@
                                     type="text"
                                     name="payload[child_religion]"
                                     value="{{ $payload['child_religion'] ?? '' }}"
+                                    readonly
+                                    maxlength="100" oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')"
                                     class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                                 >
                             </div>
@@ -455,6 +477,8 @@
                                     type="text"
                                     name="payload[child_address]"
                                     value="{{ $payload['child_address'] ?? '' }}"
+                                    readonly
+                                    maxlength="255" oninput="this.value = this.value.replace(/[^A-Za-z0-9\s,.\-\/]/g, '')"
                                     class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                                 >
                             </div>
@@ -465,22 +489,26 @@
                 {{-- SKU --}}
                 <div data-letter-fields="SKU" class="letter-fields hidden grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-2">Nama Usaha</label>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Usaha Pokok</label>
                         <input
                             type="text"
                             name="payload[business_name]"
                             value="{{ $payload['business_name'] ?? '' }}"
+                            maxlength="255"
+                            oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')"
                             class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                             placeholder="Contoh: Warung Sembako"
                         >
                     </div>
 
                     <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-2">Jenis Usaha</label>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Usaha Tambahan</label>
                         <input
                             type="text"
                             name="payload[business_type]"
                             value="{{ $payload['business_type'] ?? '' }}"
+                            maxlength="255"
+                            oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')"
                             class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                             placeholder="Contoh: Perdagangan"
                         >
@@ -530,6 +558,23 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    function formatRupiah(value) {
+        const digits = (value || '').replace(/\D/g, '');
+
+        if (!digits) {
+            return '';
+        }
+
+        return 'Rp ' + digits.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    }
+
+    document.querySelectorAll('[data-rupiah-income]').forEach(function (input) {
+        input.value = formatRupiah(input.value);
+
+        input.addEventListener('input', function () {
+            input.value = formatRupiah(input.value);
+        });
+    });
 
     if (typeof Swal === 'undefined') {
         console.error('SweetAlert tidak ter-load!');

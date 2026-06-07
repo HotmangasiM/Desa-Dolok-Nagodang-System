@@ -8,7 +8,6 @@ use App\Models\Citizen;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Illuminate\Support\Facades\DB;
 
 class AdminCitizenPageController extends Controller
 {
@@ -46,17 +45,20 @@ class AdminCitizenPageController extends Controller
         $femaleCitizens = Citizen::where('gender', 'Perempuan')->count();
         $activeCitizens = Citizen::where('life_status', 'alive')->count();
 
-        // =============================
-        // 🔥 STATISTIK PER DUSUN (DARI ADDRESS)
-        // =============================
-        $dusunStats = DB::table(function ($query) {
-                $query->selectRaw("SUBSTRING_INDEX(address, ' ', 2) as dusun")
-                    ->from('citizens');
-            }, 't')
-            ->select('dusun', DB::raw('COUNT(*) as total'))
-            ->groupBy('dusun')
-            ->orderBy('dusun')
-            ->get();
+        $dusunStats = Citizen::query()
+            ->whereNotNull('address')
+            ->pluck('address')
+            ->map(function (string $address): string {
+                return str($address)->squish()->explode(' ')->take(2)->implode(' ');
+            })
+            ->filter()
+            ->countBy()
+            ->sortKeys()
+            ->map(fn (int $total, string $dusun): object => (object) [
+                'dusun' => $dusun,
+                'total' => $total,
+            ])
+            ->values();
 
         return view('admin.citizens.index', [
             'title' => 'Admin Desa - Data Penduduk',

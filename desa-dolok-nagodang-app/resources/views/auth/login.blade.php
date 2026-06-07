@@ -43,7 +43,7 @@
         </h1>
 
         <p class="mt-6 text-sm lg:text-base leading-relaxed text-slate-200/95 max-w-lg">
-            Platform digital desa untuk pelayanan masyarakat, administrasi, transparansi informasi, dan pengelolaan data secara modern, cepat, dan terintegrasi.
+            Platform desa digital untuk pelayanan masyarakat, administrasi, transparansi informasi, dan pengelolaan data secara modern, cepat, dan terintegrasi.
         </p>
 
         <div class="mt-8 max-w-md rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-5 shadow-xl relative overflow-hidden">

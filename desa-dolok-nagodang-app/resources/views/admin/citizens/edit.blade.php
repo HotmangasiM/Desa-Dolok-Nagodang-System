@@ -43,6 +43,8 @@
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">NIK <span class="text-rose-500">*</span></label>
                     <input type="text" name="nik" value="{{ old('nik', $citizen->nik) }}"
+                           inputmode="numeric" maxlength="16" pattern="[0-9]{16}"
+                           oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 16)"
                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                            placeholder="Masukkan 16 digit NIK">
                 </div>
@@ -50,6 +52,7 @@
                 <div class="md:col-span-2">
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Nama Lengkap <span class="text-rose-500">*</span></label>
                     <input type="text" name="full_name" value="{{ old('full_name', $citizen->full_name) }}"
+                           maxlength="255" oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')"
                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                            placeholder="Masukkan nama lengkap">
                 </div>
@@ -83,6 +86,8 @@
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">No. KK</label>
                     <input type="text" name="family_card_number" value="{{ old('family_card_number', $citizen->family_card_number) }}"
+                           inputmode="numeric" maxlength="16" pattern="[0-9]{16}"
+                           oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 16)"
                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                            placeholder="Masukkan nomor kartu keluarga">
                 </div>
@@ -100,12 +105,14 @@
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Tempat Lahir</label>
                     <input type="text" name="birth_place" value="{{ old('birth_place', $citizen->birth_place) }}"
+                           maxlength="100" oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')"
                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
                 </div>
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Tanggal Lahir</label>
                     <input type="date" name="birth_date" value="{{ old('birth_date', $citizen->birth_date) }}"
+                           max="{{ now()->toDateString() }}"
                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
                 </div>
 
@@ -137,12 +144,14 @@
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Pendidikan</label>
                     <input type="text" name="education" value="{{ old('education', $citizen->education) }}"
+                           maxlength="100" oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')"
                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
                 </div>
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Pekerjaan</label>
                     <input type="text" name="occupation" value="{{ old('occupation', $citizen->occupation) }}"
+                           maxlength="100" oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')"
                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
                 </div>
 
@@ -199,54 +208,68 @@
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">RT</label>
                     <input type="text" name="rt" value="{{ old('rt', $citizen->rt) }}"
+                           inputmode="numeric" maxlength="3"
+                           oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 3)"
                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
                 </div>
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">RW</label>
                     <input type="text" name="rw" value="{{ old('rw', $citizen->rw) }}"
+                           inputmode="numeric" maxlength="3"
+                           oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 3)"
                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
                 </div>
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Desa</label>
                     <input type="text" name="village" value="{{ old('village', $citizen->village) }}"
+                           maxlength="100" oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')"
                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
                 </div>
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Kecamatan</label>
                     <input type="text" name="district" value="{{ old('district', $citizen->district) }}"
+                           maxlength="100" oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')"
                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
                 </div>
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Kabupaten</label>
                     <input type="text" name="regency" value="{{ old('regency', $citizen->regency) }}"
+                           maxlength="100" oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')"
                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
                 </div>
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Provinsi</label>
                     <input type="text" name="province" value="{{ old('province', $citizen->province) }}"
+                           maxlength="100" oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')"
                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
                 </div>
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Kode Pos</label>
                     <input type="text" name="postal_code" value="{{ old('postal_code', $citizen->postal_code) }}"
+                           inputmode="numeric" maxlength="5" pattern="[0-9]{5}"
+                           oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 5)"
                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
                 </div>
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">No. HP</label>
                     <input type="text" name="phone" value="{{ old('phone', $citizen->phone) }}"
+                           inputmode="numeric" maxlength="20"
+                           oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 20)"
                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
                 </div>
 
                 <div class="md:col-span-2 xl:col-span-2">
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Email</label>
                     <input type="email" name="email" value="{{ old('email', $citizen->email) }}"
+                           maxlength="255" pattern="[^@\s]+@[^@\s]+"
+                           title="Email harus mengandung tanda @, contoh: nama@example.com"
                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
                 </div>
             </div>
@@ -309,6 +332,10 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
+        if (!form.reportValidity()) {
+            return;
+        }
+
         Swal.fire({
             title: 'Simpan Perubahan?',
             html: `
@@ -339,7 +366,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 });
 
-                form.submit();
+                form.dataset.confirmed = 'true';
+
+                if (form.requestSubmit) {
+                    form.requestSubmit();
+                } else {
+                    form.submit();
+                }
             }
 
         });

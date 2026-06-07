@@ -1,5 +1,91 @@
 @extends('layouts.public')
 
+@push('styles')
+<style>
+    .news-article-content {
+        color: #334155;
+        font-size: 1.075rem;
+        line-height: 1.9;
+        overflow-wrap: anywhere;
+    }
+
+    .news-article-content h2 {
+        margin: 2rem 0 0.8rem;
+        color: #0f172a;
+        font-size: 1.85rem;
+        font-weight: 900;
+        line-height: 1.25;
+    }
+
+    .news-article-content h3 {
+        margin: 1.6rem 0 0.7rem;
+        color: #0f172a;
+        font-size: 1.35rem;
+        font-weight: 800;
+        line-height: 1.3;
+    }
+
+    .news-article-content h4 {
+        margin: 1.3rem 0 0.6rem;
+        color: #1e293b;
+        font-size: 1.1rem;
+        font-weight: 800;
+    }
+
+    .news-article-content p,
+    .news-article-content ul,
+    .news-article-content ol,
+    .news-article-content blockquote,
+    .news-article-content pre {
+        margin: 1rem 0;
+    }
+
+    .news-article-content ul,
+    .news-article-content ol {
+        padding-left: 1.75rem;
+    }
+
+    .news-article-content ul {
+        list-style: disc;
+    }
+
+    .news-article-content ol {
+        list-style: decimal;
+    }
+
+    .news-article-content li {
+        margin: 0.35rem 0;
+        padding-left: 0.25rem;
+    }
+
+    .news-article-content blockquote {
+        border-left: 4px solid #10b981;
+        border-radius: 0 0.75rem 0.75rem 0;
+        background: #ecfdf5;
+        padding: 1rem 1.25rem;
+        color: #334155;
+        font-style: italic;
+    }
+
+    .news-article-content a {
+        color: #047857;
+        font-weight: 700;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+    }
+
+    .news-article-content pre {
+        overflow-x: auto;
+        border-radius: 0.75rem;
+        background: #0f172a;
+        padding: 1rem;
+        color: #e2e8f0;
+        font-size: 0.95rem;
+        line-height: 1.7;
+    }
+</style>
+@endpush
+
 @section('content')
 
 <section class="bg-white">
@@ -59,8 +145,6 @@
     </span>
 
 </div>
-
-
                     {{-- Title --}}
                     <div class="mt-5">
 
@@ -165,8 +249,6 @@
 
                 @endif
 
-
-
                 {{-- ARTICLE --}}
                 <!-- <article class="mt-8"> -->
 
@@ -181,9 +263,9 @@
 
 
                     {{-- Content --}}
-                    <div class="mt-8 text-[18px] leading-9 text-slate-700 whitespace-pre-line">
+                    <div class="news-article-content mt-8">
 
-                        {{ $newsItem->content }}
+                        {!! $newsItem->content !!}
 
                     </div>
 

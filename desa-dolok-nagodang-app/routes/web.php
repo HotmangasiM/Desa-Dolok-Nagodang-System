@@ -99,7 +99,7 @@ Route::middleware('track.visitor')->group(function () {
 // Route::prefix('admin')->name('admin.')->group(function () {
 //     Route::resource('infrastructure', InfrastructureController::class);
 // });
-Route::prefix('admin/infrastructure')->name('admin.infrastructure.')->group(function () {
+Route::middleware('auth')->prefix('admin/infrastructure')->name('admin.infrastructure.')->group(function () {
     Route::get('/', [PublicInfrastructureController::class, 'adminIndex'])->name('index');
     Route::get('/create', [PublicInfrastructureController::class, 'create'])->name('create');
     Route::post('/', [PublicInfrastructureController::class, 'store'])->name('store');
