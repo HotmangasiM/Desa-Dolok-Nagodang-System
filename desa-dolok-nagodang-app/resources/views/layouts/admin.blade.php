@@ -6,6 +6,7 @@
     <title>{{ $title ?? 'Admin Desa' }}</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @stack('styles')
 
     {{-- Lucide Icons --}}
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -38,52 +39,50 @@
         <nav class="flex-1 px-4 py-6 space-y-2">
 
             @php
-                function menuClass($route) {
-                    return request()->routeIs($route)
+                $menuClass = fn ($route) => request()->routeIs($route)
                         ? 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-lg'
                         : 'text-slate-300 hover:bg-slate-800 hover:text-white';
-                }
             @endphp
 
             <a href="{{ route('admin.dashboard') }}"
-               class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium {{ menuClass('admin.dashboard') }}">
+               class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium {{ $menuClass('admin.dashboard') }}">
                 <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
                 Dashboard
             </a>
 
             <a href="{{ route('admin.citizens.index') }}"
-               class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium {{ menuClass('admin.citizens.*') }}">
+               class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium {{ $menuClass('admin.citizens.*') }}">
                 <i data-lucide="users" class="w-5 h-5"></i>
                 Data Penduduk
             </a>
 
             <a href="{{ route('admin.officials.index') }}"
-               class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium {{ menuClass('admin.officials.*') }}">
+               class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium {{ $menuClass('admin.officials.*') }}">
                 <i data-lucide="briefcase" class="w-5 h-5"></i>
                 Aparat Desa
             </a>
 
             <a href="{{ route('admin.letters.index') }}"
-               class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium {{ menuClass('admin.letters.*') }}">
+               class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium {{ $menuClass('admin.letters.*') }}">
                 <i data-lucide="file-text" class="w-5 h-5"></i>
                 Surat
             </a>
 
             <a href="{{ route('admin.news.index') }}"
-               class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium {{ menuClass('admin.news.*') }}">
+               class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium {{ $menuClass('admin.news.*') }}">
                 <i data-lucide="newspaper" class="w-5 h-5"></i>
                 Berita
             </a>
 
             <a href="{{ route('admin.assets.index') }}"
-               class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium {{ menuClass('admin.assets.*') }}">
+               class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium {{ $menuClass('admin.assets.*') }}">
                 <i data-lucide="package" class="w-5 h-5"></i>
                 Inventaris
             </a>
 
             {{-- INFRASRUKTUR (FIXED) --}}
             <a href="{{ route('admin.infrastructure.index') }}"
-               class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white">
+               class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium {{ $menuClass('admin.infrastructure.*') }}">
 
                 <i data-lucide="building-2" class="w-5 h-5"></i>
                 Infrastruktur
@@ -166,7 +165,7 @@
             </a>
 
             {{-- INFRASRUKTUR MOBILE --}}
-            <a href="{{ route('public.infrastruktur.index') }}" class="flex items-center gap-3 py-2">
+            <a href="{{ route('admin.infrastructure.index') }}" class="flex items-center gap-3 py-2">
                 <i data-lucide="building-2"></i> Infrastruktur
             </a>
 
@@ -186,13 +185,47 @@
                         <i data-lucide="menu"></i>
                     </button>
 
-                    <div>
-                        <h1 class="font-bold text-lg text-slate-800">
+                    <div class="min-w-0">
+                        <nav class="hidden sm:flex items-center gap-2 text-sm text-slate-500 mb-1">
+                            <a href="{{ route('admin.dashboard') }}" class="hover:text-slate-700 transition">
+                                Admin
+                            </a>
+
+                            @isset($breadcrumbs)
+                                @foreach ($breadcrumbs as $breadcrumb)
+                                    <span>/</span>
+
+                                    @if (!empty($breadcrumb['url']))
+                                        <a href="{{ $breadcrumb['url'] }}" class="hover:text-slate-700 transition">
+                                            {{ $breadcrumb['label'] }}
+                                        </a>
+                                    @else
+                                        <span class="text-slate-700 font-medium">
+                                            {{ $breadcrumb['label'] }}
+                                        </span>
+                                    @endif
+                                @endforeach
+                            @else
+                                <span>/</span>
+                                <span class="text-slate-700 font-medium">
+                                    {{ $pageTitle ?? 'Dashboard' }}
+                                </span>
+                            @endisset
+                        </nav>
+
+                        <h1 class="font-bold text-lg text-slate-800 truncate">
                             {{ $pageTitle ?? 'Dashboard' }}
                         </h1>
-                        <p class="text-xs text-slate-500">
-                            Administrator Panel
-                        </p>
+
+                        @isset($pageDescription)
+                            <p class="hidden sm:block text-xs text-slate-500 mt-1">
+                                {{ $pageDescription }}
+                            </p>
+                        @else
+                            <p class="hidden sm:block text-xs text-slate-500 mt-1">
+                                Administrator Panel
+                            </p>
+                        @endisset
                     </div>
                 </div>
 
@@ -242,6 +275,38 @@
 
 {{-- SCRIPT --}}
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@if(session('success'))
+<script>
+Swal.fire({
+    icon: 'success',
+    title: 'Berhasil',
+    text: '{{ session('success') }}',
+    confirmButtonColor: '#10b981'
+});
+</script>
+@endif
+
+@if(session('error'))
+<script>
+Swal.fire({
+    icon: 'error',
+    title: 'Gagal',
+    text: '{{ session('error') }}',
+    confirmButtonColor: '#ef4444'
+});
+</script>
+@endif
+
+@if(session('warning'))
+<script>
+Swal.fire({
+    icon: 'warning',
+    title: 'Peringatan',
+    text: '{{ session('warning') }}'
+});
+</script>
+@endif
 
 <script>
 function toggleSidebar() {
