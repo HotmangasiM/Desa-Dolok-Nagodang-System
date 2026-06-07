@@ -63,27 +63,44 @@ class PublicInfrastructureController extends Controller
     */
 
     public function adminIndex(Request $request)
-    {
-        $query = Infrastructure::query();
+{
+    $query = Infrastructure::query();
 
-        if ($request->filled('search')) {
-            $query->where(
-                'title',
-                'like',
-                '%' . $request->search . '%'
-            );
-        }
-
-        $data = $query
-            ->latest()
-            ->paginate(10)
-            ->withQueryString();
-
-        return view(
-            'admin.infrastructure.index',
-            compact('data')
+    if ($request->filled('search')) {
+        $query->where(
+            'title',
+            'like',
+            '%' . $request->search . '%'
         );
     }
+
+    $data = $query
+        ->latest()
+        ->paginate(10)
+        ->withQueryString();
+
+    $allInfrastructure = Infrastructure::count();
+
+    $publishedInfrastructure = Infrastructure::where(
+        'status',
+        'publish'
+    )->count();
+
+    $draftInfrastructure = Infrastructure::where(
+        'status',
+        'draft'
+    )->count();
+
+    return view(
+        'admin.infrastructure.index',
+        compact(
+            'data',
+            'allInfrastructure',
+            'publishedInfrastructure',
+            'draftInfrastructure'
+        )
+    );
+}
 
     public function create()
     {
