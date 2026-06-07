@@ -62,7 +62,7 @@
                     <input
                         type="file"
                         name="image"
-                        accept="image/*"
+                        accept=".jpg,.jpeg,.png,image/jpeg,image/png"
                         onchange="previewImage(event)"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     >
@@ -83,6 +83,7 @@
                         type="datetime-local"
                         name="published_at"
                         value="{{ old('published_at') }}"
+                        min="{{ now()->startOfDay()->format('Y-m-d\TH:i') }}"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     >
                 </div>
@@ -91,12 +92,11 @@
                     <label class="block text-sm font-semibold text-slate-700 mb-2">
                         Konten Berita <span class="text-rose-500">*</span>
                     </label>
-                    <textarea
-                        name="content"
-                        rows="12"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm leading-6 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                        placeholder="Tulis isi berita desa di sini..."
-                    >{{ old('content') }}</textarea>
+                    @include('admin.news.partials.rich-text-editor', [
+                        'content' => old('content'),
+                        'editorId' => 'newsContentCreateEditor',
+                        'inputId' => 'newsContentCreateInput',
+                    ])
                 </div>
             </div>
         </div>
@@ -125,6 +125,16 @@ function previewImage(event) {
 
     if (!input.files || !input.files[0] || !preview) return;
 
+    const allowedTypes = ['image/jpeg', 'image/png'];
+    const file = input.files[0];
+
+    if (!allowedTypes.includes(file.type)) {
+        input.value = '';
+        preview.classList.add('hidden');
+        alert('Thumbnail hanya boleh menggunakan format JPG, JPEG, atau PNG.');
+        return;
+    }
+
     const reader = new FileReader();
 
     reader.onload = function (e) {
@@ -132,7 +142,7 @@ function previewImage(event) {
         preview.classList.remove('hidden');
     };
 
-    reader.readAsDataURL(input.files[0]);
+    reader.readAsDataURL(file);
 }
 
 document.addEventListener('DOMContentLoaded', function () {

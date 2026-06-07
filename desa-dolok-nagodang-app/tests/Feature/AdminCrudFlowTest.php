@@ -10,6 +10,7 @@ use App\Models\News;
 use App\Models\Official;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
 
 class AdminCrudFlowTest extends TestCase
@@ -172,24 +173,58 @@ class AdminCrudFlowTest extends TestCase
             'is_active' => true,
         ]);
         $today = now()->toDateString();
+        $uploadedAt = now()->format('Y-m-d\TH:i');
+
+        $this->post(route('admin.news.store'), [
+            'title' => 'QA News Invalid File',
+            'content' => 'Konten berita QA',
+            'status' => 'published',
+            'published_at' => $uploadedAt,
+            'image' => UploadedFile::fake()->create('thumbnail.pdf', 10, 'application/pdf'),
+        ])->assertSessionHasErrors([
+            'image',
+        ]);
+
+        $this->post(route('admin.news.store'), [
+            'title' => 'QA News Invalid Date',
+            'content' => 'Konten berita QA',
+            'status' => 'published',
+            'published_at' => now()->subDay()->format('Y-m-d\TH:i'),
+        ])->assertSessionHasErrors([
+            'published_at',
+        ]);
 
         $this->post(route('admin.news.store'), [
             'title' => 'QA News Title',
-            'content' => 'Konten berita QA',
+            'content' => '<h2>Judul Bagian</h2><p style="margin-left: 40px;"><strong>Konten tebal QA</strong></p><ul><li>Poin pertama</li></ul><a href="https://desa.test" onclick="alert(1)">Tautan Desa</a><script>alert("xss")</script>',
             'status' => 'published',
-            'published_at' => '2026-06-04',
+            'published_at' => $uploadedAt,
         ])->assertRedirect(route('admin.news.index'));
 
         $news = News::where('title', 'QA News Title')->firstOrFail();
         $this->assertSame('qa-news-title', $news->slug);
+        $this->assertStringContainsString('<strong>Konten tebal QA</strong>', $news->content);
+        $this->assertStringContainsString('<ul><li>Poin pertama</li></ul>', $news->content);
+        $this->assertStringNotContainsString('<script>', $news->content);
+        $this->assertStringNotContainsString('onclick', $news->content);
+
+        $this->get(route('public.news.show', $news->slug))
+            ->assertOk()
+            ->assertSee('<strong>Konten tebal QA</strong>', false)
+            ->assertSee('<ul><li>Poin pertama</li></ul>', false)
+            ->assertDontSee('alert("xss")', false)
+            ->assertDontSee('onclick="alert(1)"', false);
 
         $this->put(route('admin.news.update', $news), [
             'title' => 'QA News Title Updated',
-            'content' => 'Konten berita QA updated',
+            'content' => '<h3>Subjudul Update</h3><ol><li>Langkah pertama</li></ol><blockquote>Catatan penting</blockquote>',
             'status' => 'draft',
-            'published_at' => '2026-06-04',
+            'published_at' => $uploadedAt,
         ])->assertRedirect(route('admin.news.index'));
-        $this->assertDatabaseHas('news', ['id' => $news->id, 'status' => 'draft']);
+        $news->refresh();
+        $this->assertSame('draft', $news->status);
+        $this->assertStringContainsString('<h3>Subjudul Update</h3>', $news->content);
+        $this->assertStringContainsString('<ol><li>Langkah pertama</li></ol>', $news->content);
 
         $this->delete(route('admin.news.destroy', $news))->assertRedirect(route('admin.news.index'));
         $this->assertSoftDeleted('news', ['id' => $news->id]);
