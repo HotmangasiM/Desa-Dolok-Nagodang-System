@@ -5,17 +5,17 @@
 {{-- HERO --}}
 <section class="bg-emerald-950 text-white">
 
-    <div class="max-w-7xl mx-auto px-4 py-16">
+    <div class="max-w-7xl mx-auto px-4 py-10 md:py-12">
 
-        <p class="inline-flex rounded-full bg-white/10 px-4 py-2 text-sm text-emerald-100 border border-white/10">
+        <p class="inline-flex rounded-full bg-white/10 px-3 py-1 text-xs text-emerald-100 border border-white/10">
             Pembangunan Desa
         </p>
 
-        <h1 class="mt-6 text-4xl md:text-5xl font-bold leading-tight">
+        <h1 class="mt-4 text-3xl md:text-4xl font-bold leading-tight">
             Infrastruktur Desa
         </h1>
 
-        <p class="mt-5 max-w-3xl text-emerald-100 leading-7">
+        <p class="mt-3 max-w-2xl text-sm md:text-base text-emerald-100 leading-6">
             Informasi pembangunan, infrastruktur, fasilitas desa,
             dan dokumentasi kegiatan pembangunan Desa Dolok Nagodang.
         </p>
@@ -74,7 +74,7 @@
         @forelse ($infrastructures as $item)
 
             <a
-                href="{{ route('infrastruktur.show', $item->slug) }}"
+                href="{{ route('public.infrastruktur.show', $item->slug) }}"
                 class="group rounded-3xl bg-white border border-slate-200 shadow-sm overflow-hidden hover:shadow-xl hover:-translate-y-1 transition duration-300"
             >
 
@@ -110,9 +110,8 @@
                             <i data-lucide="calendar-days" class="w-4 h-4"></i>
 
                             <span>
-                                {{ $item->year ?? '-' }}
+                                    {{ $item->created_at ? $item->created_at->format('d M Y') : '-' }}
                             </span>
-
                         </div>
 
                         <span class="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
