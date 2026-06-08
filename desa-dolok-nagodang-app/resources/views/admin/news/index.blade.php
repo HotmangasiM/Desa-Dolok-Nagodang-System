@@ -187,7 +187,7 @@
                             </td>
 
                             <td class="px-5 py-4 text-slate-600">
-                                {{ $item->published_at ? $item->published_at->format('d M Y H:i') : '-' }}
+                                {{ $item->published_at ? $item->published_at->locale('id')->translatedFormat('d F Y H:i') : '-' }}
                             </td>
 
                             <td class="px-5 py-4">

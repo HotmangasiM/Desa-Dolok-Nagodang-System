@@ -663,7 +663,7 @@
 
                     <div class="p-4">
                         <p class="text-xs text-slate-500">
-                            {{ $item->published_at ? $item->published_at->format('d M Y') : '-' }}
+                            {{ $item->published_at ? $item->published_at->locale('id')->translatedFormat('d F Y') : '-' }}
                         </p>
                         <h3 class="mt-2 font-bold text-slate-800 leading-snug">
                             {{ $item->title }}
