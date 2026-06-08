@@ -173,7 +173,13 @@ class AdminCrudFlowTest extends TestCase
             'is_active' => true,
         ]);
         $today = now()->toDateString();
-        $uploadedAt = now()->format('Y-m-d\TH:i');
+        $uploadedAtDate = now()->copy()->month(8)->day(15)->hour(10)->minute(0);
+
+        if ($uploadedAtDate->lt(now())) {
+            $uploadedAtDate->addYear();
+        }
+
+        $uploadedAt = $uploadedAtDate->format('Y-m-d\TH:i');
 
         $this->post(route('admin.news.store'), [
             'title' => 'QA News Invalid File',
@@ -202,6 +208,9 @@ class AdminCrudFlowTest extends TestCase
         ])->assertRedirect(route('admin.news.index'));
 
         $news = News::where('title', 'QA News Title')->firstOrFail();
+        $publishedDateIndonesian = $news->published_at->locale('id')->translatedFormat('d F Y');
+        $publishedDateEnglish = $news->published_at->format('d F Y');
+
         $this->assertSame('qa-news-title', $news->slug);
         $this->assertStringContainsString('<strong>Konten tebal QA</strong>', $news->content);
         $this->assertStringContainsString('<ul><li>Poin pertama</li></ul>', $news->content);
@@ -210,6 +219,8 @@ class AdminCrudFlowTest extends TestCase
 
         $this->get(route('public.news.show', $news->slug))
             ->assertOk()
+            ->assertSee($publishedDateIndonesian)
+            ->assertDontSee($publishedDateEnglish)
             ->assertSee('<strong>Konten tebal QA</strong>', false)
             ->assertSee('<ul><li>Poin pertama</li></ul>', false)
             ->assertDontSee('alert("xss")', false)

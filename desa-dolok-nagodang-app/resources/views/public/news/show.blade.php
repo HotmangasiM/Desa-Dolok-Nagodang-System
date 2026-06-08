@@ -174,7 +174,7 @@
                             </svg>
 
                             <span>
-                                {{ $newsItem->published_at ? $newsItem->published_at->format('d F Y') : '-' }}
+                                {{ $newsItem->published_at ? $newsItem->published_at->locale('id')->translatedFormat('d F Y') : '-' }}
                             </span>
 
                         </div>
@@ -335,7 +335,7 @@
                                     <div class="min-w-0">
 
                                         <p class="text-xs text-slate-400">
-                                            {{ $item->published_at ? $item->published_at->format('d M Y') : '-' }}
+                                            {{ $item->published_at ? $item->published_at->locale('id')->translatedFormat('d F Y') : '-' }}
                                         </p>
 
                                         <h3 class="mt-1 text-base font-bold leading-6 text-slate-800 group-hover:text-emerald-700 transition line-clamp-2">
