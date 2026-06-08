@@ -32,13 +32,13 @@
 
     {{-- KEPALA DESA --}}
     @if ($villageHead)
-        <div class="rounded-3xl bg-white border border-slate-200 p-8 shadow-sm mb-10">
+        <div class="rounded-3xl bg-white border border-slate-200 p-6 md:p-8 shadow-sm mb-10">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8 items-center">
                 <div class="md:col-span-1">
-                    <div class="w-40 h-40 rounded-3xl bg-emerald-100 overflow-hidden flex items-center justify-center text-5xl font-bold text-emerald-700 mx-auto md:mx-0">
+                    <div class="mx-auto md:mx-0 aspect-[4/5] w-full max-w-[240px] rounded-3xl bg-emerald-100 overflow-hidden flex items-center justify-center text-5xl font-bold text-emerald-700 shadow-inner">
                         @if ($villageHead->photo)
                             <img src="{{ asset('storage/' . $villageHead->photo) }}"
-                                 class="w-full h-full object-cover"
+                                 class="w-full h-full object-cover object-top"
                                  alt="{{ $villageHead->name }}">
                         @else
                             {{ strtoupper(substr($villageHead->name, 0, 1)) }}
@@ -85,18 +85,19 @@
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         @forelse ($otherOfficials as $official)
-            <div class="rounded-3xl bg-white border border-slate-200 p-6 text-center shadow-sm hover:shadow-md hover:-translate-y-1 transition">
-                <div class="mx-auto w-28 h-28 rounded-full bg-emerald-100 overflow-hidden flex items-center justify-center text-3xl font-bold text-emerald-700">
+            <div class="overflow-hidden rounded-3xl bg-white border border-slate-200 text-center shadow-sm hover:shadow-md hover:-translate-y-1 transition">
+                <div class="h-[320px] md:h-[360px] lg:h-[340px] w-full bg-emerald-100 overflow-hidden flex items-center justify-center text-4xl font-bold text-emerald-700">
                     @if ($official->photo)
                         <img src="{{ asset('storage/' . $official->photo) }}"
-                             class="w-full h-full object-cover"
+                             class="w-full h-full object-cover object-top transition duration-500 hover:scale-105"
                              alt="{{ $official->name }}">
                     @else
                         {{ strtoupper(substr($official->name, 0, 1)) }}
                     @endif
                 </div>
 
-                <h3 class="mt-5 font-bold text-slate-800">
+                <div class="p-6 min-h-[136px] flex flex-col items-center justify-center">
+                <h3 class="font-bold text-slate-800">
                     {{ $official->name }}
                 </h3>
 
@@ -115,6 +116,7 @@
                         ✉ {{ $official->email }}
                     </p>
                 @endif
+                </div>
             </div>
         @empty
             <div class="lg:col-span-4 rounded-3xl bg-white border border-slate-200 p-10 text-center text-slate-500">
