@@ -697,21 +697,23 @@
         </a>
     </div>
 
-    <div class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-6">
+    <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
         @forelse($officials as $official)
-            <div class="rounded-3xl bg-white border border-slate-200 p-6 text-center shadow-sm hover:shadow-md transition">
-                <div class="mx-auto w-24 h-24 rounded-full bg-emerald-100 overflow-hidden flex items-center justify-center text-2xl font-bold text-emerald-700">
+            <div class="overflow-hidden rounded-3xl bg-white border border-slate-200 text-center shadow-sm hover:shadow-md transition">
+                <div class="h-[300px] md:h-[320px] lg:h-[300px] w-full bg-emerald-100 overflow-hidden flex items-center justify-center text-4xl font-bold text-emerald-700">
                     @if($official->photo)
                         <img src="{{ asset('storage/' . $official->photo) }}"
-                             class="w-full h-full object-cover"
+                             class="w-full h-full object-cover object-top transition duration-500 hover:scale-105"
                              alt="{{ $official->name }}">
                     @else
                         {{ strtoupper(substr($official->name, 0, 1)) }}
                     @endif
                 </div>
 
-                <h3 class="mt-4 font-bold text-slate-800">{{ $official->name }}</h3>
-                <p class="mt-1 text-sm text-emerald-700">{{ $official->position ?? '-' }}</p>
+                <div class="p-5 min-h-[104px] flex flex-col items-center justify-center">
+                    <h3 class="font-bold text-slate-800">{{ $official->name }}</h3>
+                    <p class="mt-1 text-sm text-emerald-700">{{ $official->position ?? '-' }}</p>
+                </div>
             </div>
         @empty
             <div class="md:col-span-4 rounded-2xl bg-white border p-8 text-center text-slate-500">
