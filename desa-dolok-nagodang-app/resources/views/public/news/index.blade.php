@@ -64,7 +64,7 @@
 
                 <div class="p-5">
                     <p class="text-xs text-slate-500">
-                        {{ $item->published_at ? $item->published_at->format('d M Y') : '-' }}
+                        {{ $item->published_at ? $item->published_at->locale('id')->translatedFormat('d F Y') : '-' }}
                     </p>
 
                     <h2 class="mt-2 text-lg font-bold text-slate-800 leading-snug">
