@@ -31,6 +31,7 @@
                         type="text"
                         name="item_name"
                         value="{{ old('item_name') }}"
+                        data-letter-space-only
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         placeholder="Masukkan nama barang"
                     >
@@ -55,6 +56,7 @@
                         type="text"
                         name="category"
                         value="{{ old('category') }}"
+                        data-letter-space-only
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         placeholder="Contoh: Elektronik"
                     >
@@ -115,6 +117,7 @@
                         type="text"
                         name="source"
                         value="{{ old('source') }}"
+                        data-letter-space-only
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         placeholder="Contoh: Dana Desa"
                     >
@@ -239,10 +242,20 @@ function formatRupiah(value) {
     };
 }
 
+function sanitizeLetterSpaceInput(value) {
+    return value.replace(/[^\p{L}\s]/gu, '').replace(/\s{2,}/g, ' ');
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.querySelector('form[action*="assets"]');
     const assetValue = document.getElementById('asset_value');
     const assetValueDisplay = document.getElementById('asset_value_display');
+
+    document.querySelectorAll('[data-letter-space-only]').forEach(function (input) {
+        input.addEventListener('input', function () {
+            this.value = sanitizeLetterSpaceInput(this.value);
+        });
+    });
 
     if (assetValueDisplay && assetValue) {
         assetValueDisplay.addEventListener('input', function () {
