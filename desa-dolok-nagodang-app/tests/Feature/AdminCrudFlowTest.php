@@ -92,7 +92,7 @@ class AdminCrudFlowTest extends TestCase
             'birth_place' => 'Dolok Nagodang',
             'birth_date' => '1990-01-01',
             'education' => 'S1 Teknik',
-            'occupation' => 'Petani',
+            'occupation' => 'Petani/Buruh',
             'family_card_number' => '1234567890123450',
             'address' => 'Dusun I Dolok Nagodang',
             'rt' => '1',
@@ -119,7 +119,7 @@ class AdminCrudFlowTest extends TestCase
             'gender' => 'Perempuan',
             'family_card_number' => '1234567890123451',
             'education' => 'S2 Administrasi',
-            'occupation' => 'Guru',
+            'occupation' => 'Guru-Honorer',
             'address' => 'Dusun II Lumban Lintong',
             'rt' => '3',
             'rw' => '4',
@@ -139,7 +139,7 @@ class AdminCrudFlowTest extends TestCase
             'gender' => 'Perempuan',
             'family_card_number' => '1234567890123451',
             'education' => 'S2 Administrasi',
-            'occupation' => 'Guru',
+            'occupation' => 'Guru-Honorer',
             'address' => 'Dusun II Lumban Lintong',
             'rt' => '3',
             'rw' => '4',
@@ -250,10 +250,12 @@ class AdminCrudFlowTest extends TestCase
             'quantity' => 1,
             'condition' => 'good',
             'location' => 'Kantor Desa',
+            'acquisition_date' => now()->addDay()->toDateString(),
             'source' => 'Dana #1',
         ])->assertSessionHasErrors([
             'item_name',
             'category',
+            'acquisition_date',
             'source',
         ]);
         $this->assertDatabaseMissing('assets', ['item_code' => 'QA-ASSET-INVALID']);
@@ -276,10 +278,12 @@ class AdminCrudFlowTest extends TestCase
             'quantity' => 3,
             'condition' => 'damaged',
             'location' => 'Gudang',
+            'acquisition_date' => now()->addDay()->toDateString(),
             'source' => 'Bantuan 1',
         ])->assertSessionHasErrors([
             'item_name',
             'category',
+            'acquisition_date',
             'source',
         ]);
 
@@ -290,9 +294,16 @@ class AdminCrudFlowTest extends TestCase
             'quantity' => 3,
             'condition' => 'damaged',
             'location' => 'Gudang',
+            'acquisition_date' => now()->toDateString(),
             'source' => 'Dana Desa',
         ])->assertRedirect(route('admin.assets.index'));
-        $this->assertDatabaseHas('assets', ['id' => $asset->id, 'quantity' => 3, 'condition' => 'damaged', 'source' => 'Dana Desa']);
+        $this->assertDatabaseHas('assets', [
+            'id' => $asset->id,
+            'quantity' => 3,
+            'condition' => 'damaged',
+            'acquisition_date' => now()->startOfDay()->toDateTimeString(),
+            'source' => 'Dana Desa',
+        ]);
 
         $this->delete(route('admin.assets.destroy', $asset))->assertRedirect(route('admin.assets.index'));
         $this->assertSoftDeleted('assets', ['id' => $asset->id]);

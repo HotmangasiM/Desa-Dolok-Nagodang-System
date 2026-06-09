@@ -147,7 +147,7 @@
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Pekerjaan</label>
                     <input type="text" name="occupation" value="{{ old('occupation') }}"
-                           maxlength="100" oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')"
+                           maxlength="100" oninput="this.value = this.value.replace(/[\p{N}]/gu, '')"
                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
                 </div>
 

@@ -82,6 +82,7 @@
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Tanggal Perolehan</label>
                     <input type="date" name="acquisition_date"
                         value="{{ old('acquisition_date', $asset->acquisition_date ? $asset->acquisition_date->format('Y-m-d') : '') }}"
+                        max="{{ now()->toDateString() }}"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
                 </div>
 
