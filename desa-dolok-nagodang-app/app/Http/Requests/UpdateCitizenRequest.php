@@ -28,7 +28,7 @@ class UpdateCitizenRequest extends FormRequest
             'birth_date' => 'nullable|date|before_or_equal:today',
             'religion' => 'nullable|string|max:100',
             'education' => ['nullable', 'string', 'max:100', 'regex:/^[\pL\pN\s]+$/u'],
-            'occupation' => ['nullable', 'string', 'max:100', 'regex:/^[\pL\s]+$/u'],
+            'occupation' => ['nullable', 'string', 'max:100', 'not_regex:/\pN/u'],
             'marital_status' => 'nullable|string|max:50',
             'family_card_number' => 'nullable|digits:16',
             'address' => [
@@ -62,7 +62,7 @@ class UpdateCitizenRequest extends FormRequest
             'birth_place.regex' => 'Tempat lahir hanya boleh berisi huruf dan spasi.',
             'birth_date.before_or_equal' => 'Tanggal lahir tidak boleh melebihi hari ini.',
             'education.regex' => 'Pendidikan hanya boleh berisi huruf, angka, dan spasi.',
-            'occupation.regex' => 'Pekerjaan hanya boleh berisi huruf dan spasi.',
+            'occupation.not_regex' => 'Pekerjaan tidak boleh berisi angka.',
             'address.in' => 'Alamat harus dipilih dari daftar dusun yang tersedia.',
             'rt.digits_between' => 'RT hanya boleh berisi angka maksimal 3 digit.',
             'rw.digits_between' => 'RW hanya boleh berisi angka maksimal 3 digit.',

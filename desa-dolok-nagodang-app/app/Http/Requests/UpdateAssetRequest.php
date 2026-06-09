@@ -28,7 +28,7 @@ class UpdateAssetRequest extends FormRequest
             'quantity' => 'required|integer|min:0',
             'condition' => 'required|in:good,damaged',
             'location' => 'nullable|string|max:255',
-            'acquisition_date' => 'nullable|date',
+            'acquisition_date' => 'nullable|date|before_or_equal:today',
             'source' => ['nullable', 'string', 'max:255', 'regex:/^[\pL\s]+$/u'],
             'asset_value' => 'nullable|numeric',
             'asset_photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
@@ -42,6 +42,7 @@ class UpdateAssetRequest extends FormRequest
         return [
             'item_name.regex' => 'Nama Barang hanya boleh berisi huruf dan spasi.',
             'category.regex' => 'Kategori hanya boleh berisi huruf dan spasi.',
+            'acquisition_date.before_or_equal' => 'Tanggal Perolehan tidak boleh melebihi hari ini.',
             'source.regex' => 'Sumber hanya boleh berisi huruf dan spasi.',
         ];
     }
