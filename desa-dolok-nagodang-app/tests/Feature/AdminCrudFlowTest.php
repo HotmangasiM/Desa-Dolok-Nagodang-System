@@ -89,7 +89,7 @@ class AdminCrudFlowTest extends TestCase
             'gender' => 'Laki-laki',
             'birth_place' => 'Dolok Nagodang',
             'birth_date' => '1990-01-01',
-            'education' => 'Sarjana',
+            'education' => 'S1 Teknik',
             'occupation' => 'Petani',
             'family_card_number' => '1234567890123450',
             'address' => 'Dusun QA',
@@ -116,7 +116,7 @@ class AdminCrudFlowTest extends TestCase
             'full_name' => 'QA Citizen Updated',
             'gender' => 'Perempuan',
             'family_card_number' => '1234567890123451',
-            'education' => 'Magister',
+            'education' => 'S2 Administrasi',
             'occupation' => 'Guru',
             'address' => 'Dusun QA Updated',
             'rt' => '3',
@@ -136,7 +136,7 @@ class AdminCrudFlowTest extends TestCase
             'full_name' => 'QA Citizen Updated',
             'gender' => 'Perempuan',
             'family_card_number' => '1234567890123451',
-            'education' => 'Magister',
+            'education' => 'S2 Administrasi',
             'occupation' => 'Guru',
             'rt' => '3',
             'rw' => '4',
@@ -241,15 +241,45 @@ class AdminCrudFlowTest extends TestCase
         $this->assertSoftDeleted('news', ['id' => $news->id]);
 
         $this->post(route('admin.assets.store'), [
+            'item_name' => 'Meja 123!',
+            'item_code' => 'QA-ASSET-INVALID',
+            'category' => 'Elektronik 2!',
+            'quantity' => 1,
+            'condition' => 'good',
+            'location' => 'Kantor Desa',
+            'source' => 'Dana #1',
+        ])->assertSessionHasErrors([
+            'item_name',
+            'category',
+            'source',
+        ]);
+        $this->assertDatabaseMissing('assets', ['item_code' => 'QA-ASSET-INVALID']);
+
+        $this->post(route('admin.assets.store'), [
             'item_name' => 'QA Asset',
             'item_code' => 'QA-ASSET-001',
             'category' => 'Elektronik',
             'quantity' => 2,
             'condition' => 'good',
             'location' => 'Kantor Desa',
+            'source' => 'Dana Desa',
         ])->assertRedirect(route('admin.assets.index'));
 
         $asset = Asset::where('item_code', 'QA-ASSET-001')->firstOrFail();
+        $this->put(route('admin.assets.update', $asset), [
+            'item_name' => 'QA Asset 2026',
+            'item_code' => 'QA-ASSET-001',
+            'category' => 'Elektronik @',
+            'quantity' => 3,
+            'condition' => 'damaged',
+            'location' => 'Gudang',
+            'source' => 'Bantuan 1',
+        ])->assertSessionHasErrors([
+            'item_name',
+            'category',
+            'source',
+        ]);
+
         $this->put(route('admin.assets.update', $asset), [
             'item_name' => 'QA Asset Updated',
             'item_code' => 'QA-ASSET-001',
@@ -257,8 +287,9 @@ class AdminCrudFlowTest extends TestCase
             'quantity' => 3,
             'condition' => 'damaged',
             'location' => 'Gudang',
+            'source' => 'Dana Desa',
         ])->assertRedirect(route('admin.assets.index'));
-        $this->assertDatabaseHas('assets', ['id' => $asset->id, 'quantity' => 3, 'condition' => 'damaged']);
+        $this->assertDatabaseHas('assets', ['id' => $asset->id, 'quantity' => 3, 'condition' => 'damaged', 'source' => 'Dana Desa']);
 
         $this->delete(route('admin.assets.destroy', $asset))->assertRedirect(route('admin.assets.index'));
         $this->assertSoftDeleted('assets', ['id' => $asset->id]);

@@ -29,6 +29,7 @@
                         Nama Barang <span class="text-rose-500">*</span>
                     </label>
                     <input type="text" name="item_name" value="{{ old('item_name', $asset->item_name) }}"
+                        data-letter-space-only
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         placeholder="Masukkan nama barang">
                 </div>
@@ -45,6 +46,7 @@
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Kategori</label>
                     <input type="text" name="category" value="{{ old('category', $asset->category) }}"
+                        data-letter-space-only
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         placeholder="Contoh: Elektronik">
                 </div>
@@ -86,6 +88,7 @@
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Sumber</label>
                     <input type="text" name="source" value="{{ old('source', $asset->source) }}"
+                        data-letter-space-only
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         placeholder="Contoh: Dana Desa">
                 </div>
@@ -208,9 +211,19 @@ function formatRupiah(value) {
     };
 }
 
+function sanitizeLetterSpaceInput(value) {
+    return value.replace(/[^\p{L}\s]/gu, '').replace(/\s{2,}/g, ' ');
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     const assetValue = document.getElementById('asset_value');
     const assetValueDisplay = document.getElementById('asset_value_display');
+
+    document.querySelectorAll('[data-letter-space-only]').forEach(function (input) {
+        input.addEventListener('input', function () {
+            this.value = sanitizeLetterSpaceInput(this.value);
+        });
+    });
 
     if (assetValue && assetValueDisplay) {
         assetValueDisplay.addEventListener('input', function () {
