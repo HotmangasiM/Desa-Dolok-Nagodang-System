@@ -183,9 +183,19 @@
             <div class="p-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
                 <div class="xl:col-span-3">
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Alamat</label>
-                    <textarea name="address" rows="3"
-                              class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                              placeholder="Masukkan alamat lengkap">{{ old('address') }}</textarea>
+                    <select name="address"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                        <option value="">Pilih Dusun</option>
+                        @foreach ([
+                            'Dusun I Dolok Nagodang',
+                            'Dusun II Lumban Lintong',
+                            'Dusun III Sosor Silobu',
+                        ] as $addressOption)
+                            <option value="{{ $addressOption }}" {{ old('address') === $addressOption ? 'selected' : '' }}>
+                                {{ $addressOption }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
 
                 <div>
