@@ -13,6 +13,10 @@ class AdminUserSeeder extends Seeder
      */
     public function run(): void
     {
+        if (! app()->environment(['local', 'testing'])) {
+            return;
+        }
+
         User::updateOrCreate(
             ['email' => 'admin@desa.test'],
             [
