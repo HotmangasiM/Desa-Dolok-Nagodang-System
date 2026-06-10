@@ -491,19 +491,23 @@
     </div>
 
    {{-- MINI VISITOR --}}
-<div class="h-14 min-w-[250px] bg-emerald-500 text-white rounded-2xl shadow-xl shadow-emerald-900/10 px-5 cursor-pointer border border-emerald-400/70">
+<div class="relative h-14 min-w-[250px] bg-emerald-500 text-white rounded-2xl shadow-xl shadow-emerald-900/10 px-5 cursor-pointer border border-emerald-400/70">
 
-    <div class="h-full flex items-center justify-center gap-3">
+    <div class="h-full flex items-center justify-center">
 
-        <i data-lucide="users" class="w-5 h-5"></i>
+        <i data-lucide="users" class="absolute left-5 w-5 h-5"></i>
 
-        <span class="text-sm font-semibold text-emerald-50 whitespace-nowrap">
-            Pengunjung Hari Ini
-        </span>
+        <div class="flex items-center justify-center gap-3">
 
-        <span class="font-bold text-lg leading-none">
-            {{ number_format($visitorStats['today'] ?? 0) }}
-        </span>
+            <span class="text-sm font-semibold text-emerald-50 whitespace-nowrap">
+                Pengunjung Hari Ini
+            </span>
+
+            <span class="font-bold text-lg leading-none">
+                {{ number_format($visitorStats['today'] ?? 0) }}
+            </span>
+
+        </div>
 
     </div>
 
