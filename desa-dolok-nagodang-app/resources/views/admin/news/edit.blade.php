@@ -68,7 +68,7 @@
                             <p class="mt-2 text-xs text-slate-500">Thumbnail saat ini</p>
                         @else
                             <div class="w-40 h-28 rounded-xl bg-slate-100 text-slate-400 flex items-center justify-center text-sm border border-slate-200">
-                                No Image
+                                Tanpa Gambar
                             </div>
                         @endif
                     </div>
