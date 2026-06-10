@@ -47,7 +47,7 @@
                     👨
                 </div>
             </div>
-            <p class="mt-4 text-sm text-slate-500">49.8% dari total penduduk</p>
+            <p class="mt-4 text-sm text-slate-500">{{ number_format((float) $maleCitizenPercentage, 1) }}% dari total penduduk</p>
         </div>
 
         <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm">
@@ -60,7 +60,7 @@
                     👩
                 </div>
             </div>
-            <p class="mt-4 text-sm text-slate-500">50.2% dari total penduduk</p>
+            <p class="mt-4 text-sm text-slate-500">{{ number_format((float) $femaleCitizenPercentage, 1) }}% dari total penduduk</p>
         </div>
 
         <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm">
