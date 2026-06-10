@@ -111,7 +111,10 @@ class AdminCrudFlowTest extends TestCase
 
         $this->get(route('admin.citizens.index', ['search' => 'QA Citizen']))
             ->assertOk()
-            ->assertSee('QA Citizen');
+            ->assertSee('QA Citizen')
+            ->assertSee('100.0% dari total penduduk')
+            ->assertDontSee('49.8% dari total penduduk')
+            ->assertDontSee('50.2% dari total penduduk');
 
         $this->put(route('admin.citizens.update', $citizen), [
             'nik' => '1234567890123456',
