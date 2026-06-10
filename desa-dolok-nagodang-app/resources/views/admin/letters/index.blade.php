@@ -10,13 +10,18 @@
         <div class="flex flex-wrap items-center gap-3">
             <button
                 type="button"
-                class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 shadow-sm transition">
-                ⬇ Export
+                disabled
+                aria-disabled="true"
+                title="Fitur export sedang disiapkan"
+                class="inline-flex cursor-not-allowed items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-400 shadow-sm">
+                <i data-lucide="download" class="w-4 h-4"></i>
+                Export
             </button>
 
             <a href="{{ route('admin.letters.create') }}"
             class="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-700 shadow-lg shadow-emerald-600/20 transition">
-                ＋ Tambah Surat
+                <i data-lucide="plus" class="w-4 h-4"></i>
+                Tambah Surat
             </a>
         </div>
     </div>
@@ -121,9 +126,13 @@
             </div>
 
             <div class="flex items-end gap-3">
-                <button class="w-full rounded-xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white hover:bg-slate-800 transition">
+                <button class="flex-1 rounded-xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white hover:bg-slate-800 transition">
                     Terapkan
                 </button>
+                <a href="{{ route('admin.letters.index') }}"
+                   class="rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition">
+                    Reset
+                </a>
             </div>
         </form>
     </div>
@@ -263,7 +272,7 @@
 
         <div class="px-5 py-4 border-t border-slate-200 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
             <p class="text-sm text-slate-500">
-                Showing {{ $letters->firstItem() ?? 0 }} to {{ $letters->lastItem() ?? 0 }} of {{ $letters->total() }} entries
+                Menampilkan {{ $letters->firstItem() ?? 0 }} sampai {{ $letters->lastItem() ?? 0 }} dari {{ $letters->total() }} data
             </p>
 
             <div>

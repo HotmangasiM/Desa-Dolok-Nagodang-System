@@ -29,7 +29,7 @@
             <p class="text-sm text-slate-500">Berita</p>
             <h3 class="text-3xl font-bold mt-2 text-slate-800">{{ $totalNews }}</h3>
             <p class="text-xs text-slate-500 mt-2">
-                Published: {{ $publishedNews }}
+                Dipublikasikan: {{ $publishedNews }}
             </p>
         </div>
 
@@ -38,7 +38,7 @@
             <p class="text-sm text-slate-500">Inventaris</p>
             <h3 class="text-3xl font-bold mt-2 text-slate-800">{{ $totalAssets }}</h3>
             <p class="text-xs text-slate-500 mt-2">
-                Good: {{ $goodAssets }}
+                Kondisi baik: {{ $goodAssets }}
             </p>
         </div>
     </div>
@@ -87,12 +87,12 @@
         </div>
 
         <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm">
-            <p class="text-sm text-slate-500">Submitted</p>
+            <p class="text-sm text-slate-500">Diajukan</p>
             <h3 class="text-3xl font-bold mt-2 text-slate-800">{{ $submittedLetters }}</h3>
         </div>
 
         <div class="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm">
-            <p class="text-sm text-slate-500">Completed</p>
+            <p class="text-sm text-slate-500">Selesai</p>
             <h3 class="text-3xl font-bold mt-2 text-slate-800">{{ $completedLetters }}</h3>
         </div>
     </div>
@@ -129,15 +129,15 @@
                             <td class="px-5 py-3">
                                 @if ($letter->status === 'COMPLETED')
                                     <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700">
-                                        completed
+                                        Selesai
                                     </span>
                                 @elseif ($letter->status === 'SUBMITTED')
                                     <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-700">
-                                        submitted
+                                        Diajukan
                                     </span>
                                 @elseif ($letter->status === 'PROCESSING')
                                     <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-medium bg-sky-100 text-sky-700">
-                                        processing
+                                        Diproses
                                     </span>
                                 @else
                                     <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-700">

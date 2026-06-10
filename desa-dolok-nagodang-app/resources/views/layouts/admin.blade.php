@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -113,13 +113,13 @@
 
                     <a href="{{ route('profile.edit') }}"
                        class="text-center text-sm bg-slate-700 hover:bg-slate-600 py-2 rounded-xl">
-                        Profile
+                        Profil
                     </a>
 
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button class="w-full bg-red-600 hover:bg-red-700 py-2 rounded-xl text-sm">
-                            Logout
+                            Keluar
                         </button>
                     </form>
 
@@ -135,7 +135,9 @@
 
         <div class="p-5 border-b border-slate-800 flex items-center justify-between">
             <span class="font-bold">Menu</span>
-            <button onclick="toggleSidebar()">✕</button>
+            <button type="button" onclick="toggleSidebar()" aria-label="Tutup menu">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
         </div>
 
         <div class="p-4 space-y-2">
@@ -223,7 +225,7 @@
                             </p>
                         @else
                             <p class="hidden sm:block text-xs text-slate-500 mt-1">
-                                Administrator Panel
+                                Panel Administrator
                             </p>
                         @endisset
                     </div>
@@ -249,13 +251,13 @@
                     <a href="{{ route('profile.edit') }}"
                        class="hidden sm:inline-flex items-center gap-2 px-3 py-2 rounded-xl border bg-white text-sm">
                         <i data-lucide="user-circle" class="w-4 h-4"></i>
-                        Profile
+                        Profil
                     </a>
 
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button class="bg-red-500 text-white px-3 py-2 rounded-xl text-sm">
-                            Logout
+                            Keluar
                         </button>
                     </form>
 

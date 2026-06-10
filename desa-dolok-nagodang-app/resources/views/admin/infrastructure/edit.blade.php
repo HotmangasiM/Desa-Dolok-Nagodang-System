@@ -80,12 +80,12 @@
 
                         <option value="draft"
                             {{ old('status', $item->status) == 'draft' ? 'selected' : '' }}>
-                            Draft
+                            Draf
                         </option>
 
                         <option value="publish"
                             {{ old('status', $item->status) == 'publish' ? 'selected' : '' }}>
-                            Publish
+                            Dipublikasikan
                         </option>
 
                     </select>
@@ -117,7 +117,7 @@
                         @else
 
                             <div class="w-48 h-32 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 border border-slate-200">
-                                No Image
+                                Tanpa Gambar
                             </div>
 
                         @endif
