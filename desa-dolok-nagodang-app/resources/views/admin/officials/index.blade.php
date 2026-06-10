@@ -10,13 +10,18 @@
         <div class="flex flex-wrap items-center gap-3">
             <button
                 type="button"
-                class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 shadow-sm transition">
-                ⬇ Export
+                disabled
+                aria-disabled="true"
+                title="Fitur export sedang disiapkan"
+                class="inline-flex cursor-not-allowed items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-400 shadow-sm">
+                <i data-lucide="download" class="w-4 h-4"></i>
+                Export
             </button>
 
             <a href="{{ route('admin.officials.create') }}"
             class="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-700 shadow-lg shadow-emerald-600/20 transition">
-                ＋ Tambah Aparat Desa
+                <i data-lucide="plus" class="w-4 h-4"></i>
+                Tambah Aparat Desa
             </a>
         </div>
     </div>
@@ -98,9 +103,13 @@
             </div>
 
             <div class="flex items-end gap-3">
-                <button class="w-full rounded-xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white hover:bg-slate-800 transition">
+                <button class="flex-1 rounded-xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white hover:bg-slate-800 transition">
                     Terapkan
                 </button>
+                <a href="{{ route('admin.officials.index') }}"
+                   class="rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition">
+                    Reset
+                </a>
             </div>
         </form>
     </div>
@@ -214,7 +223,7 @@
 
         <div class="px-5 py-4 border-t border-slate-200 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
             <p class="text-sm text-slate-500">
-                Showing {{ $officials->firstItem() ?? 0 }} to {{ $officials->lastItem() ?? 0 }} of {{ $officials->total() }} entries
+                Menampilkan {{ $officials->firstItem() ?? 0 }} sampai {{ $officials->lastItem() ?? 0 }} dari {{ $officials->total() }} data
             </p>
 
             <div>
@@ -224,50 +233,6 @@
     </div>
 </div>
 
-<div id="deleteModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/50 px-4">
-    <div class="w-full max-w-md rounded-2xl bg-white shadow-2xl">
-        <div class="p-6 border-b border-slate-200">
-            <div class="flex items-center gap-3">
-                <div class="w-12 h-12 rounded-full bg-rose-100 flex items-center justify-center text-2xl">
-                    ⚠️
-                </div>
-                <div>
-                    <h3 class="text-lg font-bold text-slate-800">Konfirmasi Hapus</h3>
-                    <p class="text-sm text-slate-500">Tindakan ini akan melakukan soft delete data aparat desa.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="p-6">
-            <p class="text-sm text-slate-600 leading-6">
-                Apakah kamu yakin ingin menghapus data aparat
-                <span id="officialName" class="font-semibold text-slate-800"></span>?
-            </p>
-        </div>
-
-        <form id="deleteOfficialForm" method="POST" action="">
-            @csrf
-            @method('DELETE')
-
-            <div class="px-6 pb-6 flex items-center justify-end gap-3">
-                <button
-                    type="button"
-                    onclick="closeDeleteModal()"
-                    class="rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 transition"
-                >
-                    Batal
-                </button>
-
-                <button
-                    type="submit"
-                    class="rounded-xl bg-rose-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-rose-700 transition"
-                >
-                    Ya, Hapus
-                </button>
-            </div>
-        </form>
-    </div>
-</div>
 @endsection
 
 @push('scripts')

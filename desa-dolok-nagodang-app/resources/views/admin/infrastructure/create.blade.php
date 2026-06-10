@@ -69,12 +69,12 @@
 
                         <option value="draft"
                             {{ old('status') == 'draft' ? 'selected' : '' }}>
-                            Draft
+                            Draf
                         </option>
 
                         <option value="publish"
                             {{ old('status') == 'publish' ? 'selected' : '' }}>
-                            Publish
+                            Dipublikasikan
                         </option>
                     </select>
                 </div>
