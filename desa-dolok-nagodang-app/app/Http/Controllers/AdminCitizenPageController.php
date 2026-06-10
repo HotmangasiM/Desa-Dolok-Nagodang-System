@@ -44,6 +44,8 @@ class AdminCitizenPageController extends Controller
         $maleCitizens = Citizen::where('gender', 'Laki-laki')->count();
         $femaleCitizens = Citizen::where('gender', 'Perempuan')->count();
         $activeCitizens = Citizen::where('life_status', 'alive')->count();
+        $maleCitizenPercentage = $allCitizens > 0 ? round(($maleCitizens / $allCitizens) * 100, 1) : 0;
+        $femaleCitizenPercentage = $allCitizens > 0 ? round(($femaleCitizens / $allCitizens) * 100, 1) : 0;
 
         $dusunStats = Citizen::query()
             ->whereNotNull('address')
@@ -76,6 +78,8 @@ class AdminCitizenPageController extends Controller
             'maleCitizens' => $maleCitizens,
             'femaleCitizens' => $femaleCitizens,
             'activeCitizens' => $activeCitizens,
+            'maleCitizenPercentage' => $maleCitizenPercentage,
+            'femaleCitizenPercentage' => $femaleCitizenPercentage,
 
             // 🔥 tambahan
             'dusunStats' => $dusunStats,
