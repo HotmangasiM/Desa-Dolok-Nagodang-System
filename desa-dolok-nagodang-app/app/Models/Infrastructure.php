@@ -12,7 +12,6 @@ class Infrastructure extends Model
         'slug',
         'image',
         'content',
-        'status',
     ];
 
     // optional: auto slug jika belum diisi

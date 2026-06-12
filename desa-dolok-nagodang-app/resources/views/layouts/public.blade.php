@@ -293,6 +293,15 @@
 
                     </a>
 
+                    <!-- <a href="{{ route('public.infrastruktur') }}"
+                       class="flex items-center gap-2 text-slate-400 hover:text-white transition">
+
+                        <i data-lucide="chevron-right" class="w-4 h-4"></i>
+
+                        Infrastruktur
+
+                    </a> -->
+
                 </div>
 
             </div>
@@ -410,7 +419,7 @@
             <p>
                 Design & Development by
                 <span class="font-semibold text-white">
-                    Marsidapari 
+                    Marsiadapari 
                 </span>
             </p>
 
