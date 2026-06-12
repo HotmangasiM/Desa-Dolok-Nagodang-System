@@ -53,6 +53,32 @@
                     >
                 </div>
 
+                {{-- STATUS --}}
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">
+                        Status
+                        <span class="text-rose-500">*</span>
+                    </label>
+
+                    <select
+                        name="status"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm
+                               focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    >
+                        <option value="">Pilih Status</option>
+
+                        <option value="draft"
+                            {{ old('status') == 'draft' ? 'selected' : '' }}>
+                            Draft
+                        </option>
+
+                        <option value="publish"
+                            {{ old('status') == 'publish' ? 'selected' : '' }}>
+                            Publish
+                        </option>
+                    </select>
+                </div>
+
                 {{-- IMAGE --}}
                 <div class="xl:col-span-3">
                     <label class="block text-sm font-semibold text-slate-700 mb-2">

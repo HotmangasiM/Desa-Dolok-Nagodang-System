@@ -432,10 +432,10 @@
 {{-- ================= VISITOR STATS ================= --}}
 @if(isset($visitorStats))
 
-<div class="fixed left-3 bottom-3 z-50 hidden lg:block group">
+<div class="fixed left-4 bottom-4 z-50 hidden lg:block group">
 
     {{-- DETAIL --}}
-    <div class="absolute bottom-16 left-0 w-72 rounded-2xl bg-slate-900/95 border border-white/10 text-white p-4 shadow-2xl backdrop-blur-xl
+    <div class="absolute bottom-20 left-0 w-72 rounded-2xl bg-slate-900/95 border border-white/10 text-white p-4 shadow-2xl backdrop-blur-xl
                 opacity-0 invisible translate-y-2
                 group-hover:opacity-100
                 group-hover:visible
@@ -500,19 +500,23 @@
     </div>
 
    {{-- MINI VISITOR --}}
-<div class="bg-emerald-600 text-white rounded-full shadow-lg px-4 py-2.5 cursor-pointer border border-emerald-500">
+<div class="relative h-14 min-w-[250px] bg-emerald-500 text-white rounded-2xl shadow-xl shadow-emerald-900/10 px-5 cursor-pointer border border-emerald-400/70">
 
-    <div class="flex items-center gap-2">
+    <div class="h-full flex items-center justify-center">
 
-        <i data-lucide="users" class="w-4 h-4"></i>
+        <i data-lucide="users" class="absolute left-5 w-5 h-5"></i>
 
-        <span class="text-xs text-emerald-100">
-            Pengunjung Hari Ini
-        </span>
+        <div class="flex items-center justify-center gap-3">
 
-        <span class="font-bold text-sm">
-            {{ number_format($visitorStats['today'] ?? 0) }}
-        </span>
+            <span class="text-sm font-semibold text-emerald-50 whitespace-nowrap">
+                Pengunjung Hari Ini
+            </span>
+
+            <span class="font-bold text-lg leading-none">
+                {{ number_format($visitorStats['today'] ?? 0) }}
+            </span>
+
+        </div>
 
     </div>
 
@@ -523,30 +527,30 @@
 @endif
 
 {{-- ================= FLOATING COMPLAINT ================= --}}
-<div class="fixed right-3 bottom-3 z-50">
+<div class="fixed right-4 bottom-4 z-50">
 
     <button
         type="button"
         onclick="toggleComplaintPanel()"
-        class="w-12 h-12 md:w-auto md:h-auto
-               md:px-4 md:py-3
-               rounded-full md:rounded-xl
-               bg-rose-500 hover:bg-rose-600
+        class="w-14 h-14 md:w-[190px] md:h-14
+               md:px-5
+               rounded-2xl
+               bg-rose-400 hover:bg-rose-500
                text-white
-               shadow-lg
-               border border-white/10
-               flex items-center justify-center gap-3
+               shadow-xl shadow-rose-900/10
+               border border-rose-300/80
+               flex items-center justify-center
                transition-all duration-300">
 
-        <i data-lucide="headphones" class="w-5 h-5"></i>
+        <i data-lucide="headphones" class="w-5 h-5 md:hidden"></i>
 
-        <div class="hidden md:block text-left">
+        <div class="hidden md:flex h-full w-full flex-col items-center justify-center text-center">
 
-            <p class="text-xs text-rose-100">
+            <p class="text-sm font-semibold leading-tight text-rose-50">
                 Layanan
             </p>
 
-            <p class="font-semibold leading-none text-sm">
+            <p class="text-sm font-semibold leading-tight text-white">
                 Pengaduan
             </p>
 
@@ -559,8 +563,8 @@
 {{-- ================= PANEL PENGADUAN ================= --}}
 <div id="complaintPanel"
      class="hidden fixed
-            right-3
-            bottom-16
+            right-4
+            bottom-20
             z-[999]
             w-[calc(100vw-24px)]
             sm:w-[360px]
@@ -569,7 +573,7 @@
             bg-white
             border border-slate-200
             shadow-2xl
-            overflow-hidden"> max-w-[calc(100vw-2rem)] rounded-[30px] bg-white border border-slate-200 shadow-2xl overflow-hidden">
+            overflow-hidden">
 
     {{-- HEADER --}}
     <div class="bg-gradient-to-r from-emerald-700 to-emerald-600 text-white px-6 py-5 flex items-start justify-between gap-4">

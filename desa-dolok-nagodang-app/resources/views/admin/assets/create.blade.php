@@ -107,6 +107,7 @@
                         type="date"
                         name="acquisition_date"
                         value="{{ old('acquisition_date') }}"
+                        max="{{ now()->toDateString() }}"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     >
                 </div>

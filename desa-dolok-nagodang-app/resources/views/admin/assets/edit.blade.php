@@ -82,6 +82,7 @@
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Tanggal Perolehan</label>
                     <input type="date" name="acquisition_date"
                         value="{{ old('acquisition_date', $asset->acquisition_date ? $asset->acquisition_date->format('Y-m-d') : '') }}"
+                        max="{{ now()->toDateString() }}"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
                 </div>
 
@@ -130,7 +131,7 @@
                             <p class="mt-2 text-xs text-slate-500">Foto saat ini</p>
                         @else
                             <div class="w-40 h-28 rounded-xl bg-slate-100 text-slate-400 flex items-center justify-center text-sm border border-slate-200">
-                                No Image
+                                Tanpa Gambar
                             </div>
                         @endif
                     </div>
