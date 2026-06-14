@@ -176,6 +176,7 @@ class AdminCrudFlowTest extends TestCase
         $letterType = LetterType::create([
             'name' => 'Surat QA',
             'code' => 'QA',
+            'template_file' => 'admin.letters.pdf.skot',
             'is_active' => true,
         ]);
         $today = now()->toDateString();
@@ -488,6 +489,12 @@ class AdminCrudFlowTest extends TestCase
         $this->assertSame('Ayah QA Update', $letter->payload['father_name']);
         $this->assertSame('Ibu QA Update', $letter->payload['mother_name']);
         $this->assertSame('Wali QA Update', $letter->payload['guardian_name']);
+
+        $this->get(route('admin.letters.download-pdf', $letter->id))
+            ->assertOk();
+        $letter->refresh();
+        $this->assertSame('COMPLETED', $letter->status);
+        $this->assertStringEndsWith('.pdf', (string) $letter->result_file);
 
         $this->delete(route('admin.letters.destroy', $letter->id))
             ->assertRedirect(route('admin.letters.index'));
