@@ -18,6 +18,7 @@ class AdminLetterPdfController extends Controller
         $data = $this->buildTemplateData($letter);
 
         $pdf = Pdf::loadView($template, $data)
+            ->setOption('defaultFont', 'Arial')
             ->setPaper('a4', 'portrait');
 
         return $pdf->stream($this->fileName($letter));
@@ -31,6 +32,7 @@ class AdminLetterPdfController extends Controller
         $data = $this->buildTemplateData($letter);
 
         $pdf = Pdf::loadView($template, $data)
+            ->setOption('defaultFont', 'Arial')
             ->setPaper('a4', 'portrait');
 
         $filename = 'letters/' . $this->fileName($letter);
