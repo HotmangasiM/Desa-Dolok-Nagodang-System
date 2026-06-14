@@ -107,37 +107,50 @@ class PublicInfrastructureController extends Controller
         return view('admin.infrastructure.create');
     }
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'title'   => 'required|string|max:255',
-            'content' => 'required',
-            'status'  => 'required|in:draft,publish',
-            'image'   => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-        ]);
+   public function store(Request $request)
+{
+    $request->validate([
+        'nama_barang'     => 'required|string|max:255',
+        'kode_barang'     => 'nullable|string|max:255',
+        'jenis_barang'    => 'nullable|string|max:255',
+        'jumlah_luas'     => 'nullable|string|max:255',
+        'nilai_harga'     => 'nullable|numeric',
+        'tahun_pengadaan' => 'nullable',
+        'kondisi'         => 'required',
+        'keterangan'      => 'nullable|string',
+        'status'          => 'required|in:draft,publish',
+        'image'           => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+    ]);
 
-        $imagePath = null;
+    $imagePath = null;
 
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')
-                ->store('infrastructure', 'public');
-        }
-
-        Infrastructure::create([
-            'title'   => $request->title,
-            'slug'    => Str::slug($request->title),
-            'content' => $request->content,
-            'status'  => $request->status,
-            'image'   => $imagePath,
-        ]);
-
-        return redirect()
-            ->route('admin.infrastructure.index')
-            ->with(
-                'success',
-                'Data infrastruktur berhasil ditambahkan.'
-            );
+    if ($request->hasFile('image')) {
+        $imagePath = $request->file('image')
+            ->store('infrastructure', 'public');
     }
+
+    Infrastructure::create([
+    'slug' => Str::slug($request->nama_barang),
+
+    'nama_barang' => $request->nama_barang,
+    'kode_barang' => $request->kode_barang,
+    'jenis_barang' => $request->jenis_barang,
+    'jumlah_luas' => $request->jumlah_luas,
+    'nilai_harga' => $request->nilai_harga,
+    'tahun_pengadaan' => $request->tahun_pengadaan,
+    'kondisi' => $request->kondisi,
+    'keterangan' => $request->keterangan,
+
+    'content' => $request->content,
+
+    'status' => $request->status,
+    'image' => $imagePath,
+]);
+
+    return redirect()
+        ->route('admin.infrastructure.index')
+        ->with('success', 'Data aset berhasil ditambahkan.');
+}
 
     public function edit($id)
     {
@@ -149,49 +162,52 @@ class PublicInfrastructureController extends Controller
         );
     }
 
-    public function update(Request $request, $id)
-    {
-        $item = Infrastructure::findOrFail($id);
+  public function update(Request $request, $id)
+{
+    $item = Infrastructure::findOrFail($id);
 
-        $request->validate([
-            'title'   => 'required|string|max:255',
-            'content' => 'required',
-            'status'  => 'required|in:draft,publish',
-            'image'   => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-        ]);
+    $request->validate([
+        'nama_barang' => 'required|string|max:255',
+        'kondisi'     => 'required',
+        'status'      => 'required|in:draft,publish',
+        'content'     => 'nullable|string',
+        'image'       => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+    ]);
 
-        $imagePath = $item->image;
+    $imagePath = $item->image;
 
-        if ($request->hasFile('image')) {
+    if ($request->hasFile('image')) {
 
-            if (
-                $item->image &&
-                Storage::disk('public')->exists($item->image)
-            ) {
-                Storage::disk('public')
-                    ->delete($item->image);
-            }
-
-            $imagePath = $request->file('image')
-                ->store('infrastructure', 'public');
+        if (
+            $item->image &&
+            Storage::disk('public')->exists($item->image)
+        ) {
+            Storage::disk('public')->delete($item->image);
         }
 
-        $item->update([
-            'title'   => $request->title,
-            'slug'    => Str::slug($request->title),
-            'content' => $request->content,
-            'status'  => $request->status,
-            'image'   => $imagePath,
-        ]);
-
-        return redirect()
-            ->route('admin.infrastructure.index')
-            ->with(
-                'success',
-                'Data infrastruktur berhasil diperbarui.'
-            );
+        $imagePath = $request->file('image')
+            ->store('infrastructure', 'public');
     }
 
+    $item->update([
+        'slug'            => Str::slug($request->nama_barang . '-' . time()),
+        'nama_barang'     => $request->nama_barang,
+        'kode_barang'     => $request->kode_barang,
+        'jenis_barang'    => $request->jenis_barang,
+        'jumlah_luas'     => $request->jumlah_luas,
+        'nilai_harga'     => $request->nilai_harga,
+        'tahun_pengadaan' => $request->tahun_pengadaan,
+        'kondisi'         => $request->kondisi,
+        'keterangan'      => $request->keterangan,
+        'content'         => $request->content,
+        'status'          => $request->status,
+        'image'           => $imagePath,
+    ]);
+
+    return redirect()
+        ->route('admin.infrastructure.index')
+        ->with('success', 'Data aset berhasil diperbarui.');
+}
     public function destroy($id)
     {
         $item = Infrastructure::findOrFail($id);

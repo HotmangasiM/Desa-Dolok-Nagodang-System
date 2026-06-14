@@ -2,16 +2,16 @@
 
 @section('content')
 
-<div class="space-y-6">
+<div class="max-w-7xl mx-auto space-y-6">
 
     {{-- ERROR --}}
     @if ($errors->any())
-        <div class="rounded-2xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-700">
-            <div class="font-semibold mb-2">
-                Terjadi kesalahan pada input:
+        <div class="rounded-2xl border border-rose-200 bg-rose-50 p-5">
+            <div class="font-semibold text-rose-700 mb-2">
+                Terjadi kesalahan:
             </div>
 
-            <ul class="list-disc list-inside space-y-1">
+            <ul class="list-disc list-inside text-sm text-rose-600 space-y-1">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
                 @endforeach
@@ -24,142 +24,231 @@
         method="POST"
         enctype="multipart/form-data"
         id="infrastructureForm"
-        class="space-y-6">
+        class="space-y-6"
+    >
 
         @csrf
         @method('PUT')
 
-        {{-- CARD --}}
-        <div class="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
+        <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
 
             {{-- HEADER --}}
-            <div class="px-6 py-4 border-b border-slate-200">
-                <h2 class="text-lg font-bold text-slate-800">
-                    Informasi Infrastruktur
+            <div class="px-6 py-5 border-b border-slate-200">
+                <h2 class="font-semibold text-slate-800">
+                    Edit Data Aset Desa
                 </h2>
-
-                <p class="text-sm text-slate-500 mt-1">
-                    Perbarui data pembangunan dan fasilitas desa.
-                </p>
             </div>
 
-            {{-- CONTENT --}}
-            <div class="p-6 grid grid-cols-1 xl:grid-cols-3 gap-5">
+            {{-- FORM CONTENT --}}
+            <div class="p-6">
 
-                {{-- JUDUL --}}
-                <div class="xl:col-span-2">
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
 
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">
-                        Judul Infrastruktur
-                        <span class="text-rose-500">*</span>
-                    </label>
+                    {{-- NAMA BARANG --}}
+                    <div class="xl:col-span-2">
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">
+                            Nama Barang
+                        </label>
 
-                    <input
-                        type="text"
-                        name="title"
-                        value="{{ old('title', $item->title) }}"
-                        placeholder="Masukkan judul pembangunan"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    >
-
-                </div>
-
-                {{-- STATUS --}}
-                <div>
-
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">
-                        Status
-                        <span class="text-rose-500">*</span>
-                    </label>
-
-                    <select
-                        name="status"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
-
-                        <option value="">Pilih Status</option>
-
-                        <option value="draft"
-                            {{ old('status', $item->status) == 'draft' ? 'selected' : '' }}>
-                            Draf
-                        </option>
-
-                        <option value="publish"
-                            {{ old('status', $item->status) == 'publish' ? 'selected' : '' }}>
-                            Dipublikasikan
-                        </option>
-
-                    </select>
-
-                </div>
-
-                {{-- GAMBAR --}}
-                <div class="xl:col-span-3">
-
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">
-                        Foto Infrastruktur
-                    </label>
-
-                    {{-- OLD IMAGE --}}
-                    <div class="mb-3">
-
-                        @if($item->image)
-
-                            <img
-                                src="{{ asset('storage/'.$item->image) }}"
-                                alt="{{ $item->title }}"
-                                class="w-48 h-32 rounded-xl object-cover border border-slate-200 shadow-sm"
-                            >
-
-                            <p class="mt-2 text-xs text-slate-500">
-                                Foto saat ini
-                            </p>
-
-                        @else
-
-                            <div class="w-48 h-32 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 border border-slate-200">
-                                Tanpa Gambar
-                            </div>
-
-                        @endif
-
+                        <input
+                            type="text"
+                            name="nama_barang"
+                            value="{{ old('nama_barang', $item->nama_barang) }}"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3"
+                        >
                     </div>
 
-                    <input
-                        type="file"
-                        name="image"
-                        id="imageInput"
-                        accept="image/*"
-                        onchange="previewInfrastructureImage(event)"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    >
+                    {{-- KODE BARANG --}}
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">
+                            Kode Barang
+                        </label>
 
-                    <p class="text-xs text-slate-500 mt-2">
-                        Kosongkan jika tidak ingin mengganti gambar.
-                        Format JPG, JPEG, PNG, WEBP maksimal 2MB.
-                    </p>
+                        <input
+                            type="text"
+                            name="kode_barang"
+                            value="{{ old('kode_barang', $item->kode_barang) }}"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3"
+                        >
+                    </div>
 
-                    {{-- PREVIEW --}}
-                    <img
-                        id="imagePreview"
-                        class="hidden mt-4 w-48 h-32 rounded-xl object-cover border border-slate-200 shadow-sm"
-                    >
+                    {{-- JENIS BARANG --}}
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">
+                            Jenis Barang / Merk
+                        </label>
 
-                </div>
+                        <input
+                            type="text"
+                            name="jenis_barang"
+                            value="{{ old('jenis_barang', $item->jenis_barang) }}"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3"
+                        >
+                    </div>
 
-                {{-- KONTEN --}}
-                <div class="xl:col-span-3">
+                    {{-- JUMLAH --}}
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">
+                            Jumlah / Luas
+                        </label>
 
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">
-                        Deskripsi Infrastruktur
-                        <span class="text-rose-500">*</span>
-                    </label>
+                        <input
+                            type="text"
+                            name="jumlah_luas"
+                            value="{{ old('jumlah_luas', $item->jumlah_luas) }}"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3"
+                        >
+                    </div>
 
-                    <textarea
-                        name="content"
-                        rows="12"
-                        placeholder="Tulis informasi pembangunan desa..."
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm leading-6 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    >{{ old('content', $item->content) }}</textarea>
+                    {{-- NILAI --}}
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">
+                            Nilai / Harga
+                        </label>
+
+                        <input
+                            type="number"
+                            name="nilai_harga"
+                            value="{{ old('nilai_harga', $item->nilai_harga) }}"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3"
+                        >
+                    </div>
+
+                    {{-- TAHUN --}}
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">
+                            Tahun Pengadaan
+                        </label>
+
+                        <input
+                            type="number"
+                            name="tahun_pengadaan"
+                            value="{{ old('tahun_pengadaan', $item->tahun_pengadaan) }}"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3"
+                        >
+                    </div>
+
+                    {{-- KONDISI --}}
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">
+                            Kondisi
+                        </label>
+
+                        <select
+                            name="kondisi"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3"
+                        >
+                            <option value="">Pilih Kondisi</option>
+
+                            <option value="Baik"
+                                {{ old('kondisi', $item->kondisi) == 'Baik' ? 'selected' : '' }}>
+                                Baik
+                            </option>
+
+                            <option value="Rusak Ringan"
+                                {{ old('kondisi', $item->kondisi) == 'Rusak Ringan' ? 'selected' : '' }}>
+                                Rusak Ringan
+                            </option>
+
+                            <option value="Rusak Berat"
+                                {{ old('kondisi', $item->kondisi) == 'Rusak Berat' ? 'selected' : '' }}>
+                                Rusak Berat
+                            </option>
+                        </select>
+                    </div>
+
+                    {{-- KETERANGAN --}}
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">
+                            Keterangan
+                        </label>
+
+                        <select
+                            name="keterangan"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3"
+                        >
+                            <option value="">Pilih</option>
+
+                            <option value="ADD"
+                                {{ old('keterangan', $item->keterangan) == 'ADD' ? 'selected' : '' }}>
+                                ADD
+                            </option>
+
+                            <option value="DD"
+                                {{ old('keterangan', $item->keterangan) == 'DD' ? 'selected' : '' }}>
+                                DD
+                            </option>
+
+                            <option value="HIBAH"
+                                {{ old('keterangan', $item->keterangan) == 'HIBAH' ? 'selected' : '' }}>
+                                HIBAH
+                            </option>
+
+                            <option value="SUMBANGAN"
+                                {{ old('keterangan', $item->keterangan) == 'SUMBANGAN' ? 'selected' : '' }}>
+                                SUMBANGAN
+                            </option>
+                        </select>
+                    </div>
+
+                    {{-- STATUS --}}
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">
+                            Status Publish
+                        </label>
+
+                        <select name="status"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3">
+
+                            <option value="draft"
+                                {{ old('status', $item->status) == 'draft' ? 'selected' : '' }}>
+                                Draft
+                            </option>
+
+                            <option value="publish"
+                                {{ old('status', $item->status) == 'publish' ? 'selected' : '' }}>
+                                Publish
+                            </option>
+
+                        </select>
+                    </div>
+
+                    {{-- FOTO --}}
+                    <div class="xl:col-span-3">
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">
+                            Foto Aset
+                        </label>
+
+                        <input
+                            type="file"
+                            name="image"
+                            accept="image/*"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3"
+                        >
+
+                        @if($item->image)
+                            <img src="{{ asset('storage/'.$item->image) }}"
+                                 class="w-40 h-28 mt-3 rounded-lg object-cover border">
+                        @endif
+                    </div>
+
+                    {{-- MASALAH --}}
+                    <div class="xl:col-span-3">
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">
+                            Masalah Terkait Aset
+                        </label>
+
+                        <div class="xl:col-span-3">
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">
+                            Isi Konten Pembangunan
+                        </label>
+
+                        <textarea
+                            name="content"
+                            rows="10"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3"
+                        >{{ old('content', $item->content) }}</textarea>
+                    </div>
 
                 </div>
 
@@ -167,22 +256,18 @@
 
         </div>
 
-        {{-- ACTION --}}
-        <div class="flex flex-col sm:flex-row items-center justify-end gap-3">
+        {{-- BUTTON --}}
+        <div class="flex justify-end gap-3">
 
             <a href="{{ route('admin.infrastructure.index') }}"
-               class="w-full sm:w-auto inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 transition">
-
+               class="px-5 py-3 rounded-xl border border-slate-300">
                 Batal
-
             </a>
 
             <button
                 type="submit"
-                class="w-full sm:w-auto inline-flex items-center justify-center rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-700 shadow-lg shadow-emerald-600/20 transition">
-
+                class="px-6 py-3 rounded-xl bg-emerald-600 text-white">
                 Simpan Perubahan
-
             </button>
 
         </div>
@@ -192,77 +277,3 @@
 </div>
 
 @endsection
-
-@push('scripts')
-<script>
-
-function previewInfrastructureImage(event)
-{
-    const input = event.target;
-    const preview = document.getElementById('imagePreview');
-
-    if (!input.files.length) return;
-
-    const reader = new FileReader();
-
-    reader.onload = function(e)
-    {
-        preview.src = e.target.result;
-        preview.classList.remove('hidden');
-    };
-
-    reader.readAsDataURL(input.files[0]);
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-
-    const form = document.getElementById('infrastructureForm');
-
-    form.addEventListener('submit', function(e){
-
-        if(form.dataset.confirmed === 'true'){
-            return;
-        }
-
-        e.preventDefault();
-
-        const title =
-            document.querySelector('input[name="title"]').value ||
-            'data infrastruktur';
-
-        Swal.fire({
-            title: 'Simpan Perubahan?',
-            text: `Perbarui data "${title}" ?`,
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#10b981',
-            cancelButtonColor: '#64748b',
-            confirmButtonText: 'Ya, Simpan',
-            cancelButtonText: 'Batal',
-            reverseButtons: true
-        }).then((result) => {
-
-            if(result.isConfirmed){
-
-                form.dataset.confirmed = 'true';
-
-                Swal.fire({
-                    title: 'Menyimpan...',
-                    text: 'Mohon tunggu',
-                    allowOutsideClick: false,
-                    showConfirmButton: false,
-                    didOpen: () => {
-                        Swal.showLoading();
-                    }
-                });
-
-                form.submit();
-            }
-
-        });
-
-    });
-
-});
-</script>
-@endpush

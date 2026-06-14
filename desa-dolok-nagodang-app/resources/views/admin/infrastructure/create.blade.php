@@ -1,13 +1,28 @@
+```blade
 @extends('layouts.admin')
 
 @section('content')
-<div class="space-y-6">
+<div class="max-w-7xl mx-auto space-y-6">
+
+    {{-- HEADER --}}
+    <div>
+        <h1 class="text-2xl font-bold text-slate-800">
+            Tambah Data Pembangunan Infrastruktur Desa
+        </h1>
+
+        <p class="text-sm text-slate-500 mt-1">
+            Input data aset desa sesuai laporan inventaris desa.
+        </p>
+    </div>
 
     {{-- ERROR --}}
     @if ($errors->any())
-        <div class="rounded-2xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-700">
-            <div class="font-semibold mb-2">Terjadi kesalahan pada input:</div>
-            <ul class="list-disc list-inside space-y-1">
+        <div class="rounded-2xl border border-rose-200 bg-rose-50 p-5">
+            <div class="font-semibold text-rose-700 mb-2">
+                Terjadi kesalahan:
+            </div>
+
+            <ul class="list-disc list-inside text-sm text-rose-600 space-y-1">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
                 @endforeach
@@ -15,134 +30,209 @@
         </div>
     @endif
 
-    <form action="{{ route('admin.infrastructure.store') }}"
-          method="POST"
-          enctype="multipart/form-data">
-
+    <form
+        action="{{ route('admin.infrastructure.store') }}"
+        method="POST"
+        enctype="multipart/form-data"
+    >
         @csrf
 
-        <div class="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
+        <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
 
-            {{-- HEADER --}}
-            <div class="px-6 py-4 border-b border-slate-200">
-                <h2 class="text-lg font-bold text-slate-800">
+            {{-- CARD HEADER --}}
+            <div class="px-6 py-5 border-b border-slate-200">
+                <h2 class="font-semibold text-slate-800">
                     Informasi Infrastruktur
                 </h2>
-                <p class="text-sm text-slate-500 mt-1">
-                    Tambahkan data pembangunan atau fasilitas desa.
-                </p>
             </div>
 
-            {{-- FORM --}}
-            <div class="p-6 grid grid-cols-1 xl:grid-cols-3 gap-5">
+            {{-- FORM CONTENT --}}
+            <div class="p-6">
 
-                {{-- TITLE --}}
-                <div class="xl:col-span-2">
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">
-                        Judul Infrastruktur
-                        <span class="text-rose-500">*</span>
-                    </label>
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
 
-                    <input
-                        type="text"
-                        name="title"
-                        value="{{ old('title') }}"
-                        placeholder="Contoh: Pembangunan Jalan Desa"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm
-                               focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    >
-                </div>
+                    {{-- NAMA BARANG --}}
+                    <div class="xl:col-span-2">
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">
+                            Nama Barang
+                        </label>
 
-                {{-- STATUS --}}
-                <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">
-                        Status
-                        <span class="text-rose-500">*</span>
-                    </label>
-
-                    <select
-                        name="status"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm
-                               focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    >
-                        <option value="">Pilih Status</option>
-
-                        <option value="draft"
-                            {{ old('status') == 'draft' ? 'selected' : '' }}>
-                            Draft
-                        </option>
-
-                        <option value="publish"
-                            {{ old('status') == 'publish' ? 'selected' : '' }}>
-                            Publish
-                        </option>
-                    </select>
-                </div>
-
-                {{-- IMAGE --}}
-                <div class="xl:col-span-3">
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">
-                        Foto Infrastruktur
-                    </label>
-
-                    <input
-                        type="file"
-                        name="image"
-                        id="imageInput"
-                        accept="image/*"
-                        onchange="previewImage(event)"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm
-                               focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    >
-
-                    <p class="text-xs text-slate-500 mt-2">
-                        Format: JPG, PNG, JPEG (max 2MB)
-                    </p>
-
-                    <div class="mt-4">
-                        <img
-                            id="imagePreview"
-                            class="hidden w-48 h-32 object-cover rounded-xl border border-slate-200 shadow-sm"
+                        <input
+                            type="text"
+                            name="nama_barang"
+                            value="{{ old('nama_barang') }}"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
                         >
                     </div>
-                </div>
 
-                {{-- CONTENT --}}
-                <div class="xl:col-span-3">
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">
-                        Deskripsi Infrastruktur
-                        <span class="text-rose-500">*</span>
+                    {{-- KODE BARANG --}}
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">
+                            Kode Barang
+                        </label>
+
+                        <input
+                            type="text"
+                            name="kode_barang"
+                            value="{{ old('kode_barang') }}"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3"
+                        >
+                    </div>
+
+                    {{-- JENIS --}}
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">
+                            Jenis Barang / Merk
+                        </label>
+
+                        <input
+                            type="text"
+                            name="jenis_barang"
+                            value="{{ old('jenis_barang') }}"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3"
+                        >
+                    </div>
+
+                    {{-- JUMLAH --}}
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">
+                            Jumlah / Luas
+                        </label>
+
+                        <input
+                            type="text"
+                            name="jumlah_luas"
+                            value="{{ old('jumlah_luas') }}"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3"
+                        >
+                    </div>
+
+                    {{-- NILAI --}}
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">
+                            Nilai / Harga
+                        </label>
+
+                        <input
+                            type="number"
+                            name="nilai_harga"
+                            value="{{ old('nilai_harga') }}"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3"
+                        >
+                    </div>
+
+                    {{-- TAHUN --}}
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">
+                            Tahun Pengadaan
+                        </label>
+
+                        <input
+                            type="number"
+                            name="tahun_pengadaan"
+                            value="{{ old('tahun_pengadaan') }}"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3"
+                        >
+                    </div>
+
+                    {{-- KONDISI --}}
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">
+                            Kondisi
+                        </label>
+
+                        <select
+                            name="kondisi"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3"
+                        >
+                            <option value="">Pilih Kondisi</option>
+                            <option value="Baik">Baik</option>
+                            <option value="Rusak Ringan">Rusak Ringan</option>
+                            <option value="Rusak Berat">Rusak Berat</option>
+                        </select>
+                    </div>
+
+                    {{-- KETERANGAN --}}
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">
+                            Keterangan
+                        </label>
+
+                        <select
+                            name="keterangan"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3"
+                        >
+                            <option value="">Pilih</option>
+                            <option value="ADD">ADD</option>
+                            <option value="DD">DD</option>
+                            <option value="HIBAH">HIBAH</option>
+                            <option value="SUMBANGAN">SUMBANGAN</option>
+                        </select>
+                    </div>
+
+                    {{-- STATUS --}}
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">
+                            Status Publish
+                        </label>
+
+                        <select
+                            name="status"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3"
+                        >
+                            <option value="draft">Draft</option>
+                            <option value="publish">Publish</option>
+                        </select>
+                    </div>
+
+                    {{-- FOTO --}}
+                    <div class="xl:col-span-3">
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">
+                            Foto Aset
+                        </label>
+
+                        <input
+                            type="file"
+                            name="image"
+                            accept="image/*"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3"
+                        >
+                    </div>
+
+                    {{-- MASALAH ASET --}}
+                    <div class="xl:col-span-3">
+                     <label class="block text-sm font-semibold text-slate-700 mb-2">
+                        Isi Konten Pembangunan / Deskripsi Lengkap
                     </label>
 
                     <textarea
                         name="content"
                         rows="10"
-                        placeholder="Tulis deskripsi pembangunan atau fasilitas desa..."
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm leading-6
-                               focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                    >{{ old('content') }}</textarea>
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3"
+                        placeholder="Masukkan deskripsi lengkap aset, sejarah pembangunan, sumber anggaran, manfaat, dan informasi lainnya..."
+                    >{{ old('content') }}
+                    </textarea>
+                    </div>
+
                 </div>
 
             </div>
+
         </div>
 
         {{-- BUTTON --}}
-        <div class="flex flex-col sm:flex-row items-center justify-end gap-3">
+        <div class="flex justify-end gap-3 pt-2">
 
             <a href="{{ route('admin.infrastructure.index') }}"
-               class="w-full sm:w-auto inline-flex items-center justify-center
-                      rounded-xl border border-slate-300 bg-white px-5 py-3
-                      text-sm font-medium text-slate-700 hover:bg-slate-50 transition">
+               class="px-5 py-3 rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-50">
                 Batal
             </a>
 
             <button
                 type="submit"
-                class="w-full sm:w-auto inline-flex items-center justify-center
-                       rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold
-                       text-white hover:bg-emerald-700
-                       shadow-lg shadow-emerald-600/20 transition">
-                Simpan Infrastruktur
+                class="px-6 py-3 rounded-xl bg-emerald-600 text-white font-semibold hover:bg-emerald-700 shadow-lg shadow-emerald-600/20"
+            >
+                Simpan Data Aset
             </button>
 
         </div>
@@ -151,94 +241,4 @@
 
 </div>
 @endsection
-
-@push('scripts')
-<script>
-
-function previewImage(event) {
-
-    const input = event.target;
-    const preview = document.getElementById('imagePreview');
-
-    if (!input.files || !input.files[0]) return;
-
-    const reader = new FileReader();
-
-    reader.onload = function(e) {
-        preview.src = e.target.result;
-        preview.classList.remove('hidden');
-    };
-
-    reader.readAsDataURL(input.files[0]);
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-
-    if (typeof Swal === 'undefined') return;
-
-    document.addEventListener('submit', function (e) {
-
-        const form = e.target;
-
-        if (!form.action.includes('infrastructure')) return;
-
-        if (form.dataset.confirmed === 'true') return;
-
-        e.preventDefault();
-
-        const title =
-            form.querySelector('input[name="title"]')?.value ||
-            'data infrastruktur';
-
-        Swal.fire({
-            title: 'Konfirmasi Simpan',
-            text: `Apakah Anda yakin ingin menyimpan "${title}"?`,
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: 'Ya, Simpan',
-            cancelButtonText: 'Batal',
-            confirmButtonColor: '#10b981',
-            cancelButtonColor: '#6b7280',
-            reverseButtons: true
-        }).then((result) => {
-
-            if (result.isConfirmed) {
-
-                form.dataset.confirmed = 'true';
-
-                Swal.fire({
-                    title: 'Menyimpan...',
-                    text: 'Mohon tunggu',
-                    allowOutsideClick: false,
-                    showConfirmButton: false,
-                    didOpen: () => {
-                        Swal.showLoading();
-                    }
-                });
-
-                form.submit();
-            }
-        });
-
-    });
-
-});
-</script>
-<script>
-document.getElementById('imageInput').addEventListener('change', function (e) {
-    const file = e.target.files[0];
-
-    if (file && file.size > 2 * 1024 * 1024) {
-
-        Swal.fire({
-            icon: 'error',
-            title: 'File terlalu besar',
-            text: 'Maksimal ukuran gambar adalah 2MB'
-        });
-
-        e.target.value = '';
-        document.getElementById('imagePreview').classList.add('hidden');
-    }
-});
-</script>
-@endpush
+```

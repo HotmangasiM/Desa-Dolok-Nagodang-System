@@ -47,7 +47,7 @@
                     </svg>
 
                     <span class="text-slate-700 line-clamp-1">
-                        {{ $infrastructure->title }}
+                        {{ $infrastructure->nama_barang }}
                     </span>
 
                 </div>
@@ -60,7 +60,7 @@
                     </div>
 
                     <h1 class="mt-5 text-3xl md:text-5xl font-black leading-tight tracking-tight text-slate-900">
-                        {{ $infrastructure->title }}
+                        {{ $infrastructure->nama_barang }}
                     </h1>
 
                 </div>
@@ -145,7 +145,7 @@
 
                         <img
                             src="{{ asset('storage/' . $infrastructure->image) }}"
-                            alt="{{ $infrastructure->title }}"
+                            alt="{{ $infrastructure->nama_barang }}"
                             class="w-full rounded-2xl object-cover max-h-[550px]"
                         >
 
@@ -225,7 +225,7 @@
 
                                 <img
                                     src="{{ asset('storage/' . $item->image) }}"
-                                    alt="{{ $item->title }}"
+                                    alt="{{ $item->nama_barang }}"
                                     class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                                 >
 
@@ -260,7 +260,7 @@
                             </p>
 
                             <h3 class="mt-1 text-base font-bold leading-6 text-slate-800 group-hover:text-emerald-700 transition line-clamp-2">
-                                {{ $item->title }}
+                                {{ $item->nama_barang }}
                             </h3>
 
                             <p class="mt-2 text-sm leading-6 text-slate-500 line-clamp-2">

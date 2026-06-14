@@ -123,7 +123,7 @@
                     {{-- TITLE --}}
                     <h2 class="mt-4 text-xl font-bold text-slate-800 leading-snug group-hover:text-emerald-700 transition">
 
-                        {{ $item->title }}
+                        {{ $item->nama_barang }}
 
                     </h2>
 
