@@ -742,36 +742,26 @@
                 </h2>
 
                 <p class="mt-4 text-slate-500 leading-8 text-[15px] md:text-base">
-                    Informasi pembangunan, fasilitas desa,
-                    dan dokumentasi infrastruktur terbaru.
+                    Informasi pembangunan, fasilitas desa, dan dokumentasi infrastruktur terbaru.
                 </p>
 
             </div>
 
-            {{-- BUTTON --}}
-            <div>
+            <a href="{{ route('public.infrastruktur.index') }}"
+               class="inline-flex items-center gap-2 rounded-2xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-600/20 transition hover:bg-emerald-700">
 
-                <a href="{{ route('public.infrastruktur.index') }}"
-                   class="inline-flex items-center gap-2 rounded-2xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-600/20 transition hover:bg-emerald-700">
+                Lihat Semua
 
-                    Lihat Semua
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     class="h-4 w-4"
+                     fill="none"
+                     viewBox="0 0 24 24"
+                     stroke="currentColor"
+                     stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
 
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                         class="h-4 w-4"
-                         fill="none"
-                         viewBox="0 0 24 24"
-                         stroke="currentColor"
-                         stroke-width="2">
-
-                        <path stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="M9 5l7 7-7 7" />
-
-                    </svg>
-
-                </a>
-
-            </div>
+            </a>
 
         </div>
 
@@ -780,57 +770,42 @@
 
             @forelse ($latestInfrastructures as $item)
 
-                {{-- CARD --}}
                 <a href="{{ route('public.infrastruktur.show', $item->slug) }}"
-                   class="group overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl block">
+                   class="group block overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
 
                     {{-- IMAGE --}}
                     <div class="relative overflow-hidden">
 
                         @if($item->image)
-
                             <img
                                 src="{{ asset('storage/' . $item->image) }}"
                                 alt="{{ $item->title }}"
                                 class="h-64 w-full object-cover transition duration-500 group-hover:scale-105"
                             >
-
                         @else
-
                             <div class="h-64 w-full bg-gradient-to-br from-slate-200 to-slate-100 flex items-center justify-center">
-
                                 <div class="text-center">
-
                                     <svg xmlns="http://www.w3.org/2000/svg"
                                          class="mx-auto h-14 w-14 text-slate-400"
                                          fill="none"
                                          viewBox="0 0 24 24"
                                          stroke="currentColor"
                                          stroke-width="1.5">
-
-                                        <path stroke-linecap="round"
-                                              stroke-linejoin="round"
+                                        <path stroke-linecap="round" stroke-linejoin="round"
                                               d="M3 7l9-4 9 4-9 4-9-4zm0 0v10l9 4 9-4V7" />
-
                                     </svg>
-
-                                    <p class="mt-4 text-sm font-medium text-slate-500">
+                                    <p class="mt-3 text-sm text-slate-500">
                                         Foto pembangunan
                                     </p>
-
                                 </div>
-
                             </div>
-
                         @endif
 
                         {{-- BADGE --}}
                         <div class="absolute top-4 left-4">
-
                             <span class="rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-slate-700 backdrop-blur">
                                 Infrastruktur
                             </span>
-
                         </div>
 
                     </div>
@@ -840,63 +815,47 @@
 
                         {{-- META --}}
                         <div class="flex items-center gap-2 text-xs text-slate-500">
-
                             <svg xmlns="http://www.w3.org/2000/svg"
                                  class="h-4 w-4"
                                  fill="none"
                                  viewBox="0 0 24 24"
                                  stroke="currentColor"
                                  stroke-width="2">
-
                                 <path stroke-linecap="round"
                                       stroke-linejoin="round"
                                       d="M8 7V3m8 4V3m-9 8h10m-11 9h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v11a2 2 0 002 2z" />
-
                             </svg>
 
                             <span>
-                                {{ $item->created_at->format('d M Y') }}
+                                {{ optional($item->created_at)->format('d M Y') }}
                             </span>
-
                         </div>
 
                         {{-- TITLE --}}
                         <h3 class="mt-4 text-xl font-bold leading-snug text-slate-800 group-hover:text-emerald-700 transition">
-
                             {{ $item->title }}
-
                         </h3>
 
                         {{-- DESCRIPTION --}}
                         <p class="mt-3 text-sm leading-7 text-slate-500">
-
                             {{ \Illuminate\Support\Str::limit(strip_tags($item->content), 120) }}
-
                         </p>
 
                         {{-- FOOTER --}}
                         <div class="mt-6 flex items-center justify-between border-t border-slate-100 pt-5">
 
-                            <div></div>
+                            <span class="text-sm font-semibold text-emerald-600 group-hover:translate-x-1 transition">
+                                Detail →
+                            </span>
 
-                            <div class="inline-flex items-center gap-2 text-sm font-semibold text-emerald-600 group-hover:translate-x-1 transition">
-
-                                Detail
-
-                                <svg xmlns="http://www.w3.org/2000/svg"
-                                     class="h-4 w-4"
-                                     fill="none"
-                                     viewBox="0 0 24 24"
-                                     stroke="currentColor"
-                                     stroke-width="2">
-
-                                    <path stroke-linecap="round"
-                                          stroke-linejoin="round"
-                                          d="M9 5l7 7-7 7" />
-
-                                </svg>
-
-                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 class="h-4 w-4 text-emerald-600"
+                                 fill="none"
+                                 viewBox="0 0 24 24"
+                                 stroke="currentColor"
+                                 stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                            </svg>
 
                         </div>
 
@@ -909,20 +868,16 @@
                 <div class="col-span-full rounded-3xl border border-dashed border-slate-300 bg-white p-10 text-center">
 
                     <div class="mx-auto w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center">
-
                         <svg xmlns="http://www.w3.org/2000/svg"
                              class="w-8 h-8 text-slate-400"
                              fill="none"
                              viewBox="0 0 24 24"
                              stroke="currentColor"
                              stroke-width="1.5">
-
                             <path stroke-linecap="round"
                                   stroke-linejoin="round"
                                   d="M3 7l9-4 9 4-9 4-9-4zm0 0v10l9 4 9-4V7" />
-
                         </svg>
-
                     </div>
 
                     <h3 class="mt-5 text-lg font-bold text-slate-700">
@@ -942,7 +897,6 @@
     </div>
 
 </section>
-
 {{-- LAYANAN SURAT --}}
 <section class="bg-emerald-950 text-white py-12 md:py-14">
     <div class="max-w-7xl mx-auto px-4">
