@@ -5,7 +5,7 @@
     <title>Surat Keterangan Penghasilan Orang Tua</title>
     <style>
         body {
-            font-family: DejaVu Sans, sans-serif;
+            font-family: Arial, sans-serif !important;
             font-size: 12px;
             line-height: 1.4;
             margin: 28px 34px;

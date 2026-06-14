@@ -9,7 +9,7 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
+            font-family: Arial, sans-serif !important;
             font-size: 13px;
             color: #000;
             line-height: 1.35;

@@ -7,7 +7,7 @@
         @page { margin: 28px 58px; }
 
         body {
-            font-family: Arial, sans-serif;
+            font-family: Arial, sans-serif !important;
             font-size: 13px;
             line-height: 1.38;
             color: #000;
