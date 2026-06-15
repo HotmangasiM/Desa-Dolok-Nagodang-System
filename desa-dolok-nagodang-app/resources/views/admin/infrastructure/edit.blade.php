@@ -1,5 +1,4 @@
 @extends('layouts.admin')
-
 @section('content')
 
 <div class="max-w-7xl mx-auto space-y-6">
@@ -276,4 +275,72 @@
 
 </div>
 
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const form = document.getElementById('infrastructureForm');
+
+    if (!form) return;
+
+    form.addEventListener('submit', function (e) {
+
+        if (form.dataset.confirmed === 'true') {
+            return;
+        }
+
+        if (typeof Swal === 'undefined') {
+            return;
+        }
+
+        e.preventDefault();
+
+        Swal.fire({
+            title: 'Konfirmasi Perubahan Data',
+            text: 'Apakah Anda yakin ingin menyimpan perubahan data infrastruktur ini?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, simpan',
+            cancelButtonText: 'Batal',
+            confirmButtonColor: '#10b981',
+            cancelButtonColor: '#6b7280',
+            reverseButtons: true
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+
+                form.dataset.confirmed = 'true';
+
+                Swal.fire({
+                    title: 'Menyimpan...',
+                    text: 'Mohon tunggu',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    showConfirmButton: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                form.submit();
+            }
+        });
+    });
+
+});
+</script>
+
+@if(session('success'))
+<script>
+Swal.fire({
+    icon: 'success',
+    title: 'Berhasil',
+    text: '{{ session('success') }}',
+    confirmButtonColor: '#10b981'
+});
+</script>
+@endif
+@endpush
 @endsection

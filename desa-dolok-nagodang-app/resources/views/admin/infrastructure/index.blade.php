@@ -1,5 +1,4 @@
 @extends('layouts.admin')
-
 @section('content')
 <div class="space-y-6">
 
@@ -313,4 +312,3 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 @endpush
-```
