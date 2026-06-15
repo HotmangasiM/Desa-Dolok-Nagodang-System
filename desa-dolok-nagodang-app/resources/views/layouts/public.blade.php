@@ -205,15 +205,16 @@
 {{-- ================= FOOTER ================= --}}
 <footer class="relative overflow-hidden bg-slate-950 text-slate-300 mt-4">
 
-    {{-- BACKGROUND --}}
-    <div class="absolute inset-0 opacity-10">
+    {{-- BACKGROUND EFFECT --}}
+    <div class="absolute inset-0 overflow-hidden opacity-10 pointer-events-none">
         <div class="absolute -top-20 -left-20 w-72 h-72 bg-emerald-500 rounded-full blur-3xl"></div>
         <div class="absolute bottom-0 right-0 w-80 h-80 bg-cyan-500 rounded-full blur-3xl"></div>
     </div>
 
-    <div class="relative max-w-7xl mx-auto px-4 lg:px-6 py-10">
+    {{-- MAIN FOOTER --}}
+    <div class="relative w-full px-4 lg:px-8 xl:px-10 py-10">
 
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8">
 
             {{-- PROFILE --}}
             <div class="xl:col-span-2">
@@ -224,8 +225,7 @@
                         <img
                             src="{{ asset('images/logo.png') }}"
                             alt="Logo Desa"
-                            class="w-full h-full object-contain"
-                        >
+                            class="w-full h-full object-contain">
                     </div>
 
                     <div>
@@ -240,10 +240,10 @@
 
                 </div>
 
-                <p class="mt-4 text-sm leading-7 text-slate-400 max-w-xl">
-                    Website resmi Pemerintah Desa Dolok Nagodang sebagai pusat informasi,
-                    pelayanan administrasi, berita desa, dan transparansi publik
-                    kepada masyarakat.
+                <p class="mt-4 text-sm leading-7 text-slate-400 max-w-2xl">
+                    Website resmi Pemerintah Desa Dolok Nagodang sebagai pusat
+                    informasi, pelayanan administrasi, berita desa, dan
+                    transparansi publik kepada masyarakat.
                 </p>
 
             </div>
@@ -251,77 +251,59 @@
             {{-- MENU --}}
             <div>
 
-                <h3 class="text-white font-bold text-base">
+                <h3 class="text-white font-bold text-base mb-4">
                     Menu Utama
                 </h3>
 
-                <div class="mt-4 space-y-2.5 text-sm">
+                <div class="space-y-3 text-sm">
 
                     <a href="{{ route('public.home') }}"
                        class="flex items-center gap-2 text-slate-400 hover:text-white transition">
-
                         <i data-lucide="chevron-right" class="w-4 h-4"></i>
-
                         Beranda
-
                     </a>
 
                     <a href="{{ route('public.profile') }}"
                        class="flex items-center gap-2 text-slate-400 hover:text-white transition">
-
                         <i data-lucide="chevron-right" class="w-4 h-4"></i>
-
                         Profil Desa
-
                     </a>
 
                     <a href="{{ route('public.news.index') }}"
                        class="flex items-center gap-2 text-slate-400 hover:text-white transition">
-
                         <i data-lucide="chevron-right" class="w-4 h-4"></i>
-
                         Berita Desa
-
                     </a>
 
                     <a href="{{ route('public.letters') }}"
                        class="flex items-center gap-2 text-slate-400 hover:text-white transition">
-
                         <i data-lucide="chevron-right" class="w-4 h-4"></i>
-
                         Layanan Surat
-
                     </a>
 
                     <a href="{{ route('public.infrastruktur.index') }}"
                        class="flex items-center gap-2 text-slate-400 hover:text-white transition">
-
                         <i data-lucide="chevron-right" class="w-4 h-4"></i>
-
                         Infrastruktur
-
                     </a>
 
                 </div>
 
             </div>
 
-            {{-- CONTACT --}}
+            {{-- INFORMASI --}}
             <div>
 
-                <h3 class="text-white font-bold text-base">
+                <h3 class="text-white font-bold text-base mb-4">
                     Informasi Desa
                 </h3>
 
-                <div class="mt-4 space-y-3 text-sm">
+                <div class="space-y-4 text-sm">
 
-                    {{-- ALAMAT --}}
                     <div class="flex gap-3">
 
                         <div class="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
-
                             <i data-lucide="map-pin" class="w-4 h-4 text-emerald-400"></i>
-
                         </div>
 
                         <div>
@@ -330,19 +312,17 @@
                             </p>
 
                             <p class="text-slate-400 leading-6">
-                                Desa Dolok Nagodang, Kecamatan Uluan, Kabupaten Toba
+                                Desa Dolok Nagodang, Kecamatan Uluan,
+                                Kabupaten Toba
                             </p>
                         </div>
 
                     </div>
 
-                    {{-- JAM --}}
                     <div class="flex gap-3">
 
                         <div class="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
-
                             <i data-lucide="clock-3" class="w-4 h-4 text-emerald-400"></i>
-
                         </div>
 
                         <div>
@@ -357,13 +337,10 @@
 
                     </div>
 
-                    {{-- TELEPON --}}
                     <div class="flex gap-3">
 
                         <div class="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
-
                             <i data-lucide="phone" class="w-4 h-4 text-emerald-400"></i>
-
                         </div>
 
                         <div>
@@ -378,13 +355,10 @@
 
                     </div>
 
-                    {{-- EMAIL --}}
                     <div class="flex gap-3">
 
                         <div class="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
-
                             <i data-lucide="mail" class="w-4 h-4 text-emerald-400"></i>
-
                         </div>
 
                         <div>
@@ -406,26 +380,24 @@
         </div>
 
     </div>
+<div class="w-full px-4 lg:px-8 xl:px-10 py-4">
 
-    {{-- COPYRIGHT --}}
-    <div class="border-t border-white/10">
+    <div class="flex flex-col items-center justify-center text-center gap-2">
 
-        <div class="max-w-7xl mx-auto px-4 lg:px-6 py-3 flex flex-col items-center justify-center gap-1 text-sm text-slate-500 text-center">
+        <p class="text-sm text-slate-500">
+            © {{ date('Y') }} Pemerintah Desa Dolok Nagodang
+        </p>
 
-            <p>
-                © {{ date('Y') }} Pemerintah Desa Dolok Nagodang
-            </p>
-
-            <p>
-                Design & Development by
-                <span class="font-semibold text-white">
-                    Marsiadapari 
-                </span>
-            </p>
-
-        </div>
+        <p class="text-sm text-slate-500">
+            Design & Development by
+            <span class="font-semibold text-white">
+                Marsiadapari
+            </span>
+        </p>
 
     </div>
+
+</div>
 
 </footer>
 
