@@ -9,7 +9,52 @@
     @stack('styles')
 
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+    function swalPlainText(value) {
+        if (!value) {
+            return '';
+        }
+
+        return String(value).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+    }
+
+    if (typeof window.Swal === 'undefined') {
+        window.Swal = {
+            fire(options = {}) {
+                const config = typeof options === 'string'
+                    ? { title: options }
+                    : options;
+
+                if (typeof config.didOpen === 'function') {
+                    config.didOpen();
+                }
+
+                const message = [
+                    swalPlainText(config.title),
+                    swalPlainText(config.text),
+                    swalPlainText(config.html),
+                ].filter(Boolean).join('\n\n');
+
+                if (config.showCancelButton) {
+                    return Promise.resolve({
+                        isConfirmed: window.confirm(message || 'Lanjutkan aksi ini?'),
+                    });
+                }
+
+                if (config.showConfirmButton === false) {
+                    return Promise.resolve({ isConfirmed: true });
+                }
+
+                if (message) {
+                    window.alert(message);
+                }
+
+                return Promise.resolve({ isConfirmed: true });
+            },
+            showLoading() {},
+        };
+    }
+    </script>
 </head>
 
 <body class="bg-slate-100 text-slate-800">

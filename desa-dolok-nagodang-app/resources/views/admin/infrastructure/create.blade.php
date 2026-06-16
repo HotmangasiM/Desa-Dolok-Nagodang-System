@@ -243,8 +243,6 @@
 
 </div>
 @push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -255,6 +253,11 @@ document.addEventListener('DOMContentLoaded', function () {
     form.addEventListener('submit', function (e) {
 
         if (form.dataset.confirmed === 'true') {
+            return;
+        }
+
+        if (typeof Swal === 'undefined') {
+            form.dataset.confirmed = 'true';
             return;
         }
 
