@@ -109,6 +109,7 @@
                             type="number"
                             name="nilai_harga"
                             value="{{ old('nilai_harga', $item->nilai_harga) }}"
+                            min="0"
                             class="w-full rounded-xl border border-slate-300 px-4 py-3"
                         >
                     </div>
@@ -123,6 +124,8 @@
                             type="number"
                             name="tahun_pengadaan"
                             value="{{ old('tahun_pengadaan', $item->tahun_pengadaan) }}"
+                            min="1900"
+                            max="{{ now()->year }}"
                             class="w-full rounded-xl border border-slate-300 px-4 py-3"
                         >
                     </div>
@@ -231,13 +234,8 @@
                         @endif
                     </div>
 
-                    {{-- MASALAH --}}
+                    {{-- KONTEN --}}
                     <div class="xl:col-span-3">
-                        <label class="block text-sm font-semibold text-slate-700 mb-2">
-                            Masalah Terkait Aset
-                        </label>
-
-                        <div class="xl:col-span-3">
                         <label class="block text-sm font-semibold text-slate-700 mb-2">
                             Isi Konten Pembangunan
                         </label>

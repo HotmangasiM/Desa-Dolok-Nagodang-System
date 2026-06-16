@@ -85,7 +85,7 @@
 
                         <img
                             src="{{ asset('storage/' . $item->image) }}"
-                            alt="{{ $item->title }}"
+                            alt="{{ $item->nama_barang }}"
                             class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                         >
 
@@ -115,7 +115,7 @@
                         </div>
 
                         <span class="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
-                            {{ $item->category ?? 'Infrastruktur' }}
+                            {{ $item->jenis_barang ?: 'Infrastruktur' }}
                         </span>
 
                     </div>
@@ -129,8 +129,7 @@
 
                     {{-- DESCRIPTION --}}
                     <p class="mt-3 text-sm text-slate-500 leading-7">
-
-                        {{ \Illuminate\Support\Str::limit(strip_tags($item->description), 120) }}
+                        {{ \Illuminate\Support\Str::limit(strip_tags($item->content), 120) ?: 'Informasi pembangunan desa akan ditampilkan di sini.' }}
 
                     </p>
 

@@ -29,7 +29,7 @@
     @endif
 
     <form
-    id="infrastructureForm"
+    id="infrastructureCreateForm"
     action="{{ route('admin.infrastructure.store') }}"
     method="POST"
     enctype="multipart/form-data"
@@ -116,6 +116,7 @@
                             type="number"
                             name="nilai_harga"
                             value="{{ old('nilai_harga') }}"
+                            min="0"
                             class="w-full rounded-xl border border-slate-300 px-4 py-3"
                         >
                     </div>
@@ -130,6 +131,8 @@
                             type="number"
                             name="tahun_pengadaan"
                             value="{{ old('tahun_pengadaan') }}"
+                            min="1900"
+                            max="{{ now()->year }}"
                             class="w-full rounded-xl border border-slate-300 px-4 py-3"
                         >
                     </div>
@@ -145,9 +148,9 @@
                             class="w-full rounded-xl border border-slate-300 px-4 py-3"
                         >
                             <option value="">Pilih Kondisi</option>
-                            <option value="Baik">Baik</option>
-                            <option value="Rusak Ringan">Rusak Ringan</option>
-                            <option value="Rusak Berat">Rusak Berat</option>
+                            <option value="Baik" {{ old('kondisi') === 'Baik' ? 'selected' : '' }}>Baik</option>
+                            <option value="Rusak Ringan" {{ old('kondisi') === 'Rusak Ringan' ? 'selected' : '' }}>Rusak Ringan</option>
+                            <option value="Rusak Berat" {{ old('kondisi') === 'Rusak Berat' ? 'selected' : '' }}>Rusak Berat</option>
                         </select>
                     </div>
 
@@ -162,10 +165,10 @@
                             class="w-full rounded-xl border border-slate-300 px-4 py-3"
                         >
                             <option value="">Pilih</option>
-                            <option value="ADD">ADD</option>
-                            <option value="DD">DD</option>
-                            <option value="HIBAH">HIBAH</option>
-                            <option value="SUMBANGAN">SUMBANGAN</option>
+                            <option value="ADD" {{ old('keterangan') === 'ADD' ? 'selected' : '' }}>ADD</option>
+                            <option value="DD" {{ old('keterangan') === 'DD' ? 'selected' : '' }}>DD</option>
+                            <option value="HIBAH" {{ old('keterangan') === 'HIBAH' ? 'selected' : '' }}>HIBAH</option>
+                            <option value="SUMBANGAN" {{ old('keterangan') === 'SUMBANGAN' ? 'selected' : '' }}>SUMBANGAN</option>
                         </select>
                     </div>
 
@@ -179,8 +182,8 @@
                             name="status"
                             class="w-full rounded-xl border border-slate-300 px-4 py-3"
                         >
-                            <option value="draft">Draft</option>
-                            <option value="publish">Publish</option>
+                            <option value="draft" {{ old('status', 'draft') === 'draft' ? 'selected' : '' }}>Draft</option>
+                            <option value="publish" {{ old('status') === 'publish' ? 'selected' : '' }}>Publish</option>
                         </select>
                     </div>
 
@@ -228,7 +231,7 @@
             </a>
 
             <button
-            type="button"
+            type="submit"
             id="btnSubmit"
             class="px-6 py-3 rounded-xl bg-emerald-600 text-white font-semibold hover:bg-emerald-700 shadow-lg shadow-emerald-600/20"
         >
