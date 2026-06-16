@@ -46,7 +46,8 @@ class PublicHomeController extends Controller
         $totalPublishedNews = News::where('status', 'published')->count();
 
         // Infrastuktur terbaru
-        $latestInfrastructures = Infrastructure::latest()
+        $latestInfrastructures = Infrastructure::where('status', 'publish')
+            ->latest()
             ->take(3)
             ->get();
 

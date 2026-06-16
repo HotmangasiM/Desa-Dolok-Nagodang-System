@@ -29,6 +29,11 @@ class Infrastructure extends Model
         'content',
     ];
 
+    protected $casts = [
+        'nilai_harga' => 'decimal:2',
+        'tahun_pengadaan' => 'integer',
+    ];
+
     protected static function boot()
     {
         parent::boot();

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreInfrastructureRequest;
+use App\Http\Requests\UpdateInfrastructureRequest;
 use App\Models\Infrastructure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -21,7 +23,14 @@ class PublicInfrastructureController extends Controller
             ->where('status', 'publish');
 
         if ($request->filled('search')) {
-            $query->where('title', 'like', '%' . $request->search . '%');
+            $search = $request->search;
+
+            $query->where(function ($builder) use ($search) {
+                $builder->where('nama_barang', 'like', '%' . $search . '%')
+                    ->orWhere('kode_barang', 'like', '%' . $search . '%')
+                    ->orWhere('jenis_barang', 'like', '%' . $search . '%')
+                    ->orWhere('content', 'like', '%' . $search . '%');
+            });
         }
 
         $infrastructures = $query
@@ -67,11 +76,13 @@ class PublicInfrastructureController extends Controller
     $query = Infrastructure::query();
 
     if ($request->filled('search')) {
-        $query->where(
-            'title',
-            'like',
-            '%' . $request->search . '%'
-        );
+        $search = $request->search;
+
+        $query->where(function ($builder) use ($search) {
+            $builder->where('nama_barang', 'like', '%' . $search . '%')
+                ->orWhere('kode_barang', 'like', '%' . $search . '%')
+                ->orWhere('jenis_barang', 'like', '%' . $search . '%');
+        });
     }
 
     $data = $query
@@ -107,20 +118,9 @@ class PublicInfrastructureController extends Controller
         return view('admin.infrastructure.create');
     }
 
-   public function store(Request $request)
+   public function store(StoreInfrastructureRequest $request)
 {
-    $request->validate([
-        'nama_barang'     => 'required|string|max:255',
-        'kode_barang'     => 'nullable|string|max:255',
-        'jenis_barang'    => 'nullable|string|max:255',
-        'jumlah_luas'     => 'nullable|string|max:255',
-        'nilai_harga'     => 'nullable|numeric',
-        'tahun_pengadaan' => 'nullable',
-        'kondisi'         => 'required',
-        'keterangan'      => 'nullable|string',
-        'status'          => 'required|in:draft,publish',
-        'image'           => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-    ]);
+    $data = $request->validated();
 
     $imagePath = null;
 
@@ -130,26 +130,14 @@ class PublicInfrastructureController extends Controller
     }
 
     Infrastructure::create([
-    'slug' => Str::slug($request->nama_barang),
-
-    'nama_barang' => $request->nama_barang,
-    'kode_barang' => $request->kode_barang,
-    'jenis_barang' => $request->jenis_barang,
-    'jumlah_luas' => $request->jumlah_luas,
-    'nilai_harga' => $request->nilai_harga,
-    'tahun_pengadaan' => $request->tahun_pengadaan,
-    'kondisi' => $request->kondisi,
-    'keterangan' => $request->keterangan,
-
-    'content' => $request->content,
-
-    'status' => $request->status,
-    'image' => $imagePath,
-]);
+        ...$data,
+        'slug' => $this->generateUniqueSlug($data['nama_barang']),
+        'image' => $imagePath,
+    ]);
 
     return redirect()
         ->route('admin.infrastructure.index')
-        ->with('success', 'Data aset berhasil ditambahkan.');
+        ->with('success', 'Data infrastruktur berhasil ditambahkan.');
 }
 
     public function edit($id)
@@ -162,17 +150,10 @@ class PublicInfrastructureController extends Controller
         );
     }
 
-  public function update(Request $request, $id)
+  public function update(UpdateInfrastructureRequest $request, $id)
 {
     $item = Infrastructure::findOrFail($id);
-
-    $request->validate([
-        'nama_barang' => 'required|string|max:255',
-        'kondisi'     => 'required',
-        'status'      => 'required|in:draft,publish',
-        'content'     => 'nullable|string',
-        'image'       => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-    ]);
+    $data = $request->validated();
 
     $imagePath = $item->image;
 
@@ -190,23 +171,14 @@ class PublicInfrastructureController extends Controller
     }
 
     $item->update([
-        'slug'            => Str::slug($request->nama_barang . '-' . time()),
-        'nama_barang'     => $request->nama_barang,
-        'kode_barang'     => $request->kode_barang,
-        'jenis_barang'    => $request->jenis_barang,
-        'jumlah_luas'     => $request->jumlah_luas,
-        'nilai_harga'     => $request->nilai_harga,
-        'tahun_pengadaan' => $request->tahun_pengadaan,
-        'kondisi'         => $request->kondisi,
-        'keterangan'      => $request->keterangan,
-        'content'         => $request->content,
-        'status'          => $request->status,
-        'image'           => $imagePath,
+        ...$data,
+        'slug' => $this->generateUniqueSlug($data['nama_barang'], $item->id),
+        'image' => $imagePath,
     ]);
 
     return redirect()
         ->route('admin.infrastructure.index')
-        ->with('success', 'Data aset berhasil diperbarui.');
+        ->with('success', 'Data infrastruktur berhasil diperbarui.');
 }
     public function destroy($id)
     {
@@ -228,5 +200,22 @@ class PublicInfrastructureController extends Controller
                 'success',
                 'Data infrastruktur berhasil dihapus.'
             );
+    }
+
+    protected function generateUniqueSlug(string $name, ?int $ignoreId = null): string
+    {
+        $baseSlug = Str::slug($name);
+        $slug = $baseSlug;
+        $counter = 2;
+
+        while (Infrastructure::query()
+            ->when($ignoreId, fn ($query) => $query->where('id', '!=', $ignoreId))
+            ->where('slug', $slug)
+            ->exists()) {
+            $slug = $baseSlug . '-' . $counter;
+            $counter++;
+        }
+
+        return $slug;
     }
 }
