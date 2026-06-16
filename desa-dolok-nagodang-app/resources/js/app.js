@@ -1,10 +1,12 @@
 import './bootstrap';
 import Swiper from 'swiper';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import Swal from 'sweetalert2';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 import Alpine from 'alpinejs';
 
@@ -20,3 +22,4 @@ window.SwiperModules = {
     Pagination,
     Autoplay
 };
+window.Swal = Swal;
