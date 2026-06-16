@@ -779,7 +779,7 @@
                         @if($item->image)
                             <img
                                 src="{{ asset('storage/' . $item->image) }}"
-                                alt="{{ $item->title }}"
+                                alt="{{ $item->nama_barang }}"
                                 class="h-64 w-full object-cover transition duration-500 group-hover:scale-105"
                             >
                         @else
@@ -833,7 +833,7 @@
 
                         {{-- TITLE --}}
                         <h3 class="mt-4 text-xl font-bold leading-snug text-slate-800 group-hover:text-emerald-700 transition">
-                            {{ $item->title }}
+                            {{ $item->nama_barang }}
                         </h3>
 
                         {{-- DESCRIPTION --}}
