@@ -281,6 +281,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
         form.addEventListener('submit', function(e) {
 
+            if (typeof Swal === 'undefined') {
+                const name = this.querySelector('button').dataset.name;
+
+                if (!window.confirm(`Hapus data "${name}"?`)) {
+                    e.preventDefault();
+                }
+
+                return;
+            }
+
             e.preventDefault();
 
             const name =

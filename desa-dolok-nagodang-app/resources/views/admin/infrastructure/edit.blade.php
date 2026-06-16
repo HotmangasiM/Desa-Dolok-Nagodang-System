@@ -274,8 +274,6 @@
 </div>
 
 @push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -290,6 +288,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         if (typeof Swal === 'undefined') {
+            form.dataset.confirmed = 'true';
             return;
         }
 
@@ -332,12 +331,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
 @if(session('success'))
 <script>
-Swal.fire({
-    icon: 'success',
-    title: 'Berhasil',
-    text: '{{ session('success') }}',
-    confirmButtonColor: '#10b981'
-});
+if (typeof Swal !== 'undefined') {
+    Swal.fire({
+        icon: 'success',
+        title: 'Berhasil',
+        text: '{{ session('success') }}',
+        confirmButtonColor: '#10b981'
+    });
+}
 </script>
 @endif
 @endpush
