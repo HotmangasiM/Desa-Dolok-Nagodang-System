@@ -33,11 +33,18 @@ class InfrastructureFeatureTest extends TestCase
         $futureYear = now()->year + 1;
 
         $this->post(route('admin.infrastructure.store'), [
-            'nama_barang' => 'Jalan Desa',
+            'nama_barang' => 'Jalan Desa!',
+            'kode_barang' => 'INF@001',
+            'jenis_barang' => 'Jalan Beton#',
+            'jumlah_luas' => '120 Meter*',
             'kondisi' => 'Baik',
             'status' => 'publish',
             'tahun_pengadaan' => $futureYear,
         ])->assertSessionHasErrors([
+            'nama_barang',
+            'kode_barang',
+            'jenis_barang',
+            'jumlah_luas',
             'tahun_pengadaan',
         ]);
 
@@ -78,6 +85,25 @@ class InfrastructureFeatureTest extends TestCase
             ->assertSee('Jalan Desa')
             ->assertSee('INF-001')
             ->assertDontSee('INF-002');
+
+        $this->put(route('admin.infrastructure.update', $draft->id), [
+            'nama_barang' => 'Drainase Dusun!',
+            'kode_barang' => 'INF@002',
+            'jenis_barang' => 'Drainase#',
+            'jumlah_luas' => '85 Meter*',
+            'nilai_harga' => 75000000,
+            'tahun_pengadaan' => $futureYear,
+            'kondisi' => 'Baik',
+            'keterangan' => 'ADD',
+            'status' => 'publish',
+            'content' => 'Drainase dusun sudah diperbarui.',
+        ])->assertSessionHasErrors([
+            'nama_barang',
+            'kode_barang',
+            'jenis_barang',
+            'jumlah_luas',
+            'tahun_pengadaan',
+        ]);
 
         $this->put(route('admin.infrastructure.update', $draft->id), [
             'nama_barang' => 'Drainase Dusun',
