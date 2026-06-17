@@ -1,6 +1,7 @@
 @extends('layouts.admin')
 @section('content')
 <div class="max-w-7xl mx-auto space-y-6">
+    @php($yearOptions = range(now()->year, 1900))
 
     {{-- HEADER --}}
     <div>
@@ -60,6 +61,7 @@
                             type="text"
                             name="nama_barang"
                             value="{{ old('nama_barang') }}"
+                            data-alpha-num-space-only
                             class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
                         >
                     </div>
@@ -74,6 +76,7 @@
                             type="text"
                             name="kode_barang"
                             value="{{ old('kode_barang') }}"
+                            data-code-only
                             class="w-full rounded-xl border border-slate-300 px-4 py-3"
                         >
                     </div>
@@ -88,6 +91,7 @@
                             type="text"
                             name="jenis_barang"
                             value="{{ old('jenis_barang') }}"
+                            data-alpha-num-space-only
                             class="w-full rounded-xl border border-slate-300 px-4 py-3"
                         >
                     </div>
@@ -102,6 +106,7 @@
                             type="text"
                             name="jumlah_luas"
                             value="{{ old('jumlah_luas') }}"
+                            data-alpha-num-space-only
                             class="w-full rounded-xl border border-slate-300 px-4 py-3"
                         >
                     </div>
@@ -113,11 +118,19 @@
                         </label>
 
                         <input
-                            type="number"
+                            type="hidden"
                             name="nilai_harga"
+                            id="nilai_harga"
                             value="{{ old('nilai_harga') }}"
-                            min="0"
+                        >
+
+                        <input
+                            type="text"
+                            id="nilai_harga_display"
+                            value="{{ old('nilai_harga') ? 'Rp ' . number_format((float) old('nilai_harga'), 0, ',', '.') : '' }}"
+                            inputmode="numeric"
                             class="w-full rounded-xl border border-slate-300 px-4 py-3"
+                            placeholder="Contoh: Rp 17.000.000"
                         >
                     </div>
 
@@ -127,14 +140,17 @@
                             Tahun Pengadaan
                         </label>
 
-                        <input
-                            type="number"
+                        <select
                             name="tahun_pengadaan"
-                            value="{{ old('tahun_pengadaan') }}"
-                            min="1900"
-                            max="{{ now()->year }}"
                             class="w-full rounded-xl border border-slate-300 px-4 py-3"
                         >
+                            <option value="">Pilih Tahun</option>
+                            @foreach ($yearOptions as $year)
+                                <option value="{{ $year }}" {{ (string) old('tahun_pengadaan') === (string) $year ? 'selected' : '' }}>
+                                    {{ $year }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
 
                     {{-- KONDISI --}}
@@ -244,9 +260,56 @@
 </div>
 @push('scripts')
 <script>
+function sanitizeAlphaNumSpace(value) {
+    return value.replace(/[^\p{L}\p{N}\s]/gu, '').replace(/\s{2,}/g, ' ');
+}
+
+function sanitizeCodeValue(value) {
+    return value.replace(/[^A-Za-z0-9\s\-\/]/g, '').replace(/\s{2,}/g, ' ');
+}
+
+function formatRupiah(value) {
+    const numericValue = value.replace(/[^0-9]/g, '');
+
+    if (!numericValue) {
+        return {
+            raw: '',
+            formatted: ''
+        };
+    }
+
+    return {
+        raw: numericValue,
+        formatted: 'Rp ' + new Intl.NumberFormat('id-ID').format(numericValue)
+    };
+}
+
 document.addEventListener('DOMContentLoaded', function () {
 
     const form = document.querySelector('#infrastructureCreateForm');
+    const nilaiHarga = document.getElementById('nilai_harga');
+    const nilaiHargaDisplay = document.getElementById('nilai_harga_display');
+
+    document.querySelectorAll('[data-alpha-num-space-only]').forEach(function (input) {
+        input.addEventListener('input', function () {
+            this.value = sanitizeAlphaNumSpace(this.value);
+        });
+    });
+
+    document.querySelectorAll('[data-code-only]').forEach(function (input) {
+        input.addEventListener('input', function () {
+            this.value = sanitizeCodeValue(this.value);
+        });
+    });
+
+    if (nilaiHarga && nilaiHargaDisplay) {
+        nilaiHargaDisplay.addEventListener('input', function () {
+            const result = formatRupiah(this.value);
+
+            nilaiHarga.value = result.raw;
+            this.value = result.formatted;
+        });
+    }
 
     if (!form) return;
 
@@ -254,6 +317,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (form.dataset.confirmed === 'true') {
             return;
+        }
+
+        if (nilaiHarga && nilaiHargaDisplay) {
+            const result = formatRupiah(nilaiHargaDisplay.value);
+            nilaiHarga.value = result.raw;
+            nilaiHargaDisplay.value = result.formatted;
         }
 
         if (typeof Swal === 'undefined') {
