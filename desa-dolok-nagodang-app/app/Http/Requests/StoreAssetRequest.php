@@ -23,7 +23,7 @@ class StoreAssetRequest extends FormRequest
             'acquisition_date' => 'nullable|date|before_or_equal:today',
             'source' => ['nullable', 'string', 'max:255', 'regex:/^[\pL\s]+$/u'],
             'asset_value' => 'nullable|numeric',
-            'asset_photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'asset_photo' => 'required|image|mimes:jpg,jpeg,png|max:2048',
             'notes' => 'nullable|string',
             'description' => 'nullable|string',
         ];

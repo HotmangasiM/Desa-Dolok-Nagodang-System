@@ -24,7 +24,7 @@ class StoreInfrastructureRequest extends FormRequest
             'kondisi' => ['required', Rule::in(['Baik', 'Rusak Ringan', 'Rusak Berat'])],
             'keterangan' => ['nullable', Rule::in(['ADD', 'DD', 'HIBAH', 'SUMBANGAN'])],
             'status' => ['required', Rule::in(['draft', 'publish'])],
-            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'image' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
             'content' => ['nullable', 'string'],
         ];
     }
