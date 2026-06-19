@@ -19,9 +19,9 @@ class LetterController extends Controller
     public function index(Request $request): JsonResponse
     {
         $filters = [
-            'search' => $request->query('search'),
-            'status' => $request->query('status'),
-            'letter_type_id' => $request->query('letter_type_id'),
+            'search' => trim((string) $request->query('search')),
+            'status' => trim((string) $request->query('status')),
+            'letter_type_id' => trim((string) $request->query('letter_type_id')),
         ];
 
         $perPage = (int) $request->query('per_page', 10);
@@ -30,7 +30,7 @@ class LetterController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'List surat berhasil diambil',
+            'message' => 'Daftar surat berhasil diambil.',
             'data' => $data,
         ]);
     }
@@ -41,7 +41,7 @@ class LetterController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Surat berhasil ditambahkan',
+            'message' => 'Surat berhasil ditambahkan.',
             'data' => $letter,
         ], 201);
     }
@@ -52,7 +52,7 @@ class LetterController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Detail surat berhasil diambil',
+            'message' => 'Detail surat berhasil diambil.',
             'data' => $data,
         ]);
     }
@@ -63,7 +63,7 @@ class LetterController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Surat berhasil diperbarui',
+            'message' => 'Surat berhasil diperbarui.',
             'data' => $updated,
         ]);
     }
@@ -74,7 +74,7 @@ class LetterController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Surat berhasil dihapus',
+            'message' => 'Surat berhasil dihapus.',
             'data' => null,
         ]);
     }

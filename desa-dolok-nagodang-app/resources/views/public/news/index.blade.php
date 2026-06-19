@@ -56,8 +56,8 @@
                              class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                              alt="{{ $item->title }}">
                     @else
-                        <div class="w-full h-full flex items-center justify-center text-5xl">
-                            📰
+                        <div class="flex h-full w-full items-center justify-center bg-slate-100 text-slate-400">
+                            <i data-lucide="image-off" class="h-12 w-12"></i>
                         </div>
                     @endif
                 </div>
@@ -76,13 +76,15 @@
                     </p>
 
                     <p class="mt-4 text-sm font-semibold text-emerald-700">
-                        Baca selengkapnya →
+                        Baca selengkapnya
                     </p>
                 </div>
             </a>
         @empty
             <div class="md:col-span-3 rounded-3xl bg-white border border-slate-200 p-10 text-center text-slate-500">
-                <div class="text-5xl mb-4">🔎</div>
+                <div class="mb-4 flex justify-center text-slate-400">
+                    <i data-lucide="search-x" class="h-12 w-12"></i>
+                </div>
 
                 @if(!empty($search))
                     <p class="font-semibold text-slate-700">
@@ -105,3 +107,4 @@
     </div>
 </section>
 @endsection
+

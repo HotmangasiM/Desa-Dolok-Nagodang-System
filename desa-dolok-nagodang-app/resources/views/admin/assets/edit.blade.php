@@ -13,7 +13,7 @@
         </div>
     @endif
 
-    <form action="{{ route('admin.assets.update', $asset->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+    <form action="{{ route('admin.assets.update', $asset->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6" data-inline-validate>
         @csrf
         @method('PUT')
 
@@ -29,9 +29,11 @@
                         Nama Barang <span class="text-rose-500">*</span>
                     </label>
                     <input type="text" name="item_name" value="{{ old('item_name', $asset->item_name) }}"
+                        required data-required-label="Nama Barang"
                         data-letter-space-only
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         placeholder="Masukkan nama barang">
+                    @include('admin.partials.field-error', ['field' => 'item_name'])
                 </div>
 
                 <div>
@@ -39,8 +41,10 @@
                         Kode Barang <span class="text-rose-500">*</span>
                     </label>
                     <input type="text" name="item_code" value="{{ old('item_code', $asset->item_code) }}"
+                        required data-required-label="Kode Barang"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         placeholder="Masukkan kode barang">
+                    @include('admin.partials.field-error', ['field' => 'item_code'])
                 </div>
 
                 <div>
@@ -56,7 +60,9 @@
                         Jumlah <span class="text-rose-500">*</span>
                     </label>
                     <input type="number" name="quantity" min="0" value="{{ old('quantity', $asset->quantity) }}"
+                        required data-required-label="Jumlah"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    @include('admin.partials.field-error', ['field' => 'quantity'])
                 </div>
 
                 <div>
@@ -64,11 +70,13 @@
                         Kondisi <span class="text-rose-500">*</span>
                     </label>
                     <select name="condition"
+                        required data-required-label="Kondisi"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
                         <option value="">Pilih Kondisi</option>
                         <option value="good" {{ old('condition', $asset->condition) === 'good' ? 'selected' : '' }}>Baik</option>
                         <option value="damaged" {{ old('condition', $asset->condition) === 'damaged' ? 'selected' : '' }}>Rusak</option>
                     </select>
+                    @include('admin.partials.field-error', ['field' => 'condition'])
                 </div>
 
                 <div>
@@ -253,6 +261,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (form.dataset.confirmed === 'true') return;
 
+        if (window.AdminInlineValidation && !window.AdminInlineValidation.validateForm(form)) {
+            e.preventDefault();
+            return;
+        }
+
         e.preventDefault();
 
         const nama = form.querySelector('input[name="item_name"]').value;
@@ -281,7 +294,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 });
 
-                form.submit();
+                if (form.requestSubmit) {
+                    form.requestSubmit();
+                } else {
+                    form.submit();
+                }
             }
         });
     });

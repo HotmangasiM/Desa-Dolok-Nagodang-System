@@ -27,7 +27,7 @@
         </div>
     @endif
 
-    <form action="{{ route('admin.officials.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+    <form action="{{ route('admin.officials.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6" data-inline-validate>
         @csrf
 
         <div class="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
@@ -46,11 +46,14 @@
                         type="text"
                         name="name"
                         value="{{ old('name') }}"
+                        required
+                        data-required-label="Nama"
                         maxlength="100"
                         oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '')"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         placeholder="Masukkan nama aparat"
                     >
+                    @include('admin.partials.field-error', ['field' => 'name'])
                 </div>
 
                 <div>
@@ -62,23 +65,29 @@
                         type="text"
                         name="position"
                         value="{{ old('position') }}"
+                        required
+                        data-required-label="Jabatan"
                         maxlength="100"
                         oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '')"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         placeholder="Contoh: Kepala Desa"
                     >
+                    @include('admin.partials.field-error', ['field' => 'position'])
                 </div>
 
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">Foto</label>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Foto <span class="text-rose-500">*</span></label>
 
                     <input
                         type="file"
                         name="photo"
+                        required
+                        data-required-label="Foto"
                         accept="image/*"
                         onchange="previewImage(event)"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     >
+                    @include('admin.partials.field-error', ['field' => 'photo'])
 
                     <img id="photoPreview" class="mt-3 w-32 h-32 object-cover rounded-xl hidden" />
                 </div>
@@ -216,20 +225,6 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
-    // ✅ TOAST SUCCESS (setelah redirect dari controller)
-    @if(session('success'))
-        Swal.fire({
-            toast: true,
-            position: 'top-end',
-            icon: 'success',
-            title: '{{ session('success') }}',
-            showConfirmButton: false,
-            timer: 2500,
-            timerProgressBar: true
-        });
-    @endif
-
-
     // ✅ CONFIRM SUBMIT CREATE (APARAT)
     document.addEventListener('submit', function (e) {
 
@@ -240,6 +235,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // cegah submit awal
         if (form.dataset.confirmed === 'true') return;
+
+        if (window.AdminInlineValidation && !window.AdminInlineValidation.validateForm(form)) {
+            e.preventDefault();
+            return;
+        }
 
         e.preventDefault();
 
@@ -275,7 +275,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 });
 
-                form.submit();
+                if (form.requestSubmit) {
+                    form.requestSubmit();
+                } else {
+                    form.submit();
+                }
             }
 
         });
@@ -285,3 +289,5 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 @endpush
+
+

@@ -14,8 +14,8 @@ class AdminOfficialPageController extends Controller
     public function index(Request $request): View
     {
         $filters = [
-            'search' => $request->query('search'),
-            'position' => $request->query('position'),
+            'search' => trim((string) $request->query('search')),
+            'position' => trim((string) $request->query('position')),
         ];
 
         $officials = Official::query()
@@ -28,7 +28,7 @@ class AdminOfficialPageController extends Controller
                 });
             })
             ->when($filters['position'], function ($query) use ($filters) {
-                $query->where('position', $filters['position']);
+                $query->where('position', 'like', '%' . $filters['position'] . '%');
             })
             ->latest()
             ->paginate(10)

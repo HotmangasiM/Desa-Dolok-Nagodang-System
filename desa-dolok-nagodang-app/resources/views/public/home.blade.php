@@ -844,8 +844,8 @@
                         {{-- FOOTER --}}
                         <div class="mt-6 flex items-center justify-between border-t border-slate-100 pt-5">
 
-                            <span class="text-sm font-semibold text-emerald-600 group-hover:translate-x-1 transition">
-                                Detail →
+                            <span class="text-sm font-semibold text-emerald-600 transition group-hover:translate-x-1">
+                                Detail
                             </span>
 
                             <svg xmlns="http://www.w3.org/2000/svg"
@@ -980,3 +980,4 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 @endpush
+

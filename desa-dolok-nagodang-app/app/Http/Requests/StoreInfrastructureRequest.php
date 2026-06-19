@@ -32,10 +32,14 @@ class StoreInfrastructureRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'nama_barang.required' => 'Nama Barang wajib diisi.',
             'nama_barang.regex' => 'Nama Barang hanya boleh berisi huruf, angka, dan spasi.',
             'kode_barang.regex' => 'Kode Barang hanya boleh berisi huruf, angka, spasi, tanda hubung, dan garis miring.',
             'jenis_barang.regex' => 'Jenis Barang hanya boleh berisi huruf, angka, dan spasi.',
             'jumlah_luas.regex' => 'Jumlah atau Luas hanya boleh berisi huruf, angka, dan spasi.',
+            'kondisi.required' => 'Kondisi wajib dipilih.',
+            'status.required' => 'Status Publish wajib dipilih.',
+            'image.required' => 'Foto Aset wajib diunggah.',
             'tahun_pengadaan.max' => 'Tahun pengadaan tidak boleh melebihi tahun berjalan.',
             'tahun_pengadaan.min' => 'Tahun pengadaan tidak valid.',
             'nilai_harga.min' => 'Nilai atau harga tidak boleh kurang dari 0.',
