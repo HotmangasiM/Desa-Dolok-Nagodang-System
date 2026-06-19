@@ -36,6 +36,8 @@
         class="rich-editor-content min-h-[320px] px-4 py-3 text-sm leading-7 text-slate-800 focus:outline-none"
         contenteditable="true"
         data-target="{{ $inputId }}"
+        data-required-label="Konten Berita"
+        data-required-target="#{{ $inputId }}"
     >{!! $sanitizedContent !!}</div>
 </div>
 

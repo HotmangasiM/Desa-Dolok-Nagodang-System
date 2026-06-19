@@ -14,9 +14,9 @@ class AdminAssetPageController extends Controller
     public function index(Request $request): View
     {
         $filters = [
-            'search' => $request->query('search'),
+            'search' => trim((string) $request->query('search')),
             'condition' => $request->query('condition'),
-            'category' => $request->query('category'),
+            'category' => trim((string) $request->query('category')),
         ];
 
         $assets = Asset::query()
@@ -32,7 +32,7 @@ class AdminAssetPageController extends Controller
                 $query->where('condition', $filters['condition']);
             })
             ->when($filters['category'], function ($query) use ($filters) {
-                $query->where('category', $filters['category']);
+                $query->where('category', 'like', '%' . $filters['category'] . '%');
             })
             ->latest()
             ->paginate(10)

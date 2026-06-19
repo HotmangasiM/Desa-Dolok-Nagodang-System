@@ -2,6 +2,7 @@
 
 @section('content')
 <div class="space-y-6">
+    @php($hasActiveFilters = collect($filters ?? [])->filter(fn ($value) => filled($value))->isNotEmpty())
     <div class="flex flex-wrap items-center justify-between gap-3">
         <div class="text-sm text-slate-500">
             Aksi cepat data penduduk
@@ -220,7 +221,7 @@
                                         Edit
                                     </a>
 
-                                    <form action="{{ route('admin.citizens.destroy', $citizen->id) }}" method="POST" class="inline">
+                                    <form action="{{ route('admin.citizens.destroy', $citizen->id) }}" method="POST" class="inline" data-delete-form>
                                         @csrf
                                         @method('DELETE')
 
@@ -237,7 +238,7 @@
                     @empty
                         <tr>
                             <td colspan="8" class="px-5 py-10 text-center text-slate-500">
-                                Data penduduk belum tersedia.
+                                {{ $hasActiveFilters ? 'Tidak ada data penduduk yang cocok dengan filter pencarian.' : 'Data penduduk belum tersedia.' }}
                             </td>
                         </tr>
                     @endforelse
@@ -257,69 +258,3 @@
     </div>
 </div>
 @endsection
-
-@push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    if (typeof Swal === 'undefined') {
-        console.error('SweetAlert tidak ter-load!');
-        return;
-    }
-
-    @if(session('success'))
-        Swal.fire({
-            toast: true,
-            position: 'top-end',
-            icon: 'success',
-            title: '{{ session('success') }}',
-            showConfirmButton: false,
-            timer: 2500,
-            timerProgressBar: true
-        });
-    @endif
-
-    document.addEventListener('click', function (e) {
-        const button = e.target.closest('.btn-delete');
-        if (!button) return;
-
-        e.preventDefault();
-
-        const form = button.closest('form');
-        const nama = button.dataset.name || 'data ini';
-
-        if (!form) {
-            console.error('Form tidak ditemukan!');
-            return;
-        }
-
-        Swal.fire({
-            title: 'Konfirmasi Hapus',
-            html: `<p class="text-sm text-slate-600">Data <b>${nama}</b> akan dihapus.</p>`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Ya, hapus',
-            cancelButtonText: 'Batal',
-            confirmButtonColor: '#ef4444',
-            cancelButtonColor: '#6b7280',
-            reverseButtons: true,
-            focusCancel: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Swal.fire({
-                    title: 'Menghapus...',
-                    text: 'Mohon tunggu sebentar',
-                    allowOutsideClick: false,
-                    allowEscapeKey: false,
-                    showConfirmButton: false,
-                    didOpen: () => {
-                        Swal.showLoading();
-                    }
-                });
-
-                form.submit();
-            }
-        });
-    });
-});
-</script>
-@endpush

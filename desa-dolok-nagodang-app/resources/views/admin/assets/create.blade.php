@@ -13,7 +13,7 @@
         </div>
     @endif
 
-    <form method="POST" action="{{ route('admin.assets.store') }}" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('admin.assets.store') }}" enctype="multipart/form-data" data-inline-validate>
         @csrf
 
         <div class="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
@@ -31,10 +31,13 @@
                         type="text"
                         name="item_name"
                         value="{{ old('item_name') }}"
+                        required
+                        data-required-label="Nama Barang"
                         data-letter-space-only
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         placeholder="Masukkan nama barang"
                     >
+                    @include('admin.partials.field-error', ['field' => 'item_name'])
                 </div>
 
                 <div>
@@ -45,9 +48,12 @@
                         type="text"
                         name="item_code"
                         value="{{ old('item_code') }}"
+                        required
+                        data-required-label="Kode Barang"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         placeholder="Masukkan kode barang"
                     >
+                    @include('admin.partials.field-error', ['field' => 'item_code'])
                 </div>
 
                 <div>
@@ -71,8 +77,11 @@
                         name="quantity"
                         min="0"
                         value="{{ old('quantity', 0) }}"
+                        required
+                        data-required-label="Jumlah"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     >
+                    @include('admin.partials.field-error', ['field' => 'quantity'])
                 </div>
 
                 <div>
@@ -82,12 +91,15 @@
 
                     <select
                         name="condition"
+                        required
+                        data-required-label="Kondisi"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     >
                         <option value="">Pilih Kondisi</option>
                         <option value="good" {{ old('condition') === 'good' ? 'selected' : '' }}>Baik</option>
                         <option value="damaged" {{ old('condition') === 'damaged' ? 'selected' : '' }}>Rusak</option>
                     </select>
+                    @include('admin.partials.field-error', ['field' => 'condition'])
                 </div>
 
                 <div>
@@ -148,16 +160,19 @@
 
                 <div class="md:col-span-2 xl:col-span-2">
                     <label class="block text-sm font-semibold text-slate-700 mb-2">
-                        Foto Aset
+                        Foto Aset <span class="text-rose-500">*</span>
                     </label>
 
                     <input
                         type="file"
                         name="asset_photo"
+                        required
+                        data-required-label="Foto Aset"
                         accept="image/*"
                         onchange="previewAssetImage(event)"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     >
+                    @include('admin.partials.field-error', ['field' => 'asset_photo'])
 
                     <p class="text-xs text-slate-500 mt-2">
                         Format: JPG, PNG, JPEG (max 2MB)
@@ -278,6 +293,11 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
+        if (window.AdminInlineValidation && !window.AdminInlineValidation.validateForm(form)) {
+            e.preventDefault();
+            return;
+        }
+
         if (typeof Swal === 'undefined') {
             return;
         }
@@ -309,7 +329,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 });
 
-                form.submit();
+                if (form.requestSubmit) {
+                    form.requestSubmit();
+                } else {
+                    form.submit();
+                }
             }
         });
     });

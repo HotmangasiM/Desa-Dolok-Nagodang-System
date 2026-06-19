@@ -34,6 +34,7 @@
     action="{{ route('admin.infrastructure.store') }}"
     method="POST"
     enctype="multipart/form-data"
+    data-inline-validate
 >
         @csrf
 
@@ -54,16 +55,19 @@
                     {{-- NAMA BARANG --}}
                     <div class="xl:col-span-2">
                         <label class="block text-sm font-semibold text-slate-700 mb-2">
-                            Nama Barang
+                            Nama Barang <span class="text-rose-500">*</span>
                         </label>
 
                         <input
                             type="text"
                             name="nama_barang"
                             value="{{ old('nama_barang') }}"
+                            required
+                            data-required-label="Nama Barang"
                             data-alpha-num-space-only
                             class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
                         >
+                        @include('admin.partials.field-error', ['field' => 'nama_barang'])
                     </div>
 
                     {{-- KODE BARANG --}}
@@ -156,11 +160,13 @@
                     {{-- KONDISI --}}
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-2">
-                            Kondisi
+                            Kondisi <span class="text-rose-500">*</span>
                         </label>
 
                         <select
                             name="kondisi"
+                            required
+                            data-required-label="Kondisi"
                             class="w-full rounded-xl border border-slate-300 px-4 py-3"
                         >
                             <option value="">Pilih Kondisi</option>
@@ -168,6 +174,7 @@
                             <option value="Rusak Ringan" {{ old('kondisi') === 'Rusak Ringan' ? 'selected' : '' }}>Rusak Ringan</option>
                             <option value="Rusak Berat" {{ old('kondisi') === 'Rusak Berat' ? 'selected' : '' }}>Rusak Berat</option>
                         </select>
+                        @include('admin.partials.field-error', ['field' => 'kondisi'])
                     </div>
 
                     {{-- KETERANGAN --}}
@@ -191,30 +198,36 @@
                     {{-- STATUS --}}
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-2">
-                            Status Publish
+                            Status Publish <span class="text-rose-500">*</span>
                         </label>
 
                         <select
                             name="status"
+                            required
+                            data-required-label="Status Publish"
                             class="w-full rounded-xl border border-slate-300 px-4 py-3"
                         >
                             <option value="draft" {{ old('status', 'draft') === 'draft' ? 'selected' : '' }}>Draft</option>
                             <option value="publish" {{ old('status') === 'publish' ? 'selected' : '' }}>Publish</option>
                         </select>
+                        @include('admin.partials.field-error', ['field' => 'status'])
                     </div>
 
                     {{-- FOTO --}}
                     <div class="xl:col-span-3">
                         <label class="block text-sm font-semibold text-slate-700 mb-2">
-                            Foto Aset
+                            Foto Aset <span class="text-rose-500">*</span>
                         </label>
 
                         <input
                             type="file"
                             name="image"
+                            required
+                            data-required-label="Foto Aset"
                             accept="image/*"
                             class="w-full rounded-xl border border-slate-300 px-4 py-3"
                         >
+                        @include('admin.partials.field-error', ['field' => 'image'])
                     </div>
 
                     {{-- MASALAH ASET --}}
@@ -325,6 +338,11 @@ document.addEventListener('DOMContentLoaded', function () {
             nilaiHargaDisplay.value = result.formatted;
         }
 
+        if (window.AdminInlineValidation && !window.AdminInlineValidation.validateForm(form)) {
+            e.preventDefault();
+            return;
+        }
+
         if (typeof Swal === 'undefined') {
             form.dataset.confirmed = 'true';
             return;
@@ -359,7 +377,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 });
 
-                form.submit();
+                if (form.requestSubmit) {
+                    form.requestSubmit();
+                } else {
+                    form.submit();
+                }
             }
 
         });

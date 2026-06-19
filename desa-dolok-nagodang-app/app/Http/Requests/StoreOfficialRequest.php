@@ -30,6 +30,9 @@ class StoreOfficialRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'name.required' => 'Nama wajib diisi.',
+            'position.required' => 'Jabatan wajib diisi.',
+            'photo.required' => 'Foto wajib diunggah.',
             'term_end.after_or_equal' => 'Selesai masa jabatan tidak boleh sebelum mulai masa jabatan.',
         ];
     }

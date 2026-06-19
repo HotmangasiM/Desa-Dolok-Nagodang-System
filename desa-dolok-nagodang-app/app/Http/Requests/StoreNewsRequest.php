@@ -33,9 +33,13 @@ class StoreNewsRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'title.required' => 'Judul Berita wajib diisi.',
+            'content.required' => 'Konten Berita wajib diisi.',
+            'image.required' => 'Thumbnail / Gambar wajib diunggah.',
             'image.image' => 'Thumbnail harus berupa file gambar.',
             'image.mimes' => 'Thumbnail hanya boleh menggunakan format JPG, JPEG, atau PNG.',
             'image.max' => 'Ukuran thumbnail maksimal 2MB.',
+            'status.required' => 'Status wajib dipilih.',
             'published_at.after_or_equal' => 'Tanggal diunggah tidak boleh menggunakan tanggal sebelum hari ini.',
         ];
     }

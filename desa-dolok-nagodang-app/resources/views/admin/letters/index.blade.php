@@ -2,6 +2,7 @@
 
 @section('content')
 <div class="space-y-6">
+    @php($hasActiveFilters = collect($filters ?? [])->filter(fn ($value) => filled($value))->isNotEmpty())
 
     {{-- HEADER --}}
     <div class="flex flex-wrap items-center justify-between gap-3">
@@ -108,7 +109,7 @@
         </div>
 
         <form method="GET" action="{{ route('admin.letters.index') }}"
-              class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4">
+              class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-6 gap-4">
 
             <div class="xl:col-span-2">
                 <label class="block text-sm font-semibold text-slate-700 mb-2">
@@ -154,11 +155,38 @@
                     <option value="submitted" {{ ($filters['status'] ?? '') === 'submitted' ? 'selected' : '' }}>
                         Diajukan
                     </option>
+                    <option value="processed" {{ ($filters['status'] ?? '') === 'processed' ? 'selected' : '' }}>
+                        Diproses
+                    </option>
                     <option value="completed" {{ ($filters['status'] ?? '') === 'completed' ? 'selected' : '' }}>
                         Selesai
                     </option>
 
                 </select>
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                    Dari Tanggal
+                </label>
+
+                <input
+                    type="date"
+                    name="submission_date_from"
+                    value="{{ $filters['submission_date_from'] ?? '' }}"
+                    class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                    Sampai Tanggal
+                </label>
+
+                <input
+                    type="date"
+                    name="submission_date_to"
+                    value="{{ $filters['submission_date_to'] ?? '' }}"
+                    class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
             </div>
 
             <div class="flex items-end gap-3">
@@ -252,6 +280,10 @@
                                 <span class="inline-flex rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
                                     Selesai
                                 </span>
+                            @elseif (strtolower($letter->status) === 'processing' || strtolower($letter->status) === 'processed')
+                                <span class="inline-flex rounded-full bg-sky-100 px-3 py-1 text-xs font-semibold text-sky-700">
+                                    Diproses
+                                </span>
                             @elseif (strtolower($letter->status) === 'submitted')
                                 <span class="inline-flex rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700">
                                     Diajukan
@@ -295,7 +327,7 @@
                                     </a>
                                 @endif
 
-                                <form action="{{ route('admin.letters.destroy', $letter->id) }}" method="POST">
+                                <form action="{{ route('admin.letters.destroy', $letter->id) }}" method="POST" data-delete-form>
                                     @csrf
                                     @method('DELETE')
 
@@ -315,7 +347,7 @@
                 @empty
                     <tr>
                         <td colspan="8" class="px-5 py-8 text-center text-slate-500">
-                            Data surat belum tersedia.
+                            {{ $hasActiveFilters ? 'Tidak ada data surat yang cocok dengan filter pencarian.' : 'Data surat belum tersedia.' }}
                         </td>
                     </tr>
                 @endforelse
@@ -344,48 +376,3 @@
 
 </div>
 @endsection
-
-@push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-
-    if (typeof Swal === 'undefined') return;
-
-    document.addEventListener('click', function (e) {
-
-        const button = e.target.closest('.btn-delete');
-        if (!button) return;
-
-        e.preventDefault();
-
-        const form = button.closest('form');
-        const nama = button.dataset.name || 'surat ini';
-
-        Swal.fire({
-            title: 'Konfirmasi Hapus',
-            text: `Hapus "${nama}"?`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Ya, hapus',
-            cancelButtonText: 'Batal',
-            confirmButtonColor: '#ef4444',
-            cancelButtonColor: '#6b7280',
-            reverseButtons: true
-        }).then((result) => {
-
-            if (result.isConfirmed) {
-                Swal.fire({
-                    title: 'Menghapus...',
-                    allowOutsideClick: false,
-                    didOpen: () => Swal.showLoading()
-                });
-
-                form.submit();
-            }
-        });
-
-    });
-
-});
-</script>
-@endpush

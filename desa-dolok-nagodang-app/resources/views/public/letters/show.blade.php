@@ -4,8 +4,9 @@
 <section class="bg-emerald-950 text-white">
     <div class="max-w-7xl mx-auto px-4 py-16">
         <a href="{{ route('public.letters') }}"
-           class="inline-flex text-sm text-emerald-100 hover:text-white mb-5">
-            ← Kembali ke Layanan Surat
+           class="mb-5 inline-flex items-center gap-2 text-sm text-emerald-100 hover:text-white">
+            <i data-lucide="arrow-left" class="h-4 w-4"></i>
+            Kembali ke Layanan Surat
         </a>
 
         <p class="inline-flex rounded-full bg-white/10 px-4 py-2 text-sm text-emerald-100 border border-white/10">

@@ -25,6 +25,7 @@
         enctype="multipart/form-data"
         id="infrastructureForm"
         class="space-y-6"
+        data-inline-validate
     >
 
         @csrf
@@ -47,16 +48,19 @@
                     {{-- NAMA BARANG --}}
                     <div class="xl:col-span-2">
                         <label class="block text-sm font-semibold text-slate-700 mb-2">
-                            Nama Barang
+                            Nama Barang <span class="text-rose-500">*</span>
                         </label>
 
                         <input
                             type="text"
                             name="nama_barang"
                             value="{{ old('nama_barang', $item->nama_barang) }}"
+                            required
+                            data-required-label="Nama Barang"
                             data-alpha-num-space-only
                             class="w-full rounded-xl border border-slate-300 px-4 py-3"
                         >
+                        @include('admin.partials.field-error', ['field' => 'nama_barang'])
                     </div>
 
                     {{-- KODE BARANG --}}
@@ -151,11 +155,13 @@
                     {{-- KONDISI --}}
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-2">
-                            Kondisi
+                            Kondisi <span class="text-rose-500">*</span>
                         </label>
 
                         <select
                             name="kondisi"
+                            required
+                            data-required-label="Kondisi"
                             class="w-full rounded-xl border border-slate-300 px-4 py-3"
                         >
                             <option value="">Pilih Kondisi</option>
@@ -175,6 +181,7 @@
                                 Rusak Berat
                             </option>
                         </select>
+                        @include('admin.partials.field-error', ['field' => 'kondisi'])
                     </div>
 
                     {{-- KETERANGAN --}}
@@ -214,10 +221,12 @@
                     {{-- STATUS --}}
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-2">
-                            Status Publish
+                            Status Publish <span class="text-rose-500">*</span>
                         </label>
 
                         <select name="status"
+                            required
+                            data-required-label="Status Publish"
                             class="w-full rounded-xl border border-slate-300 px-4 py-3">
 
                             <option value="draft"
@@ -231,6 +240,7 @@
                             </option>
 
                         </select>
+                        @include('admin.partials.field-error', ['field' => 'status'])
                     </div>
 
                     {{-- FOTO --}}
@@ -358,6 +368,11 @@ document.addEventListener('DOMContentLoaded', function () {
             nilaiHargaDisplay.value = result.formatted;
         }
 
+        if (window.AdminInlineValidation && !window.AdminInlineValidation.validateForm(form)) {
+            e.preventDefault();
+            return;
+        }
+
         if (typeof Swal === 'undefined') {
             form.dataset.confirmed = 'true';
             return;
@@ -392,7 +407,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 });
 
-                form.submit();
+                if (form.requestSubmit) {
+                    form.requestSubmit();
+                } else {
+                    form.submit();
+                }
             }
         });
     });
@@ -400,17 +419,5 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
-@if(session('success'))
-<script>
-if (typeof Swal !== 'undefined') {
-    Swal.fire({
-        icon: 'success',
-        title: 'Berhasil',
-        text: '{{ session('success') }}',
-        confirmButtonColor: '#10b981'
-    });
-}
-</script>
-@endif
 @endpush
 @endsection

@@ -27,7 +27,7 @@
         </div>
     @endif
 
-    <form action="{{ route('admin.officials.update', $official->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+    <form action="{{ route('admin.officials.update', $official->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6" data-inline-validate>
         @csrf
         @method('PUT')
 
@@ -47,11 +47,14 @@
                         type="text"
                         name="name"
                         value="{{ old('name', $official->name) }}"
+                        required
+                        data-required-label="Nama"
                         maxlength="100"
                         oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '')"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         placeholder="Masukkan nama aparat"
                     >
+                    @include('admin.partials.field-error', ['field' => 'name'])
                 </div>
 
                 <div>
@@ -63,11 +66,14 @@
                         type="text"
                         name="position"
                         value="{{ old('position', $official->position) }}"
+                        required
+                        data-required-label="Jabatan"
                         maxlength="100"
                         oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '')"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         placeholder="Contoh: Kepala Desa"
                     >
+                    @include('admin.partials.field-error', ['field' => 'position'])
                 </div>
 
                 <div>
@@ -244,20 +250,6 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
-    // ✅ TOAST SUCCESS (setelah update)
-    @if(session('success'))
-        Swal.fire({
-            toast: true,
-            position: 'top-end',
-            icon: 'success',
-            title: '{{ session('success') }}',
-            showConfirmButton: false,
-            timer: 2500,
-            timerProgressBar: true
-        });
-    @endif
-
-
     // ✅ CONFIRM EDIT
     document.addEventListener('submit', function (e) {
 
@@ -268,6 +260,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // cegah loop
         if (form.dataset.confirmed === 'true') return;
+
+        if (window.AdminInlineValidation && !window.AdminInlineValidation.validateForm(form)) {
+            e.preventDefault();
+            return;
+        }
 
         e.preventDefault();
 
@@ -306,7 +303,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 });
 
-                form.submit();
+                if (form.requestSubmit) {
+                    form.requestSubmit();
+                } else {
+                    form.submit();
+                }
             }
 
         });
@@ -316,3 +317,5 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 @endpush
+
+

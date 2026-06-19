@@ -28,7 +28,7 @@
         </div>
     @endif
 
-    <form action="{{ route('admin.letters.update', $letter->id) }}" method="POST" class="space-y-6">
+    <form action="{{ route('admin.letters.update', $letter->id) }}" method="POST" class="space-y-6" data-inline-validate>
         @csrf
         @method('PUT')
 
@@ -60,6 +60,8 @@
                     <select
                         id="letter_type_id"
                         name="letter_type_id"
+                        required
+                        data-required-label="Jenis Surat"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     >
                         <option value="">Pilih Jenis Surat</option>
@@ -73,6 +75,7 @@
                             </option>
                         @endforeach
                     </select>
+                    @include('admin.partials.field-error', ['field' => 'letter_type_id'])
                 </div>
 
                 <div>
@@ -82,6 +85,8 @@
                     <select
                         id="citizen_id"
                         name="citizen_id"
+                        required
+                        data-required-label="Pemohon"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     >
                         <option value="">Pilih Penduduk</option>
@@ -106,6 +111,7 @@
                             </option>
                         @endforeach
                     </select>
+                    @include('admin.partials.field-error', ['field' => 'citizen_id'])
                 </div>
 
                 <div class="md:col-span-2 xl:col-span-2">
@@ -116,9 +122,12 @@
                         type="text"
                         name="subject"
                         value="{{ old('subject', $letter->subject) }}"
+                        required
+                        data-required-label="Subjek"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         placeholder="Masukkan subjek surat"
                     >
+                    @include('admin.partials.field-error', ['field' => 'subject'])
                 </div>
 
                 <div>
@@ -127,6 +136,8 @@
                     </label>
                     <select
                         name="status"
+                        required
+                        data-required-label="Status"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     >
                         <option value="">Pilih Status</option>
@@ -134,6 +145,7 @@
                         <option value="processed" {{ $statusFormValue === 'processed' ? 'selected' : '' }}>processed</option>
                         <option value="completed" {{ $statusFormValue === 'completed' ? 'selected' : '' }}>completed</option>
                     </select>
+                    @include('admin.partials.field-error', ['field' => 'status'])
                 </div>
 
                 <div>
@@ -200,6 +212,24 @@
 
                 {{-- SKTM --}}
                 <div data-letter-fields="SKTM" class="letter-fields hidden grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">
+                            No. KK <span class="text-rose-500">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            name="payload[family_card_number]"
+                            value="{{ old('payload.family_card_number', $payload['family_card_number'] ?? '') }}"
+                            required
+                            data-required-label="No. KK"
+                            maxlength="16"
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                            placeholder="Masukkan 16 digit Nomor KK"
+                        >
+                        @include('admin.partials.field-error', ['field' => 'payload.family_card_number'])
+                    </div>
+
                     <div class="md:col-span-2">
                         <label class="block text-sm font-semibold text-slate-700 mb-2">
                             Keperluan Surat
@@ -327,6 +357,8 @@
                                 </label>
                                 <select
                                     name="payload[father_citizen_id]"
+                                    required
+                                    data-required-label="Pilih Ayah"
                                     class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                                 >
                                     <option value="">Pilih Data Ayah</option>
@@ -339,6 +371,7 @@
                                         </option>
                                     @endforeach
                                 </select>
+                                @include('admin.partials.field-error', ['field' => 'payload.father_citizen_id'])
                             </div>
 
                             <div>
@@ -349,11 +382,14 @@
                                     type="text"
                                     name="payload[father_income]"
                                     value="{{ $payload['father_income'] ?? '' }}"
+                                    required
+                                    data-required-label="Penghasilan Ayah"
                                     inputmode="numeric"
                                     data-rupiah-income
                                     class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                                     placeholder="Contoh: Rp 1.000.000"
                                 >
+                                @include('admin.partials.field-error', ['field' => 'payload.father_income'])
                             </div>
                         </div>
                     </div>
@@ -369,6 +405,8 @@
                                 </label>
                                 <select
                                     name="payload[mother_citizen_id]"
+                                    required
+                                    data-required-label="Pilih Ibu"
                                     class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                                 >
                                     <option value="">Pilih Data Ibu</option>
@@ -381,6 +419,7 @@
                                         </option>
                                     @endforeach
                                 </select>
+                                @include('admin.partials.field-error', ['field' => 'payload.mother_citizen_id'])
                             </div>
 
                             <div>
@@ -391,11 +430,14 @@
                                     type="text"
                                     name="payload[mother_income]"
                                     value="{{ $payload['mother_income'] ?? '' }}"
+                                    required
+                                    data-required-label="Penghasilan Ibu"
                                     inputmode="numeric"
                                     data-rupiah-income
                                     class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                                     placeholder="Contoh: Rp 500.000"
                                 >
+                                @include('admin.partials.field-error', ['field' => 'payload.mother_income'])
                             </div>
                         </div>
                     </div>
@@ -591,6 +633,11 @@ document.addEventListener('DOMContentLoaded', function () {
         // ✅ Hindari loop submit
         if (form.dataset.confirmed === 'true') return;
 
+        if (window.AdminInlineValidation && !window.AdminInlineValidation.validateForm(form)) {
+            e.preventDefault();
+            return;
+        }
+
         e.preventDefault();
 
         // ambil subject sebagai identitas
@@ -621,7 +668,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 });
 
-                form.submit();
+                if (form.requestSubmit) {
+                    form.requestSubmit();
+                } else {
+                    form.submit();
+                }
             }
 
         });

@@ -113,10 +113,18 @@ class PublicLetterServiceController extends Controller
             ->firstOrFail();
 
         $validated = $request->validate([
-            'nik' => ['required', 'string', 'size:16'],
-            'full_name' => ['required', 'string', 'max:255'],
-            'phone' => ['nullable', 'string', 'max:30'],
+            'nik' => ['required', 'digits:16'],
+            'full_name' => ['required', 'string', 'max:255', "regex:/^[A-Za-z\\s'.-]+$/"],
+            'phone' => ['nullable', 'regex:/^\d{10,15}$/'],
             'purpose' => ['nullable', 'string', 'max:1000'],
+        ], [
+            'nik.required' => 'NIK pemohon wajib diisi.',
+            'nik.digits' => 'NIK pemohon harus terdiri dari 16 digit angka.',
+            'full_name.required' => 'Nama lengkap wajib diisi.',
+            'full_name.max' => 'Nama lengkap maksimal 255 karakter.',
+            'full_name.regex' => 'Nama lengkap hanya boleh berisi huruf, spasi, titik, apostrof, dan tanda hubung.',
+            'phone.regex' => 'Nomor HP / WhatsApp harus terdiri dari 10 sampai 15 digit angka.',
+            'purpose.max' => 'Keperluan maksimal 1000 karakter.',
         ]);
 
         $citizen = Citizen::where('nik', $validated['nik'])->first();

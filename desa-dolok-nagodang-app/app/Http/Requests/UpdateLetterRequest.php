@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\LetterType;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -35,13 +36,49 @@ class UpdateLetterRequest extends FormRequest
         ];
     }
 
+    public function messages(): array
+    {
+        return [
+            'letter_type_id.required' => 'Jenis Surat wajib dipilih.',
+            'letter_type_id.exists' => 'Jenis Surat yang dipilih tidak valid.',
+            'citizen_id.required' => 'Pemohon wajib dipilih.',
+            'citizen_id.exists' => 'Pemohon yang dipilih tidak valid.',
+            'subject.required' => 'Subjek surat wajib diisi.',
+            'status.required' => 'Status surat wajib diisi.',
+            'submission_date.date_equals' => 'Tanggal pengajuan hanya boleh menggunakan tanggal hari ini.',
+        ];
+    }
+
     public function withValidator($validator): void
     {
         $validator->after(function ($validator) {
             $payload = $this->input('payload', []);
+            $letterTypeCode = strtoupper((string) LetterType::query()
+                ->whereKey($this->input('letter_type_id'))
+                ->value('code'));
 
             if (!is_array($payload)) {
                 return;
+            }
+
+            $requiredPayloadFields = [
+                'SKTM' => [
+                    'family_card_number' => 'No. KK',
+                ],
+                'SKOT' => [
+                    'father_citizen_id' => 'Pilih Ayah',
+                    'father_income' => 'Penghasilan Ayah',
+                    'mother_citizen_id' => 'Pilih Ibu',
+                    'mother_income' => 'Penghasilan Ibu',
+                ],
+            ];
+
+            foreach ($requiredPayloadFields[$letterTypeCode] ?? [] as $field => $label) {
+                $value = $payload[$field] ?? null;
+
+                if ($value === null || trim((string) $value) === '') {
+                    $validator->errors()->add("payload.{$field}", "{$label} wajib diisi.");
+                }
             }
 
             $letterOnlyFields = [
