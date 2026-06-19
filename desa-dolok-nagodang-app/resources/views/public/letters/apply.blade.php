@@ -4,8 +4,9 @@
 <section class="bg-emerald-950 text-white">
     <div class="max-w-7xl mx-auto px-4 py-16">
         <a href="{{ route('public.letters.show', $letterType->code) }}"
-           class="inline-flex text-sm text-emerald-100 hover:text-white mb-5">
-            ← Kembali ke Detail Surat
+           class="mb-5 inline-flex items-center gap-2 text-sm text-emerald-100 hover:text-white">
+            <i data-lucide="arrow-left" class="h-4 w-4"></i>
+            Kembali ke Detail Surat
         </a>
 
         <p class="inline-flex rounded-full bg-white/10 px-4 py-2 text-sm text-emerald-100 border border-white/10">
@@ -28,8 +29,8 @@
         @if (!config('features.public_letter_submission'))
             <div class="rounded-2xl bg-amber-50 border border-amber-200 p-6 text-amber-800">
                 <div class="flex items-start gap-4">
-                    <div class="w-12 h-12 rounded-2xl bg-amber-100 flex items-center justify-center text-2xl shrink-0">
-                        🚧
+                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-amber-100 text-amber-700">
+                        <i data-lucide="construction" class="h-6 w-6"></i>
                     </div>
 
                     <div>
@@ -69,22 +70,37 @@
         @else
             @if (session('success'))
                 <div class="mb-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-sm text-emerald-700">
-                    {{ session('success') }}
+                    <div class="flex items-start gap-3">
+                        <div class="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700">
+                            <i data-lucide="badge-check" class="h-5 w-5"></i>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-emerald-900">Pengajuan berhasil dikirim</p>
+                            <p class="mt-1 leading-6">{{ session('success') }}</p>
+                        </div>
+                    </div>
                 </div>
             @endif
 
             @if ($errors->any())
                 <div class="mb-6 rounded-2xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-700">
-                    <div class="font-semibold mb-2">Terjadi kesalahan:</div>
-                    <ul class="list-disc list-inside space-y-1">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
+                    <div class="flex items-start gap-3">
+                        <div class="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-rose-100 text-rose-700">
+                            <i data-lucide="alert-circle" class="h-5 w-5"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="mb-2 font-semibold text-rose-900">Terjadi kesalahan pada pengajuan</div>
+                            <ul class="list-disc list-inside space-y-1">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('public.letters.storeApplication', $letterType->code) }}" class="space-y-6">
+            <form method="POST" action="{{ route('public.letters.storeApplication', $letterType->code) }}" class="space-y-6" data-inline-validate>
                 @csrf
 
                 <div>
@@ -96,9 +112,18 @@
                         name="nik"
                         value="{{ old('nik') }}"
                         maxlength="16"
+                        inputmode="numeric"
+                        required
+                        data-required-label="NIK Pemohon"
+                        data-sanitize="digits"
+                        data-pattern="^\d{16}$"
+                        data-pattern-message="NIK pemohon harus terdiri dari 16 digit angka."
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         placeholder="Masukkan NIK"
                     >
+                    @error('nik')
+                        <p class="mt-2 text-sm text-rose-600">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div>
@@ -109,9 +134,16 @@
                         type="text"
                         name="full_name"
                         value="{{ old('full_name') }}"
+                        required
+                        data-required-label="Nama Lengkap"
+                        data-pattern="^[A-Za-z\\s'.-]+$"
+                        data-pattern-message="Nama lengkap hanya boleh berisi huruf, spasi, titik, apostrof, dan tanda hubung."
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         placeholder="Masukkan nama lengkap"
                     >
+                    @error('full_name')
+                        <p class="mt-2 text-sm text-rose-600">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div>
@@ -122,9 +154,17 @@
                         type="text"
                         name="phone"
                         value="{{ old('phone') }}"
+                        inputmode="numeric"
+                        maxlength="15"
+                        data-sanitize="digits"
+                        data-pattern="^\d{10,15}$"
+                        data-pattern-message="Nomor HP / WhatsApp harus terdiri dari 10 sampai 15 digit angka."
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         placeholder="Contoh: 08xxxxxxxxxx"
                     >
+                    @error('phone')
+                        <p class="mt-2 text-sm text-rose-600">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div>
@@ -137,6 +177,9 @@
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm leading-6 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         placeholder="Jelaskan keperluan pengajuan surat"
                     >{{ old('purpose') }}</textarea>
+                    @error('purpose')
+                        <p class="mt-2 text-sm text-rose-600">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div class="rounded-2xl bg-sky-50 border border-sky-200 p-5 text-sm text-sky-800">

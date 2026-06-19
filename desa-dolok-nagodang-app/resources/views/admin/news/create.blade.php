@@ -13,7 +13,7 @@
         </div>
     @endif
 
-    <form method="POST" action="{{ route('admin.news.store') }}" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('admin.news.store') }}" enctype="multipart/form-data" data-inline-validate>
         @csrf
 
         <div class="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
@@ -31,9 +31,12 @@
                         type="text"
                         name="title"
                         value="{{ old('title') }}"
+                        required
+                        data-required-label="Judul Berita"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         placeholder="Masukkan judul berita"
                     >
+                    @include('admin.partials.field-error', ['field' => 'title'])
                 </div>
 
                 <div>
@@ -42,6 +45,8 @@
                     </label>
                     <select
                         name="status"
+                        required
+                        data-required-label="Status"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     >
                         <option value="">Pilih Status</option>
@@ -52,20 +57,24 @@
                             Diunggah
                         </option>
                     </select>
+                    @include('admin.partials.field-error', ['field' => 'status'])
                 </div>
 
                 <div class="xl:col-span-3">
                     <label class="block text-sm font-semibold text-slate-700 mb-2">
-                        Thumbnail / Gambar
+                        Thumbnail / Gambar <span class="text-rose-500">*</span>
                     </label>
 
                     <input
                         type="file"
                         name="image"
+                        required
+                        data-required-label="Thumbnail / Gambar"
                         accept=".jpg,.jpeg,.png,image/jpeg,image/png"
                         onchange="previewImage(event)"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     >
+                    @include('admin.partials.field-error', ['field' => 'image'])
 
                     <p class="text-xs text-slate-500 mt-2">
                         Format: JPG, PNG, JPEG (max 2MB)
@@ -97,6 +106,7 @@
                         'editorId' => 'newsContentCreateEditor',
                         'inputId' => 'newsContentCreateInput',
                     ])
+                    @include('admin.partials.field-error', ['field' => 'content'])
                 </div>
             </div>
         </div>
@@ -159,6 +169,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (form.dataset.confirmed === 'true') return;
 
+        if (window.AdminInlineValidation && !window.AdminInlineValidation.validateForm(form)) {
+            e.preventDefault();
+            return;
+        }
+
         e.preventDefault();
 
         const judul = form.querySelector('input[name="title"]')?.value || 'berita ini';
@@ -187,7 +202,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 });
 
-                form.submit();
+                if (form.requestSubmit) {
+                    form.requestSubmit();
+                } else {
+                    form.submit();
+                }
             }
         });
     });

@@ -14,7 +14,7 @@ class AdminCitizenPageController extends Controller
     public function index(Request $request): View
     {
         $filters = [
-            'search' => $request->query('search'),
+            'search' => trim((string) $request->query('search')),
             'gender' => $request->query('gender'),
             'life_status' => $request->query('life_status'),
         ];

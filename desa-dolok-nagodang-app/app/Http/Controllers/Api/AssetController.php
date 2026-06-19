@@ -20,9 +20,9 @@ class AssetController extends Controller
     public function index(Request $request): JsonResponse
     {
         $filters = [
-            'search' => $request->query('search'),
-            'condition' => $request->query('condition'),
-            'category' => $request->query('category'),
+            'search' => trim((string) $request->query('search')),
+            'condition' => trim((string) $request->query('condition')),
+            'category' => trim((string) $request->query('category')),
         ];
 
         $perPage = (int) $request->query('per_page', 10);
@@ -31,7 +31,7 @@ class AssetController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'List assets berhasil diambil',
+            'message' => 'Daftar data inventaris berhasil diambil.',
             'data' => $data,
         ]);
     }
@@ -41,7 +41,7 @@ class AssetController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Data asset berhasil ditambahkan',
+            'message' => 'Data inventaris berhasil ditambahkan.',
             'data' => $asset,
         ], 201);
     }
@@ -52,7 +52,7 @@ class AssetController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Detail asset berhasil diambil',
+            'message' => 'Detail data inventaris berhasil diambil.',
             'data' => $data,
         ]);
     }
@@ -63,7 +63,7 @@ class AssetController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Data asset berhasil diperbarui',
+            'message' => 'Data inventaris berhasil diperbarui.',
             'data' => $updated,
         ]);
     }
@@ -74,7 +74,7 @@ class AssetController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Data asset berhasil dihapus',
+            'message' => 'Data inventaris berhasil dihapus.',
             'data' => null,
         ]);
     }

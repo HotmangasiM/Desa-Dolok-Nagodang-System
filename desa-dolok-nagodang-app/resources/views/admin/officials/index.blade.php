@@ -2,6 +2,7 @@
 
 @section('content')
 <div class="space-y-6">
+    @php($hasActiveFilters = collect($filters ?? [])->filter(fn ($value) => filled($value))->isNotEmpty())
 
     {{-- HEADER ACTION --}}
     <div class="flex flex-wrap items-center justify-between gap-3">
@@ -240,7 +241,7 @@
                                         Edit
                                     </a>
 
-                                    <form action="{{ route('admin.officials.destroy', $official->id) }}" method="POST">
+                                    <form action="{{ route('admin.officials.destroy', $official->id) }}" method="POST" data-delete-form>
                                         @csrf
                                         @method('DELETE')
 
@@ -260,7 +261,7 @@
                     @empty
                         <tr>
                             <td colspan="7" class="px-5 py-10 text-center text-slate-500">
-                                Tidak ada data aparat desa.
+                                {{ $hasActiveFilters ? 'Tidak ada data aparat desa yang cocok dengan filter pencarian.' : 'Tidak ada data aparat desa.' }}
                             </td>
                         </tr>
                     @endforelse
@@ -289,48 +290,3 @@
 
 </div>
 @endsection
-
-@push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-
-    if (typeof Swal === 'undefined') return;
-
-    document.addEventListener('click', function (e) {
-
-        const button = e.target.closest('.btn-delete');
-        if (!button) return;
-
-        e.preventDefault();
-
-        const form = button.closest('form');
-        const nama = button.dataset.name || 'data ini';
-
-        Swal.fire({
-            title: 'Konfirmasi Hapus',
-            text: `Hapus "${nama}"?`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Ya, hapus',
-            cancelButtonText: 'Batal',
-            confirmButtonColor: '#ef4444',
-            cancelButtonColor: '#6b7280',
-            reverseButtons: true
-        }).then((result) => {
-
-            if (result.isConfirmed) {
-                Swal.fire({
-                    title: 'Menghapus...',
-                    allowOutsideClick: false,
-                    didOpen: () => Swal.showLoading()
-                });
-
-                form.submit();
-            }
-        });
-
-    });
-
-});
-</script>
-@endpush

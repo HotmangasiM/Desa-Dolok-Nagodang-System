@@ -15,14 +15,16 @@ class AdminNewsPageController extends Controller
     public function index(Request $request): View
     {
         $filters = [
-            'search' => $request->query('search'),
+            'search' => trim((string) $request->query('search')),
             'status' => $request->query('status'),
         ];
 
         $news = News::query()
             ->when($filters['search'], function ($query) use ($filters) {
-                $query->where('title', 'like', '%' . $filters['search'] . '%')
-                    ->orWhere('content', 'like', '%' . $filters['search'] . '%');
+                $query->where(function ($builder) use ($filters) {
+                    $builder->where('title', 'like', '%' . $filters['search'] . '%')
+                        ->orWhere('content', 'like', '%' . $filters['search'] . '%');
+                });
             })
             ->when($filters['status'], function ($query) use ($filters) {
                 $query->where('status', $filters['status']);

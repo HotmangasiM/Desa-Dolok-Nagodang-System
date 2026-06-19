@@ -59,13 +59,17 @@ class StoreCitizenRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'nik.required' => 'NIK wajib diisi.',
             'nik.digits' => 'NIK harus berisi tepat 16 digit angka.',
             'family_card_number.digits' => 'No. KK harus berisi tepat 16 digit angka.',
+            'full_name.required' => 'Nama lengkap wajib diisi.',
             'full_name.regex' => 'Nama lengkap hanya boleh berisi huruf dan spasi.',
+            'gender.required' => 'Jenis kelamin wajib dipilih.',
             'birth_place.regex' => 'Tempat lahir hanya boleh berisi huruf dan spasi.',
             'birth_date.before_or_equal' => 'Tanggal lahir tidak boleh melebihi hari ini.',
             'education.regex' => 'Pendidikan hanya boleh berisi huruf, angka, dan spasi.',
             'occupation.not_regex' => 'Pekerjaan tidak boleh berisi angka.',
+            'life_status.required' => 'Status hidup wajib dipilih.',
             'address.in' => 'Alamat harus dipilih dari daftar dusun yang tersedia.',
             'rt.digits_between' => 'RT hanya boleh berisi angka maksimal 3 digit.',
             'rw.digits_between' => 'RW hanya boleh berisi angka maksimal 3 digit.',

@@ -13,7 +13,7 @@
         </div>
     @endif
 
-    <form action="{{ route('admin.news.update', $news->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+    <form action="{{ route('admin.news.update', $news->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6" data-inline-validate>
         @csrf
         @method('PUT')
 
@@ -32,9 +32,12 @@
                         type="text"
                         name="title"
                         value="{{ old('title', $news->title) }}"
+                        required
+                        data-required-label="Judul Berita"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         placeholder="Masukkan judul berita"
                     >
+                    @include('admin.partials.field-error', ['field' => 'title'])
                 </div>
 
                 <div>
@@ -43,6 +46,8 @@
                     </label>
                     <select
                         name="status"
+                        required
+                        data-required-label="Status"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     >
                         <option value="">Pilih Status</option>
@@ -53,6 +58,7 @@
                             Diunggah
                         </option>
                     </select>
+                    @include('admin.partials.field-error', ['field' => 'status'])
                 </div>
 
                 <div class="xl:col-span-3">
@@ -111,6 +117,7 @@
                         'editorId' => 'newsContentEditEditor',
                         'inputId' => 'newsContentEditInput',
                     ])
+                    @include('admin.partials.field-error', ['field' => 'content'])
                 </div>
             </div>
         </div>
@@ -172,6 +179,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (form.dataset.confirmed === 'true') return;
 
+        if (window.AdminInlineValidation && !window.AdminInlineValidation.validateForm(form)) {
+            e.preventDefault();
+            return;
+        }
+
         e.preventDefault();
 
         const judul = form.querySelector('input[name="title"]')?.value || 'berita ini';
@@ -200,7 +212,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 });
 
-                form.submit();
+                if (form.requestSubmit) {
+                    form.requestSubmit();
+                } else {
+                    form.submit();
+                }
             }
         });
     });

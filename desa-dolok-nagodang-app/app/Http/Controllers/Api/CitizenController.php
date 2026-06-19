@@ -20,9 +20,9 @@ class CitizenController extends Controller {
     public function index(Request $request): JsonResponse
     {
         $filters = [
-            'search' => $request->query('search'),
-            'gender' => $request->query('gender'),
-            'life_status' => $request->query('life_status'),
+            'search' => trim((string) $request->query('search')),
+            'gender' => trim((string) $request->query('gender')),
+            'life_status' => trim((string) $request->query('life_status')),
         ];
 
         $perPage = (int) $request->query('per_page', 10);
@@ -31,7 +31,7 @@ class CitizenController extends Controller {
 
         return response()->json([
             'success' => true,
-            'message' => 'List data penduduk berhasil diambil',
+            'message' => 'Daftar data penduduk berhasil diambil.',
             'data' => $data,
         ]);
     }
@@ -42,7 +42,7 @@ class CitizenController extends Controller {
 
         return response()->json([
             'success' => true,
-            'message' => 'Data penduduk berhasil ditambahkan',
+            'message' => 'Data penduduk berhasil ditambahkan.',
             'data' => $citizen,
         ]);
     }
@@ -53,7 +53,7 @@ class CitizenController extends Controller {
 
         return response()->json([
             'success' => true,
-            'message' => 'Detail data penduduk berhasil diambil',
+            'message' => 'Detail data penduduk berhasil diambil.',
             'data' => $citizen,
         ]);
     }
@@ -64,7 +64,7 @@ class CitizenController extends Controller {
 
         return response()->json([
             'success' => true,
-            'message' => 'Data penduduk berhasil diperbaharui',
+            'message' => 'Data penduduk berhasil diperbarui.',
             'data' => $data,
         ]);
     }
@@ -75,7 +75,7 @@ class CitizenController extends Controller {
 
         return response()->json([
             'success' => true,
-            'message' => 'Detail data penduduk berhasil dihapus',
+            'message' => 'Data penduduk berhasil dihapus.',
             'data' => null,
         ]);
     }

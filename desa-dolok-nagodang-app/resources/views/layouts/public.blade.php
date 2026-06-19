@@ -576,6 +576,7 @@
         method="POST"
         action="{{ route('public.complaints.store') }}"
         enctype="multipart/form-data"
+        data-inline-validate
         class="p-4 sm:p-5 space-y-4 max-h-[70vh] overflow-y-auto">
 
         @csrf
@@ -588,7 +589,7 @@
 
         @endif
 
-        @if ($errors->any())
+        @if ($errors->complaint->any())
 
             <div class="rounded-2xl bg-rose-50 border border-rose-200 px-4 py-3 text-sm text-rose-700">
 
@@ -598,7 +599,7 @@
 
                 <ul class="mt-2 list-disc list-inside space-y-1">
 
-                    @foreach ($errors->all() as $error)
+                    @foreach ($errors->complaint->all() as $error)
 
                         <li>{{ $error }}</li>
 
@@ -620,8 +621,15 @@
                 type="text"
                 name="name"
                 value="{{ old('name') }}"
+                required
+                data-required-label="Nama"
+                data-pattern="^[A-Za-z\\s'.-]+$"
+                data-pattern-message="Nama hanya boleh berisi huruf, spasi, titik, apostrof, dan tanda hubung."
                 class="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none"
                 placeholder="Masukkan nama">
+            @error('name', 'complaint')
+                <p class="mt-2 text-sm text-rose-600">{{ $message }}</p>
+            @enderror
         </div>
 
         <div>
@@ -633,8 +641,18 @@
                 type="text"
                 name="phone"
                 value="{{ old('phone') }}"
+                inputmode="numeric"
+                maxlength="15"
+                required
+                data-required-label="Nomor Telepon"
+                data-sanitize="digits"
+                data-pattern="^\d{10,15}$"
+                data-pattern-message="Nomor telepon harus terdiri dari 10 sampai 15 digit angka."
                 class="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none"
                 placeholder="08xxxxxxxxxx">
+            @error('phone', 'complaint')
+                <p class="mt-2 text-sm text-rose-600">{{ $message }}</p>
+            @enderror
         </div>
 
         <div>
@@ -644,6 +662,8 @@
 
             <select
                 name="category"
+                required
+                data-required-label="Kategori"
                 class="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
 
                 <option value="">Pilih kategori</option>
@@ -660,6 +680,9 @@
                 @endforeach
 
             </select>
+            @error('category', 'complaint')
+                <p class="mt-2 text-sm text-rose-600">{{ $message }}</p>
+            @enderror
         </div>
 
         <div>
@@ -670,8 +693,13 @@
             <textarea
                 name="message"
                 rows="5"
+                required
+                data-required-label="Pengaduan"
                 class="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm leading-7 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
                 placeholder="Masukkan isi pengaduan">{{ old('message') }}</textarea>
+            @error('message', 'complaint')
+                <p class="mt-2 text-sm text-rose-600">{{ $message }}</p>
+            @enderror
         </div>
 
         <div>
@@ -683,6 +711,9 @@
                 type="file"
                 name="attachment"
                 class="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm">
+            @error('attachment', 'complaint')
+                <p class="mt-2 text-sm text-rose-600">{{ $message }}</p>
+            @enderror
         </div>
 
         <button
@@ -698,6 +729,171 @@
 </div>
 
 {{-- ================= SCRIPT ================= --}}
+<script>
+    window.PublicInlineValidation = (function () {
+        const errorClass = 'js-inline-field-error';
+        const errorBorderClasses = ['border-rose-400', 'focus:ring-rose-500'];
+
+        function isVisible(field) {
+            return !!field && !field.disabled && !field.closest('.hidden');
+        }
+
+        function resolveMessage(field) {
+            if (field.dataset.requiredMessage) {
+                return field.dataset.requiredMessage;
+            }
+
+            const label = field.dataset.requiredLabel || 'Field ini';
+
+            if (field.tagName === 'SELECT') {
+                return label + ' wajib dipilih.';
+            }
+
+            if (field.type === 'file') {
+                return label + ' wajib diunggah.';
+            }
+
+            return label + ' wajib diisi.';
+        }
+
+        function resolvePatternMessage(field) {
+            if (field.dataset.patternMessage) {
+                return field.dataset.patternMessage;
+            }
+
+            const label = field.dataset.requiredLabel || 'Field ini';
+
+            return label + ' tidak sesuai format.';
+        }
+
+        function sanitizeFieldValue(field) {
+            if (!field || field.type === 'file') {
+                return;
+            }
+
+            if (field.dataset.sanitize === 'digits') {
+                field.value = (field.value || '').replace(/\D+/g, '');
+            }
+        }
+
+        function clearFieldError(field) {
+            if (!field) {
+                return;
+            }
+
+            errorBorderClasses.forEach(function (className) {
+                field.classList.remove(className);
+            });
+
+            field.removeAttribute('aria-invalid');
+
+            const nextSibling = field.nextElementSibling;
+
+            if (nextSibling && nextSibling.classList.contains(errorClass)) {
+                nextSibling.remove();
+            }
+        }
+
+        function showFieldError(field, message) {
+            clearFieldError(field);
+
+            errorBorderClasses.forEach(function (className) {
+                field.classList.add(className);
+            });
+
+            field.setAttribute('aria-invalid', 'true');
+
+            const errorElement = document.createElement('p');
+            errorElement.className = 'mt-2 text-sm text-rose-600 ' + errorClass;
+            errorElement.textContent = message;
+
+            field.insertAdjacentElement('afterend', errorElement);
+        }
+
+        function validateField(field) {
+            if (!isVisible(field)) {
+                clearFieldError(field);
+                return true;
+            }
+
+            const value = field.type === 'file'
+                ? (field.files && field.files.length ? '__HAS_FILE__' : '')
+                : (field.value || '').trim();
+
+            if (value) {
+                if (field.dataset.pattern) {
+                    const pattern = new RegExp(field.dataset.pattern);
+
+                    if (!pattern.test(value)) {
+                        showFieldError(field, resolvePatternMessage(field));
+                        return false;
+                    }
+                }
+
+                clearFieldError(field);
+                return true;
+            }
+
+            showFieldError(field, resolveMessage(field));
+            return false;
+        }
+
+        function attachLiveValidation(form) {
+            form.querySelectorAll('[data-required-label]').forEach(function (field) {
+                ['input', 'change', 'blur'].forEach(function (eventName) {
+                    field.addEventListener(eventName, function () {
+                        sanitizeFieldValue(field);
+
+                        const existingError = field.nextElementSibling;
+
+                        if (existingError && existingError.classList.contains(errorClass)) {
+                            validateField(field);
+                        } else {
+                            clearFieldError(field);
+                        }
+                    });
+                });
+            });
+        }
+
+        function validateForm(form) {
+            let firstInvalidField = null;
+
+            form.querySelectorAll('[data-required-label]').forEach(function (field) {
+                const isValid = validateField(field);
+
+                if (!isValid && !firstInvalidField) {
+                    firstInvalidField = field;
+                }
+            });
+
+            if (firstInvalidField) {
+                firstInvalidField.focus({ preventScroll: true });
+                firstInvalidField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return false;
+            }
+
+            return true;
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('form[data-inline-validate]').forEach(function (form) {
+                form.setAttribute('novalidate', 'novalidate');
+                attachLiveValidation(form);
+                form.addEventListener('submit', function (event) {
+                    if (!validateForm(form)) {
+                        event.preventDefault();
+                    }
+                });
+            });
+        });
+
+        return {
+            validateForm: validateForm,
+        };
+    })();
+</script>
+
 <script>
 
     document.addEventListener("DOMContentLoaded", function () {
@@ -728,7 +924,7 @@
     document.addEventListener('DOMContentLoaded', function () {
 
         const hasComplaintFeedback =
-            @json(session()->has('complaint_success') || $errors->any());
+            @json(session()->has('complaint_success') || $errors->complaint->any());
 
         if (hasComplaintFeedback) {
 

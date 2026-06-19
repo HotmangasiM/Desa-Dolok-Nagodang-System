@@ -22,12 +22,23 @@ class AdminLetterPageController extends Controller
     public function index(Request $request): View
     {
         $filters = [
-            'search' => $request->query('search'),
+            'search' => trim((string) $request->query('search')),
             'status' => $request->query('status'),
             'letter_type_id' => $request->query('letter_type_id'),
-            'submission_date_from' => $request->query('submission_date_from'),
-            'submission_date_to' => $request->query('submission_date_to'),
+            'submission_date_from' => trim((string) $request->query('submission_date_from')),
+            'submission_date_to' => trim((string) $request->query('submission_date_to')),
         ];
+
+        if (
+            $filters['submission_date_from'] &&
+            $filters['submission_date_to'] &&
+            $filters['submission_date_from'] > $filters['submission_date_to']
+        ) {
+            [$filters['submission_date_from'], $filters['submission_date_to']] = [
+                $filters['submission_date_to'],
+                $filters['submission_date_from'],
+            ];
+        }
 
         $perPage = (int) $request->query('per_page', 10);
 
