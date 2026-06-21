@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
-use Throwable;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -95,7 +94,7 @@ return Application::configure(basePath: dirname(__DIR__))
             ], $statusCode, $exception->getHeaders());
         });
 
-        $exceptions->render(function (Throwable $exception, Request $request) use ($shouldRenderJson) {
+        $exceptions->render(function (\Throwable $exception, Request $request) use ($shouldRenderJson) {
             if (! $shouldRenderJson($request)) {
                 return null;
             }
