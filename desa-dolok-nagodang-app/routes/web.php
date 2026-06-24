@@ -56,6 +56,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::post('/officials', [AdminOfficialPageController::class, 'store'])->name('admin.officials.store');
     Route::get('/officials/{official}/edit', [AdminOfficialPageController::class, 'edit'])->name('admin.officials.edit');
     Route::put('/officials/{official}', [AdminOfficialPageController::class, 'update'])->name('admin.officials.update');
+    Route::post('/officials/{official}/reorder', [AdminOfficialPageController::class, 'reorder'])->name('admin.officials.reorder');
     Route::delete('/officials/{official}', [AdminOfficialPageController::class, 'destroy'])->name('admin.officials.destroy');
 
     Route::get('/letters', [AdminLetterPageController::class, 'index'])->name('admin.letters.index');
