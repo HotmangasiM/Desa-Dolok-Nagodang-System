@@ -8,7 +8,6 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('styles')
 
-    <script src="https://unpkg.com/lucide@latest"></script>
     <script>
     function swalPlainText(value) {
         if (!value) {
@@ -292,8 +291,318 @@ function toggleSidebar() {
 document.getElementById('overlay').addEventListener('click', toggleSidebar);
 
 document.addEventListener("DOMContentLoaded", () => {
-    lucide.createIcons();
+    window.lucide?.createIcons();
 });
+</script>
+
+<script>
+    window.AdminInlineValidation = (function () {
+        const errorClass = 'js-inline-field-error';
+        const errorBorderClasses = ['border-rose-400', 'focus:ring-rose-500'];
+
+        function isVisible(field) {
+            if (!field || field.disabled) {
+                return false;
+            }
+
+            if (field.type === 'hidden' && !field.dataset.requiredTarget) {
+                return false;
+            }
+
+            if (field.closest('.hidden')) {
+                return false;
+            }
+
+            return true;
+        }
+
+        function resolveSourceField(field) {
+            if (!field.dataset.requiredTarget) {
+                return field;
+            }
+
+            return document.querySelector(field.dataset.requiredTarget) || field;
+        }
+
+        function resolveValue(field) {
+            const sourceField = resolveSourceField(field);
+
+            if (!sourceField) {
+                return '';
+            }
+
+            if (sourceField.type === 'file') {
+                return sourceField.files && sourceField.files.length ? '__HAS_FILE__' : '';
+            }
+
+            if (sourceField.hasAttribute('contenteditable')) {
+                return (sourceField.textContent || '').trim();
+            }
+
+            return (sourceField.value || '').trim();
+        }
+
+        function resolveMessage(field) {
+            if (field.dataset.requiredMessage) {
+                return field.dataset.requiredMessage;
+            }
+
+            const label = field.dataset.requiredLabel || 'Field ini';
+
+            if (field.tagName === 'SELECT') {
+                return label + ' wajib dipilih.';
+            }
+
+            if (field.type === 'file') {
+                return label + ' wajib diunggah.';
+            }
+
+            return label + ' wajib diisi.';
+        }
+
+        function clearFieldError(field) {
+            if (!field) {
+                return;
+            }
+
+            errorBorderClasses.forEach(function (className) {
+                field.classList.remove(className);
+            });
+
+            field.removeAttribute('aria-invalid');
+
+            const nextSibling = field.nextElementSibling;
+
+            if (nextSibling && nextSibling.classList.contains(errorClass)) {
+                nextSibling.remove();
+            }
+        }
+
+        function showFieldError(field, message) {
+            clearFieldError(field);
+
+            errorBorderClasses.forEach(function (className) {
+                field.classList.add(className);
+            });
+
+            field.setAttribute('aria-invalid', 'true');
+
+            const errorElement = document.createElement('p');
+            errorElement.className = 'mt-2 text-sm text-rose-600 ' + errorClass;
+            errorElement.textContent = message;
+
+            field.insertAdjacentElement('afterend', errorElement);
+        }
+
+        function validateField(field) {
+            if (!isVisible(field)) {
+                clearFieldError(field);
+                return true;
+            }
+
+            const value = resolveValue(field);
+
+            if (value) {
+                clearFieldError(field);
+                return true;
+            }
+
+            showFieldError(field, resolveMessage(field));
+            return false;
+        }
+
+        function attachLiveValidation(form) {
+            const fields = form.querySelectorAll('[data-required-label]');
+
+            fields.forEach(function (field) {
+                ['input', 'change', 'blur'].forEach(function (eventName) {
+                    field.addEventListener(eventName, function () {
+                        const existingError = field.nextElementSibling;
+
+                        if (
+                            existingError &&
+                            existingError.classList.contains(errorClass)
+                        ) {
+                            validateField(field);
+                        } else {
+                            clearFieldError(field);
+                        }
+                    });
+                });
+            });
+        }
+
+        function validateForm(form) {
+            let firstInvalidField = null;
+
+            form.querySelectorAll('[data-required-label]').forEach(function (field) {
+                const isValid = validateField(field);
+
+                if (!isValid && !firstInvalidField) {
+                    firstInvalidField = field;
+                }
+            });
+
+            if (firstInvalidField) {
+                firstInvalidField.focus({ preventScroll: true });
+                firstInvalidField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return false;
+            }
+
+            return true;
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('form[data-inline-validate]').forEach(function (form) {
+                form.setAttribute('novalidate', 'novalidate');
+                attachLiveValidation(form);
+            });
+        });
+
+        return {
+            validateForm: validateForm,
+            clearFieldError: clearFieldError,
+            showFieldError: showFieldError,
+        };
+    })();
+</script>
+
+<script>
+    window.AdminFeedback = (function () {
+        function showSuccessToast(message) {
+            if (!message) {
+                return;
+            }
+
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'success',
+                title: message,
+                showConfirmButton: false,
+                timer: 2500,
+                timerProgressBar: true,
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const successMessage = @json(session('success'));
+
+            if (!successMessage) {
+                return;
+            }
+
+            showSuccessToast(successMessage);
+        });
+
+        return {
+            showSuccessToast: showSuccessToast,
+        };
+    })();
+</script>
+
+<script>
+    window.AdminCrud = (function () {
+        function getDeleteConfig(form, trigger) {
+            const fallbackTrigger = trigger || form.querySelector('.btn-delete, [data-delete-trigger], button[type="submit"]');
+            const itemName = fallbackTrigger?.dataset.name || form.dataset.deleteName || 'data ini';
+
+            return {
+                itemName: itemName,
+                confirmTitle: 'Konfirmasi Hapus',
+                confirmText: `Hapus "${itemName}"?`,
+                loadingTitle: 'Menghapus...',
+            };
+        }
+
+        function submitDeleteForm(form) {
+            form.dataset.deleteConfirmed = 'true';
+            form.submit();
+        }
+
+        function confirmDelete(form, trigger) {
+            const config = getDeleteConfig(form, trigger);
+
+            if (typeof Swal === 'undefined') {
+                if (window.confirm(config.confirmText)) {
+                    submitDeleteForm(form);
+                }
+
+                return;
+            }
+
+            Swal.fire({
+                title: config.confirmTitle,
+                text: config.confirmText,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, hapus',
+                cancelButtonText: 'Batal',
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#6b7280',
+                reverseButtons: true,
+                focusCancel: true,
+            }).then(function (result) {
+                if (!result.isConfirmed) {
+                    return;
+                }
+
+                Swal.fire({
+                    title: config.loadingTitle,
+                    text: 'Mohon tunggu sebentar',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    showConfirmButton: false,
+                    didOpen: function () {
+                        Swal.showLoading();
+                    },
+                });
+
+                submitDeleteForm(form);
+            });
+        }
+
+        document.addEventListener('click', function (event) {
+            const trigger = event.target.closest('.btn-delete, [data-delete-trigger]');
+
+            if (!trigger) {
+                return;
+            }
+
+            const form = trigger.closest('form');
+
+            if (!form || !form.matches('[data-delete-form], .delete-form')) {
+                return;
+            }
+
+            event.preventDefault();
+
+            if (form.dataset.deleteConfirmed === 'true') {
+                return;
+            }
+
+            confirmDelete(form, trigger);
+        });
+
+        document.addEventListener('submit', function (event) {
+            const form = event.target;
+
+            if (!form.matches('[data-delete-form], .delete-form')) {
+                return;
+            }
+
+            if (form.dataset.deleteConfirmed === 'true') {
+                return;
+            }
+
+            event.preventDefault();
+            confirmDelete(form, event.submitter || null);
+        });
+
+        return {
+            confirmDelete: confirmDelete,
+        };
+    })();
 </script>
 
 @stack('scripts')

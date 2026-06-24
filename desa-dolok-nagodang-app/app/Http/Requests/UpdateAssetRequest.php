@@ -40,8 +40,12 @@ class UpdateAssetRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'item_name.required' => 'Nama Barang wajib diisi.',
             'item_name.regex' => 'Nama Barang hanya boleh berisi huruf dan spasi.',
+            'item_code.required' => 'Kode Barang wajib diisi.',
             'category.regex' => 'Kategori hanya boleh berisi huruf dan spasi.',
+            'quantity.required' => 'Jumlah wajib diisi.',
+            'condition.required' => 'Kondisi wajib dipilih.',
             'acquisition_date.before_or_equal' => 'Tanggal Perolehan tidak boleh melebihi hari ini.',
             'source.regex' => 'Sumber hanya boleh berisi huruf dan spasi.',
         ];

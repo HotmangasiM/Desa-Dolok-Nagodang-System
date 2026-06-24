@@ -1,6 +1,13 @@
 @extends('layouts.admin')
 @section('content')
 <div class="space-y-6">
+    @php
+        $hasActiveFilters = collect($filters ?? [])
+            ->filter(function ($value) {
+                return filled($value);
+            })
+            ->isNotEmpty();
+    @endphp
 
     {{-- HEADER --}}
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -20,13 +27,6 @@
             Tambah Data
         </a>
     </div>
-
-    {{-- ALERT --}}
-    @if(session('success'))
-        <div class="rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-sm text-emerald-700">
-            {{ session('success') }}
-        </div>
-    @endif
 
     {{-- STATISTIK --}}
     <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -57,33 +57,44 @@
 
     </div>
 
-    {{-- SEARCH --}}
+    {{-- FILTER --}}
     <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
 
         <form method="GET"
               action="{{ route('admin.infrastructure.index') }}">
 
-            <div class="flex flex-col md:flex-row gap-3">
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
 
                 <input
                     type="text"
                     name="search"
-                    value="{{ request('search') }}"
+                    value="{{ $filters['search'] ?? '' }}"
                     placeholder="Cari nama barang, kode barang atau jenis barang..."
-                    class="flex-1 rounded-xl border border-slate-300 px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                    class="rounded-xl border border-slate-300 px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none xl:col-span-2"
                 >
+
+                <select
+                    name="status"
+                    class="rounded-xl border border-slate-300 px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                >
+                    <option value="">Semua Status</option>
+                    <option value="publish" {{ ($filters['status'] ?? '') === 'publish' ? 'selected' : '' }}>Publish</option>
+                    <option value="draft" {{ ($filters['status'] ?? '') === 'draft' ? 'selected' : '' }}>Draft</option>
+                </select>
 
                 <button
                     type="submit"
                     class="rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800">
-                    Cari
+                    Terapkan
                 </button>
 
+            </div>
+
+            <div class="mt-3 flex justify-end">
                 <a href="{{ route('admin.infrastructure.index') }}"
                    class="rounded-xl border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50">
                     Reset
                 </a>
-
             </div>
 
         </form>
@@ -175,12 +186,15 @@
                         <td class="px-4 py-4">
 
                             @php
-                                $badge = match($item->kondisi){
-                                    'Baik' => 'bg-emerald-100 text-emerald-700',
-                                    'Rusak Ringan' => 'bg-amber-100 text-amber-700',
-                                    'Rusak Berat' => 'bg-rose-100 text-rose-700',
-                                    default => 'bg-slate-100 text-slate-700'
-                                };
+                                $badge = 'bg-slate-100 text-slate-700';
+
+                                if ($item->kondisi === 'Baik') {
+                                    $badge = 'bg-emerald-100 text-emerald-700';
+                                } elseif ($item->kondisi === 'Rusak Ringan') {
+                                    $badge = 'bg-amber-100 text-amber-700';
+                                } elseif ($item->kondisi === 'Rusak Berat') {
+                                    $badge = 'bg-rose-100 text-rose-700';
+                                }
                             @endphp
 
                             <span class="px-3 py-1 rounded-full text-xs font-semibold {{ $badge }}">
@@ -223,7 +237,8 @@
                                 <form
                                     action="{{ route('admin.infrastructure.destroy',$item->id) }}"
                                     method="POST"
-                                    class="delete-form">
+                                    class="delete-form"
+                                    data-delete-form>
 
                                     @csrf
                                     @method('DELETE')
@@ -231,7 +246,7 @@
                                     <button
                                         type="submit"
                                         data-name="{{ $item->nama_barang }}"
-                                        class="px-3 py-2 rounded-lg bg-rose-100 text-rose-700 text-xs font-medium">
+                                        class="btn-delete px-3 py-2 rounded-lg bg-rose-100 text-rose-700 text-xs font-medium">
                                         Hapus
                                     </button>
 
@@ -250,7 +265,7 @@
                         <td colspan="12"
                             class="text-center py-16 text-slate-500">
 
-                            Belum ada data aset desa.
+                            {{ $hasActiveFilters ? 'Tidak ada data infrastruktur yang cocok dengan filter pencarian.' : 'Belum ada data infrastruktur desa.' }}
 
                         </td>
 
@@ -265,60 +280,20 @@
         </div>
 
         <div class="px-5 py-4 border-t border-slate-200">
-            {{ $data->links() }}
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                <p class="text-sm text-slate-500">
+                    Menampilkan {{ $data->firstItem() ?? 0 }}
+                    sampai {{ $data->lastItem() ?? 0 }}
+                    dari {{ $data->total() }} data
+                </p>
+
+                <div>
+                    {{ $data->links() }}
+                </div>
+            </div>
         </div>
 
     </div>
 
 </div>
 @endsection
-
-@push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-
-    document.querySelectorAll('.delete-form').forEach(form => {
-
-        form.addEventListener('submit', function(e) {
-
-            if (typeof Swal === 'undefined') {
-                const name = this.querySelector('button').dataset.name;
-
-                if (!window.confirm(`Hapus data "${name}"?`)) {
-                    e.preventDefault();
-                }
-
-                return;
-            }
-
-            e.preventDefault();
-
-            const name =
-                this.querySelector('button').dataset.name;
-
-            Swal.fire({
-                title: 'Hapus Data?',
-                text: `"${name}" akan dihapus permanen.`,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Ya, Hapus',
-                cancelButtonText: 'Batal',
-                confirmButtonColor: '#ef4444',
-                cancelButtonColor: '#64748b'
-            }).then((result) => {
-
-                if(result.isConfirmed){
-
-                    form.submit();
-
-                }
-
-            });
-
-        });
-
-    });
-
-});
-</script>
-@endpush

@@ -9,10 +9,10 @@ class PublicNewsController extends Controller
 {
     public function index(): View
     {
-        $search = request('search');
+        $search = trim((string) request('search'));
 
         $news = News::where('status', 'published')
-            ->when($search, function ($query) use ($search) {
+            ->when($search !== '', function ($query) use ($search) {
                 $query->where(function ($q) use ($search) {
                     $q->where('title', 'like', "%{$search}%")
                     ->orWhere('content', 'like', "%{$search}%");

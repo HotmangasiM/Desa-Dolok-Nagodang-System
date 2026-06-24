@@ -28,7 +28,7 @@
         </div>
     @endif
 
-    <form action="{{ route('admin.citizens.update', $citizen->id) }}" method="POST" class="space-y-6">
+    <form action="{{ route('admin.citizens.update', $citizen->id) }}" method="POST" class="space-y-6" data-inline-validate>
         @csrf
         @method('PUT')
 
@@ -43,24 +43,29 @@
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">NIK <span class="text-rose-500">*</span></label>
                     <input type="text" name="nik" value="{{ old('nik', $citizen->nik) }}"
+                           required data-required-label="NIK"
                            inputmode="numeric" maxlength="16" pattern="[0-9]{16}"
                            oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 16)"
                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                            placeholder="Masukkan 16 digit NIK">
+                    @include('admin.partials.field-error', ['field' => 'nik'])
                 </div>
 
                 <div class="md:col-span-2">
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Nama Lengkap <span class="text-rose-500">*</span></label>
                     <input type="text" name="full_name" value="{{ old('full_name', $citizen->full_name) }}"
+                           required data-required-label="Nama Lengkap"
                            maxlength="255" oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')"
                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                            placeholder="Masukkan nama lengkap">
+                    @include('admin.partials.field-error', ['field' => 'full_name'])
                 </div>
 
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">Jenis Kelamin</label>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Jenis Kelamin <span class="text-rose-500">*</span></label>
                     <select
                         name="gender"
+                        required data-required-label="Jenis Kelamin"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     >
                         <option value="">Pilih Jenis Kelamin</option>
@@ -71,16 +76,19 @@
                             Perempuan
                         </option>
                     </select>
+                    @include('admin.partials.field-error', ['field' => 'gender'])
                 </div>
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Status Hidup <span class="text-rose-500">*</span></label>
                     <select name="life_status"
+                            required data-required-label="Status Hidup"
                             class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
                         <option value="">Pilih Status</option>
                         <option value="alive" {{ old('life_status', $citizen->life_status) === 'alive' ? 'selected' : '' }}>Hidup</option>
                         <option value="deceased" {{ old('life_status', $citizen->life_status) === 'deceased' ? 'selected' : '' }}>Meninggal</option>
                     </select>
+                    @include('admin.partials.field-error', ['field' => 'life_status'])
                 </div>
 
                 <div>
@@ -311,20 +319,6 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
-    // ✅ TOAST SUCCESS (setelah redirect dari controller)
-    @if(session('success'))
-        Swal.fire({
-            toast: true,
-            position: 'top-end',
-            icon: 'success',
-            title: '{{ session('success') }}',
-            showConfirmButton: false,
-            timer: 2500,
-            timerProgressBar: true
-        });
-    @endif
-
-
     // ✅ SUBMIT EDIT (CONFIRMATION)
     document.addEventListener('click', function (e) {
 
@@ -340,7 +334,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        if (!form.reportValidity()) {
+        if (window.AdminInlineValidation && !window.AdminInlineValidation.validateForm(form)) {
             return;
         }
 
@@ -390,3 +384,5 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 @endpush
+
+

@@ -2,6 +2,7 @@
 
 @section('content')
 <div class="space-y-6">
+    @php($hasActiveFilters = collect($filters ?? [])->filter(fn ($value) => filled($value))->isNotEmpty())
 
     {{-- HEADER --}}
     <div class="flex flex-wrap items-center justify-between gap-3">
@@ -231,7 +232,7 @@
                                 <img src="{{ asset('storage/' . $asset->asset_photo) }}"
                                      class="w-16 h-12 object-cover rounded-lg border">
                             @else
-                                <span class="text-slate-400 text-xs">No Image</span>
+                                <span class="text-slate-400 text-xs">Tidak Ada Gambar</span>
                             @endif
                         </td>
 
@@ -254,11 +255,11 @@
                         <td class="px-5 py-4">
                             @if ($asset->condition === 'good')
                                 <span class="inline-flex rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
-                                    Good
+                                    Baik
                                 </span>
                             @elseif ($asset->condition === 'damaged')
                                 <span class="inline-flex rounded-full bg-rose-100 px-3 py-1 text-xs font-semibold text-rose-700">
-                                    Damaged
+                                    Rusak
                                 </span>
                             @else
                                 <span class="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
@@ -281,7 +282,7 @@
                                     Edit
                                 </a>
 
-                                <form action="{{ route('admin.assets.destroy', $asset->id) }}" method="POST">
+                                <form action="{{ route('admin.assets.destroy', $asset->id) }}" method="POST" data-delete-form>
                                     @csrf
                                     @method('DELETE')
 
@@ -302,7 +303,7 @@
                 @empty
                     <tr>
                         <td colspan="9" class="px-5 py-8 text-center text-slate-500">
-                            Data inventaris belum tersedia.
+                            {{ $hasActiveFilters ? 'Tidak ada data inventaris yang cocok dengan filter pencarian.' : 'Data inventaris belum tersedia.' }}
                         </td>
                     </tr>
                 @endforelse
@@ -331,49 +332,3 @@
 
 </div>
 @endsection
-
-@push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-
-    if (typeof Swal === 'undefined') return;
-
-    document.addEventListener('click', function (e) {
-
-        const button = e.target.closest('.btn-delete');
-        if (!button) return;
-
-        e.preventDefault();
-
-        const form = button.closest('form');
-        const nama = button.dataset.name || 'data ini';
-
-        Swal.fire({
-            title: 'Konfirmasi Hapus',
-            text: `Hapus "${nama}"?`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Ya, hapus',
-            cancelButtonText: 'Batal',
-            confirmButtonColor: '#ef4444',
-            cancelButtonColor: '#6b7280',
-            reverseButtons: true
-        }).then((result) => {
-
-            if (result.isConfirmed) {
-                Swal.fire({
-                    title: 'Menghapus...',
-                    allowOutsideClick: false,
-                    didOpen: () => Swal.showLoading()
-                });
-
-                form.submit();
-            }
-
-        });
-
-    });
-
-});
-</script>
-@endpush

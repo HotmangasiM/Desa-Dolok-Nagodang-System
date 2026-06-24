@@ -2,6 +2,8 @@ import './bootstrap';
 import Swiper from 'swiper';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import Swal from 'sweetalert2';
+import { createIcons, icons } from 'lucide';
+import Chart from 'chart.js/auto';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -23,3 +25,12 @@ window.SwiperModules = {
     Autoplay
 };
 window.Swal = Swal;
+window.Chart = Chart;
+window.lucide = {
+    createIcons(options = {}) {
+        return createIcons({
+            icons,
+            ...options,
+        });
+    },
+};

@@ -19,8 +19,8 @@ class OfficialController extends Controller
     public function index(Request $request): JsonResponse
     {
         $filters = [
-            'search' => $request->query('search'),
-            'position' => $request->query('position'),
+            'search' => trim((string) $request->query('search')),
+            'position' => trim((string) $request->query('position')),
         ];
 
         $perPage = (int) $request->query('per_page', 10);
@@ -29,7 +29,7 @@ class OfficialController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'List aparat desa berhasil diambil',
+            'message' => 'Daftar data aparat desa berhasil diambil.',
             'data' => $data,
         ]);
     }
@@ -40,7 +40,7 @@ class OfficialController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Data aparat desa berhasil ditambahkan',
+            'message' => 'Data aparat desa berhasil ditambahkan.',
             'data' => $official,
         ], 201);
     }
@@ -51,7 +51,7 @@ class OfficialController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Detail aparat desa berhasil diambil',
+            'message' => 'Detail data aparat desa berhasil diambil.',
             'data' => $data,
         ]);
     }
@@ -62,7 +62,7 @@ class OfficialController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Data aparat desa berhasil diperbarui',
+            'message' => 'Data aparat desa berhasil diperbarui.',
             'data' => $updated,
         ]);
     }
@@ -73,7 +73,7 @@ class OfficialController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Data aparat desa berhasil dihapus',
+            'message' => 'Data aparat desa berhasil dihapus.',
             'data' => null,
         ]);
     }

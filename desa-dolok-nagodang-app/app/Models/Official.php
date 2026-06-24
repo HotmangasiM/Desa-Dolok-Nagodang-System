@@ -30,4 +30,12 @@ class Official extends Model
         'term_start' => 'date',
         'term_end' => 'date',
     ];
+
+    public function scopeOrderedForDisplay($query)
+    {
+        return $query
+            ->orderBy('sort_order')
+            ->orderBy('created_at')
+            ->orderBy('id');
+    }
 }

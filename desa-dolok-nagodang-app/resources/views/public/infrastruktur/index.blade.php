@@ -38,7 +38,7 @@
             <input
                 type="text"
                 name="search"
-                value="{{ request('search') }}"
+                value="{{ $search ?? '' }}"
                 placeholder="Cari pembangunan desa..."
                 class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
             >
@@ -50,7 +50,7 @@
                 Cari
             </button>
 
-            @if(request('search'))
+            @if(!empty($search))
                 <a
                     href="{{ route('public.infrastruktur.index') }}"
                     class="rounded-xl border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700 text-center hover:bg-slate-50 transition"
@@ -90,11 +90,9 @@
                         >
 
                     @else
-
-                        <div class="w-full h-full flex items-center justify-center text-6xl">
-                            🏗️
+                        <div class="flex h-full w-full items-center justify-center bg-slate-100 text-slate-400">
+                            <i data-lucide="building-2" class="h-14 w-14"></i>
                         </div>
-
                     @endif
 
                 </div>
@@ -140,8 +138,9 @@
                             Detail pembangunan
                         </div>
 
-                        <div class="text-sm font-semibold text-emerald-700">
-                            Lihat →
+                        <div class="flex items-center gap-2 text-sm font-semibold text-emerald-700">
+                            <span>Lihat detail</span>
+                            <i data-lucide="arrow-right" class="h-4 w-4"></i>
                         </div>
 
                     </div>
@@ -157,8 +156,8 @@
 
                 <div class="rounded-3xl bg-white border border-slate-200 p-12 text-center shadow-sm">
 
-                    <div class="text-6xl">
-                        🏗️
+                    <div class="flex justify-center text-slate-400">
+                        <i data-lucide="building-2" class="h-14 w-14"></i>
                     </div>
 
                     <h3 class="mt-5 text-xl font-bold text-slate-800">
@@ -190,3 +189,4 @@
 </section>
 
 @endsection
+

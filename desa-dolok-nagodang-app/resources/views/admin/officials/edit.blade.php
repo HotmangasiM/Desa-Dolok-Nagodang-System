@@ -27,7 +27,7 @@
         </div>
     @endif
 
-    <form action="{{ route('admin.officials.update', $official->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+    <form action="{{ route('admin.officials.update', $official->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6" data-inline-validate>
         @csrf
         @method('PUT')
 
@@ -47,11 +47,14 @@
                         type="text"
                         name="name"
                         value="{{ old('name', $official->name) }}"
+                        required
+                        data-required-label="Nama"
                         maxlength="100"
                         oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '')"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         placeholder="Masukkan nama aparat"
                     >
+                    @include('admin.partials.field-error', ['field' => 'name'])
                 </div>
 
                 <div>
@@ -63,11 +66,14 @@
                         type="text"
                         name="position"
                         value="{{ old('position', $official->position) }}"
+                        required
+                        data-required-label="Jabatan"
                         maxlength="100"
                         oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '')"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         placeholder="Contoh: Kepala Desa"
                     >
+                    @include('admin.partials.field-error', ['field' => 'position'])
                 </div>
 
                 <div>
@@ -180,19 +186,31 @@
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">
-                        Urutan Tampil
+                        Posisi Tampil di Halaman Publik
                     </label>
-
-                    <input
-                        type="number"
-                        name="sort_order"
-                        value="{{ old('sort_order', $official->sort_order ?? 0) }}"
-                        min="0"
-                        step="1"
-                        onkeydown="return false;"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                        placeholder="Semakin kecil, tampil lebih atas"
-                    >
+                    <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+                        <p class="text-sm font-semibold text-slate-700">
+                            Posisi saat ini: {{ $official->sort_order ?? '-' }}
+                        </p>
+                        <p class="mt-1 text-xs leading-6 text-slate-500">
+                            Untuk mengubah posisi tampil, gunakan tombol naik dan turun langsung dari daftar aparat desa.
+                        </p>
+                    </div>
+                    @if (!empty($displayOrderGuide) && $displayOrderGuide->isNotEmpty())
+                        <div class="mt-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+                            <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Referensi urutan aparat lain</p>
+                            <div class="mt-2 space-y-2">
+                                @foreach ($displayOrderGuide as $guideOfficial)
+                                    <div class="flex items-center justify-between gap-3 text-xs text-slate-600">
+                                        <span class="truncate">{{ $guideOfficial->name }} - {{ $guideOfficial->position }}</span>
+                                        <span class="shrink-0 rounded-full bg-white px-2 py-1 font-semibold text-slate-700 border border-slate-200">
+                                            Posisi {{ $guideOfficial->sort_order ?? 0 }}
+                                        </span>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -244,20 +262,6 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
-    // ✅ TOAST SUCCESS (setelah update)
-    @if(session('success'))
-        Swal.fire({
-            toast: true,
-            position: 'top-end',
-            icon: 'success',
-            title: '{{ session('success') }}',
-            showConfirmButton: false,
-            timer: 2500,
-            timerProgressBar: true
-        });
-    @endif
-
-
     // ✅ CONFIRM EDIT
     document.addEventListener('submit', function (e) {
 
@@ -268,6 +272,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // cegah loop
         if (form.dataset.confirmed === 'true') return;
+
+        if (window.AdminInlineValidation && !window.AdminInlineValidation.validateForm(form)) {
+            e.preventDefault();
+            return;
+        }
 
         e.preventDefault();
 
@@ -306,7 +315,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 });
 
-                form.submit();
+                if (form.requestSubmit) {
+                    form.requestSubmit();
+                } else {
+                    form.submit();
+                }
             }
 
         });
@@ -316,3 +329,5 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 @endpush
+
+

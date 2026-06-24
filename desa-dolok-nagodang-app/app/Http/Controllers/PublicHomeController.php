@@ -52,8 +52,7 @@ class PublicHomeController extends Controller
             ->get();
 
         // Aparat desa
-        $officials = Official::orderBy('sort_order')
-            ->orderBy('created_at')
+        $officials = Official::orderedForDisplay()
             ->get();
 
         $villageHead = Official::where('position', 'like', '%Kepala Desa%')

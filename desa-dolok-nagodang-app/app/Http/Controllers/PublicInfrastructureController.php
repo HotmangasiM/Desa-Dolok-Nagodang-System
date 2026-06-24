@@ -19,12 +19,12 @@ class PublicInfrastructureController extends Controller
 
     public function index(Request $request)
     {
+        $search = trim((string) $request->query('search'));
+
         $query = Infrastructure::query()
             ->where('status', 'publish');
 
-        if ($request->filled('search')) {
-            $search = $request->search;
-
+        if ($search !== '') {
             $query->where(function ($builder) use ($search) {
                 $builder->where('nama_barang', 'like', '%' . $search . '%')
                     ->orWhere('kode_barang', 'like', '%' . $search . '%')
@@ -40,7 +40,7 @@ class PublicInfrastructureController extends Controller
 
         return view(
             'public.infrastruktur.index',
-            compact('infrastructures')
+            compact('infrastructures', 'search')
         );
     }
 
@@ -71,18 +71,28 @@ class PublicInfrastructureController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    public function adminIndex(Request $request)
+public function adminIndex(Request $request)
 {
+    $filters = [
+        'search' => trim((string) $request->query('search')),
+        'status' => $request->query('status'),
+    ];
+
     $query = Infrastructure::query();
 
-    if ($request->filled('search')) {
-        $search = $request->search;
+    if ($filters['search']) {
+        $search = $filters['search'];
 
         $query->where(function ($builder) use ($search) {
             $builder->where('nama_barang', 'like', '%' . $search . '%')
                 ->orWhere('kode_barang', 'like', '%' . $search . '%')
-                ->orWhere('jenis_barang', 'like', '%' . $search . '%');
+                ->orWhere('jenis_barang', 'like', '%' . $search . '%')
+                ->orWhere('content', 'like', '%' . $search . '%');
         });
+    }
+
+    if (!empty($filters['status'])) {
+        $query->where('status', $filters['status']);
     }
 
     $data = $query
@@ -108,7 +118,8 @@ class PublicInfrastructureController extends Controller
             'data',
             'allInfrastructure',
             'publishedInfrastructure',
-            'draftInfrastructure'
+            'draftInfrastructure',
+            'filters'
         )
     );
 }
@@ -129,11 +140,13 @@ class PublicInfrastructureController extends Controller
             ->store('infrastructure', 'public');
     }
 
-    Infrastructure::create([
-        ...$data,
-        'slug' => $this->generateUniqueSlug($data['nama_barang']),
-        'image' => $imagePath,
-    ]);
+    Infrastructure::create(array_merge(
+        $data,
+        [
+            'slug' => $this->generateUniqueSlug($data['nama_barang']),
+            'image' => $imagePath,
+        ]
+    ));
 
     return redirect()
         ->route('admin.infrastructure.index')
@@ -170,11 +183,13 @@ class PublicInfrastructureController extends Controller
             ->store('infrastructure', 'public');
     }
 
-    $item->update([
-        ...$data,
-        'slug' => $this->generateUniqueSlug($data['nama_barang'], $item->id),
-        'image' => $imagePath,
-    ]);
+    $item->update(array_merge(
+        $data,
+        [
+            'slug' => $this->generateUniqueSlug($data['nama_barang'], $item->id),
+            'image' => $imagePath,
+        ]
+    ));
 
     return redirect()
         ->route('admin.infrastructure.index')
@@ -209,7 +224,9 @@ class PublicInfrastructureController extends Controller
         $counter = 2;
 
         while (Infrastructure::query()
-            ->when($ignoreId, fn ($query) => $query->where('id', '!=', $ignoreId))
+            ->when($ignoreId, function ($query) use ($ignoreId) {
+                return $query->where('id', '!=', $ignoreId);
+            })
             ->where('slug', $slug)
             ->exists()) {
             $slug = $baseSlug . '-' . $counter;
