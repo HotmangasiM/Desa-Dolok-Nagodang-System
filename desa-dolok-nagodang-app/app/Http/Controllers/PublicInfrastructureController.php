@@ -140,11 +140,13 @@ public function adminIndex(Request $request)
             ->store('infrastructure', 'public');
     }
 
-    Infrastructure::create([
-        ...$data,
-        'slug' => $this->generateUniqueSlug($data['nama_barang']),
-        'image' => $imagePath,
-    ]);
+    Infrastructure::create(array_merge(
+        $data,
+        [
+            'slug' => $this->generateUniqueSlug($data['nama_barang']),
+            'image' => $imagePath,
+        ]
+    ));
 
     return redirect()
         ->route('admin.infrastructure.index')
@@ -181,11 +183,13 @@ public function adminIndex(Request $request)
             ->store('infrastructure', 'public');
     }
 
-    $item->update([
-        ...$data,
-        'slug' => $this->generateUniqueSlug($data['nama_barang'], $item->id),
-        'image' => $imagePath,
-    ]);
+    $item->update(array_merge(
+        $data,
+        [
+            'slug' => $this->generateUniqueSlug($data['nama_barang'], $item->id),
+            'image' => $imagePath,
+        ]
+    ));
 
     return redirect()
         ->route('admin.infrastructure.index')
@@ -220,7 +224,9 @@ public function adminIndex(Request $request)
         $counter = 2;
 
         while (Infrastructure::query()
-            ->when($ignoreId, fn ($query) => $query->where('id', '!=', $ignoreId))
+            ->when($ignoreId, function ($query) use ($ignoreId) {
+                return $query->where('id', '!=', $ignoreId);
+            })
             ->where('slug', $slug)
             ->exists()) {
             $slug = $baseSlug . '-' . $counter;
