@@ -551,4 +551,187 @@ class AdminCrudFlowTest extends TestCase
             'created_by' => $this->admin->id,
         ]);
     }
+
+    public function test_official_sort_order_is_consistent_across_admin_and_public_pages(): void
+    {
+        $this->actingAs($this->admin);
+
+        $thirdOfficial = Official::create([
+            'name' => 'Official Ketiga',
+            'position' => 'Kasi Pelayanan',
+            'sort_order' => 3,
+        ]);
+
+        $firstOfficial = Official::create([
+            'name' => 'Official Pertama',
+            'position' => 'Sekretaris Desa',
+            'sort_order' => 1,
+        ]);
+
+        $secondOfficial = Official::create([
+            'name' => 'Official Kedua',
+            'position' => 'Kaur Umum',
+            'sort_order' => 2,
+        ]);
+
+        $adminResponse = $this->get(route('admin.officials.index'))
+            ->assertOk()
+            ->assertSee('Urutan Tampil');
+
+        $adminContent = $adminResponse->getContent();
+
+        $this->assertLessThan(
+            strpos($adminContent, 'Official Kedua'),
+            strpos($adminContent, 'Official Pertama')
+        );
+
+        $this->assertLessThan(
+            strpos($adminContent, 'Official Ketiga'),
+            strpos($adminContent, 'Official Kedua')
+        );
+
+        auth()->logout();
+
+        $publicOfficialsResponse = $this->get(route('public.officials'))
+            ->assertOk();
+
+        $publicOfficialsContent = $publicOfficialsResponse->getContent();
+
+        $this->assertLessThan(
+            strpos($publicOfficialsContent, 'Official Kedua'),
+            strpos($publicOfficialsContent, 'Official Pertama')
+        );
+
+        $this->assertLessThan(
+            strpos($publicOfficialsContent, 'Official Ketiga'),
+            strpos($publicOfficialsContent, 'Official Kedua')
+        );
+
+        $homeResponse = $this->get(route('public.home'))
+            ->assertOk();
+
+        $homeContent = $homeResponse->getContent();
+
+        $this->assertLessThan(
+            strpos($homeContent, 'Official Kedua'),
+            strpos($homeContent, 'Official Pertama')
+        );
+
+        $this->assertLessThan(
+            strpos($homeContent, 'Official Ketiga'),
+            strpos($homeContent, 'Official Kedua')
+        );
+    }
+
+    public function test_official_create_and_edit_pages_explain_display_order_clearly(): void
+    {
+        $this->actingAs($this->admin);
+
+        Official::create([
+            'name' => 'Official Referensi',
+            'position' => 'Sekretaris Desa',
+            'sort_order' => 2,
+        ]);
+
+        $createResponse = $this->get(route('admin.officials.create'))
+            ->assertOk()
+            ->assertSee('Posisi Tampil di Halaman Publik')
+            ->assertSee('Otomatis ditempatkan di urutan paling bawah')
+            ->assertSee('tombol naik dan turun')
+            ->assertSee('Official Referensi');
+
+        $official = Official::create([
+            'name' => 'Official Edit',
+            'position' => 'Kaur Umum',
+            'sort_order' => 4,
+        ]);
+
+        $this->get(route('admin.officials.edit', $official))
+            ->assertOk()
+            ->assertSee('Posisi Tampil di Halaman Publik')
+            ->assertSee('Untuk mengubah posisi tampil, gunakan tombol naik dan turun langsung dari daftar aparat desa.')
+            ->assertSee('Official Referensi');
+    }
+
+    public function test_official_display_order_can_be_reordered_without_manual_input(): void
+    {
+        $this->actingAs($this->admin);
+
+        $firstOfficial = Official::create([
+            'name' => 'Official Pertama',
+            'position' => 'Sekretaris Desa',
+            'sort_order' => 1,
+        ]);
+
+        $secondOfficial = Official::create([
+            'name' => 'Official Kedua',
+            'position' => 'Kaur Umum',
+            'sort_order' => 2,
+        ]);
+
+        $thirdOfficial = Official::create([
+            'name' => 'Official Ketiga',
+            'position' => 'Kasi Pelayanan',
+            'sort_order' => 3,
+        ]);
+
+        $this->post(route('admin.officials.reorder', $thirdOfficial), [
+            'direction' => 'up',
+        ])->assertRedirect(route('admin.officials.index'));
+
+        $this->assertDatabaseHas('officials', [
+            'id' => $thirdOfficial->id,
+            'sort_order' => 2,
+        ]);
+
+        $this->assertDatabaseHas('officials', [
+            'id' => $secondOfficial->id,
+            'sort_order' => 3,
+        ]);
+
+        $this->post(route('admin.officials.reorder', $firstOfficial), [
+            'direction' => 'down',
+        ])->assertRedirect(route('admin.officials.index'));
+
+        $this->assertDatabaseHas('officials', [
+            'id' => $firstOfficial->id,
+            'sort_order' => 2,
+        ]);
+    }
+
+    public function test_official_list_disables_reorder_buttons_for_top_and_bottom_positions(): void
+    {
+        $this->actingAs($this->admin);
+
+        Official::create([
+            'name' => 'Official Paling Atas',
+            'position' => 'Sekretaris Desa',
+            'sort_order' => 1,
+        ]);
+
+        Official::create([
+            'name' => 'Official Tengah',
+            'position' => 'Kaur Umum',
+            'sort_order' => 2,
+        ]);
+
+        Official::create([
+            'name' => 'Official Paling Bawah',
+            'position' => 'Kasi Pelayanan',
+            'sort_order' => 3,
+        ]);
+
+        $response = $this->get(route('admin.officials.index'))
+            ->assertOk()
+            ->assertSee('Paling Atas')
+            ->assertSee('Paling Bawah')
+            ->assertSee('sudah berada di posisi paling atas')
+            ->assertSee('sudah berada di posisi paling bawah');
+
+        $content = $response->getContent();
+
+        $this->assertStringContainsString('Official Paling Atas', $content);
+        $this->assertStringContainsString('Official Paling Bawah', $content);
+        $this->assertStringContainsString('cursor-not-allowed opacity-40', $content);
+    }
 }

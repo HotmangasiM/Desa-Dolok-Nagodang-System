@@ -161,19 +161,31 @@
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">
-                        Urutan Tampil
+                        Posisi Tampil di Halaman Publik
                     </label>
-
-                    <input
-                        type="number"
-                        name="sort_order"
-                        value="{{ old('sort_order', $official->sort_order ?? 0) }}"
-                        min="0"
-                        step="1"
-                        onkeydown="return false;"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                        placeholder="Semakin kecil, tampil lebih atas"
-                    >
+                    <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+                        <p class="text-sm font-semibold text-slate-700">
+                            Otomatis ditempatkan di urutan paling bawah
+                        </p>
+                        <p class="mt-1 text-xs leading-6 text-slate-500">
+                            Setelah data disimpan, admin dapat mengatur urutannya langsung dari daftar aparat menggunakan tombol naik dan turun.
+                        </p>
+                    </div>
+                    @if (!empty($displayOrderGuide) && $displayOrderGuide->isNotEmpty())
+                        <div class="mt-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+                            <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Contoh urutan saat ini</p>
+                            <div class="mt-2 space-y-2">
+                                @foreach ($displayOrderGuide as $guideOfficial)
+                                    <div class="flex items-center justify-between gap-3 text-xs text-slate-600">
+                                        <span class="truncate">{{ $guideOfficial->name }} - {{ $guideOfficial->position }}</span>
+                                        <span class="shrink-0 rounded-full bg-white px-2 py-1 font-semibold text-slate-700 border border-slate-200">
+                                            Posisi {{ $guideOfficial->sort_order ?? 0 }}
+                                        </span>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -278,7 +290,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (form.requestSubmit) {
                     form.requestSubmit();
                 } else {
-                    form.submit();
+                form.submit();
                 }
             }
 
