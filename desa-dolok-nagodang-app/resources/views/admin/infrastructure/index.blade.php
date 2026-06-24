@@ -1,7 +1,13 @@
 @extends('layouts.admin')
 @section('content')
 <div class="space-y-6">
-    @php($hasActiveFilters = collect($filters ?? [])->filter(fn ($value) => filled($value))->isNotEmpty())
+    @php
+        $hasActiveFilters = collect($filters ?? [])
+            ->filter(function ($value) {
+                return filled($value);
+            })
+            ->isNotEmpty();
+    @endphp
 
     {{-- HEADER --}}
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -180,12 +186,15 @@
                         <td class="px-4 py-4">
 
                             @php
-                                $badge = match($item->kondisi){
-                                    'Baik' => 'bg-emerald-100 text-emerald-700',
-                                    'Rusak Ringan' => 'bg-amber-100 text-amber-700',
-                                    'Rusak Berat' => 'bg-rose-100 text-rose-700',
-                                    default => 'bg-slate-100 text-slate-700'
-                                };
+                                $badge = 'bg-slate-100 text-slate-700';
+
+                                if ($item->kondisi === 'Baik') {
+                                    $badge = 'bg-emerald-100 text-emerald-700';
+                                } elseif ($item->kondisi === 'Rusak Ringan') {
+                                    $badge = 'bg-amber-100 text-amber-700';
+                                } elseif ($item->kondisi === 'Rusak Berat') {
+                                    $badge = 'bg-rose-100 text-rose-700';
+                                }
                             @endphp
 
                             <span class="px-3 py-1 rounded-full text-xs font-semibold {{ $badge }}">
