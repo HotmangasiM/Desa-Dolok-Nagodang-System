@@ -16,9 +16,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    {{-- LUCIDE ICON --}}
-    <script src="https://unpkg.com/lucide@latest"></script>
-
     <style>
         html {
             scroll-behavior: smooth;
@@ -897,7 +894,7 @@
 <script>
 
     document.addEventListener("DOMContentLoaded", function () {
-        lucide.createIcons();
+        window.lucide?.createIcons();
     });
 
     // MOBILE MENU
