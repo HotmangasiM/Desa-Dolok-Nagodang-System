@@ -9,7 +9,7 @@ class PublicOfficialController extends Controller
 {
     public function index(): View
     {
-        $officials = Official::latest()->get();
+        $officials = Official::orderedForDisplay()->get();
 
         return view('public.officials.index', [
             'title' => 'Aparat Desa',

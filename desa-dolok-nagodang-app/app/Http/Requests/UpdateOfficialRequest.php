@@ -23,7 +23,7 @@ class UpdateOfficialRequest extends FormRequest
             'term_start' => 'nullable|date',
             'term_end' => 'nullable|date|after_or_equal:term_start',
             'description' => 'nullable|string',
-            'sort_order' => ['nullable', 'integer'],
+            'sort_order' => ['nullable', 'integer', 'min:0'],
         ];
     }
 
@@ -33,6 +33,7 @@ class UpdateOfficialRequest extends FormRequest
             'name.required' => 'Nama wajib diisi.',
             'position.required' => 'Jabatan wajib diisi.',
             'term_end.after_or_equal' => 'Selesai masa jabatan tidak boleh sebelum mulai masa jabatan.',
+            'sort_order.min' => 'Urutan tampil tidak boleh kurang dari 0.',
         ];
     }
 

@@ -2,7 +2,9 @@
 
 @section('content')
 <div class="space-y-6">
-    @php($hasActiveFilters = collect($filters ?? [])->filter(fn ($value) => filled($value))->isNotEmpty())
+    @php
+        $hasActiveFilters = collect($filters ?? [])->filter()->isNotEmpty();
+    @endphp
 
     {{-- HEADER ACTION --}}
     <div class="flex flex-wrap items-center justify-between gap-3">
@@ -165,7 +167,7 @@
                     Daftar Aparat Desa
                 </h2>
                 <p class="text-sm text-slate-500 mt-1">
-                    Data aparat desa yang tersedia di sistem.
+                    Data aparat desa yang tersedia di sistem. Atur posisi tampil dari tabel ini menggunakan tombol naik dan turun.
                 </p>
             </div>
 
@@ -185,6 +187,7 @@
                         <th class="px-5 py-4 text-left font-semibold">No</th>
                         <th class="px-5 py-4 text-left font-semibold">Nama</th>
                         <th class="px-5 py-4 text-left font-semibold">Jabatan</th>
+                        <th class="px-5 py-4 text-left font-semibold">Urutan Tampil</th>
                         <th class="px-5 py-4 text-left font-semibold">No. Telepon</th>
                         <th class="px-5 py-4 text-left font-semibold">Email</th>
                         <th class="px-5 py-4 text-left font-semibold">Alamat</th>
@@ -195,10 +198,15 @@
                 <tbody class="divide-y divide-slate-100">
 
                     @forelse ($officials as $index => $official)
+                        @php
+                            $rowNumber = ($officials->firstItem() ?? 0) + $index;
+                            $isTopMostOfficial = ($officials->firstItem() ?? 0) === $rowNumber;
+                            $isBottomMostOfficial = ($officials->lastItem() ?? 0) === $rowNumber;
+                        @endphp
                         <tr class="hover:bg-slate-50 transition">
 
                             <td class="px-5 py-4">
-                                {{ ($officials->firstItem() ?? 0) + $index }}
+                                {{ $rowNumber }}
                             </td>
 
                             <td class="px-5 py-4">
@@ -217,6 +225,48 @@
 
                             <td class="px-5 py-4 text-slate-600">
                                 {{ $official->position ?? '-' }}
+                            </td>
+
+                            <td class="px-5 py-4 text-slate-600">
+                                <div class="flex items-center gap-2">
+                                    <span class="inline-flex rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-semibold text-slate-700">
+                                        {{ $official->sort_order ?? 0 }}
+                                    </span>
+                                    @if ($isTopMostOfficial)
+                                        <span class="inline-flex rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-semibold text-emerald-700">
+                                            Paling Atas
+                                        </span>
+                                    @elseif ($isBottomMostOfficial)
+                                        <span class="inline-flex rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-700">
+                                            Paling Bawah
+                                        </span>
+                                    @endif
+                                    <div class="flex items-center gap-1">
+                                        <form action="{{ route('admin.officials.reorder', $official->id) }}" method="POST" class="inline">
+                                            @csrf
+                                            <input type="hidden" name="direction" value="up">
+                                            <button
+                                                type="submit"
+                                                @if($isTopMostOfficial) disabled @endif
+                                                class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 transition {{ $isTopMostOfficial ? 'cursor-not-allowed opacity-40' : 'hover:bg-slate-50 hover:text-slate-800' }}"
+                                                title="{{ $isTopMostOfficial ? $official->name . ' sudah berada di posisi paling atas' : 'Naikkan urutan tampil ' . $official->name }}">
+                                                <i data-lucide="arrow-up" class="w-4 h-4"></i>
+                                            </button>
+                                        </form>
+
+                                        <form action="{{ route('admin.officials.reorder', $official->id) }}" method="POST" class="inline">
+                                            @csrf
+                                            <input type="hidden" name="direction" value="down">
+                                            <button
+                                                type="submit"
+                                                @if($isBottomMostOfficial) disabled @endif
+                                                class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 transition {{ $isBottomMostOfficial ? 'cursor-not-allowed opacity-40' : 'hover:bg-slate-50 hover:text-slate-800' }}"
+                                                title="{{ $isBottomMostOfficial ? $official->name . ' sudah berada di posisi paling bawah' : 'Turunkan urutan tampil ' . $official->name }}">
+                                                <i data-lucide="arrow-down" class="w-4 h-4"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
                             </td>
 
                             <td class="px-5 py-4 text-slate-600">
@@ -260,7 +310,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="px-5 py-10 text-center text-slate-500">
+                            <td colspan="8" class="px-5 py-10 text-center text-slate-500">
                                 {{ $hasActiveFilters ? 'Tidak ada data aparat desa yang cocok dengan filter pencarian.' : 'Tidak ada data aparat desa.' }}
                             </td>
                         </tr>
