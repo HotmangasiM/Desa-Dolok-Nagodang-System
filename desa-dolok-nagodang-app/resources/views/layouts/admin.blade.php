@@ -8,7 +8,6 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('styles')
 
-    <script src="https://unpkg.com/lucide@latest"></script>
     <script>
     function swalPlainText(value) {
         if (!value) {
@@ -292,7 +291,7 @@ function toggleSidebar() {
 document.getElementById('overlay').addEventListener('click', toggleSidebar);
 
 document.addEventListener("DOMContentLoaded", () => {
-    lucide.createIcons();
+    window.lucide?.createIcons();
 });
 </script>
 
