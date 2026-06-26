@@ -30,7 +30,7 @@ class UpdateCitizenRequest extends FormRequest
             'education' => ['nullable', 'string', 'max:100', 'regex:/^[\pL\pN\s]+$/u'],
             'occupation' => ['nullable', 'string', 'max:100', 'not_regex:/\pN/u'],
             'marital_status' => 'nullable|string|max:50',
-            'family_card_number' => 'nullable|digits:16',
+            'family_card_number' => 'required|digits:16',
             'address' => [
                 'nullable',
                 'string',
@@ -58,6 +58,7 @@ class UpdateCitizenRequest extends FormRequest
         return [
             'nik.required' => 'NIK wajib diisi.',
             'nik.digits' => 'NIK harus berisi tepat 16 digit angka.',
+            'family_card_number.required' => 'No. KK wajib diisi.',
             'family_card_number.digits' => 'No. KK harus berisi tepat 16 digit angka.',
             'full_name.required' => 'Nama lengkap wajib diisi.',
             'full_name.regex' => 'Nama lengkap hanya boleh berisi huruf dan spasi.',
