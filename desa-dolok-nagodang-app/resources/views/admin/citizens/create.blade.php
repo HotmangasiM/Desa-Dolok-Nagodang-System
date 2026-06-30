@@ -91,12 +91,14 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">No. KK</label>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">No. KK <span class="text-rose-500">*</span></label>
                     <input type="text" name="family_card_number" value="{{ old('family_card_number') }}"
+                           required data-required-label="No. KK"
                            inputmode="numeric" maxlength="16" pattern="[0-9]{16}"
                            oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 16)"
                            class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                           placeholder="Masukkan nomor kartu keluarga">
+                           placeholder="Masukkan 16 digit nomor kartu keluarga">
+                    @include('admin.partials.field-error', ['field' => 'family_card_number'])
                 </div>
             </div>
         </div>
