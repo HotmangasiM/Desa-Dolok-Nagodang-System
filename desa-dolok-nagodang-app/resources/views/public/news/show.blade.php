@@ -354,6 +354,30 @@
                             @endforeach
 
                         </div>
+                         {{-- BUTTON --}}
+            <div class="mt-8">
+
+                <a href="{{ route('public.news.index') }}"
+                   class="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-700 transition shadow-lg shadow-emerald-600/20">
+
+                    Lihat Semua Berita
+
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         class="w-4 h-4"
+                         fill="none"
+                         viewBox="0 0 24 24"
+                         stroke="currentColor">
+
+                        <path stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M9 5l7 7-7 7"/>
+
+                    </svg>
+
+                </a>
+
+            </div>
 
                     </div>
 

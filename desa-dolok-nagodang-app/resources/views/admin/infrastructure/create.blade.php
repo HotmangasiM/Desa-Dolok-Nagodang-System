@@ -52,10 +52,10 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
 
-                    {{-- NAMA BARANG --}}
+                    {{-- Pembangunan Infrastuktur --}}
                     <div class="xl:col-span-2">
                         <label class="block text-sm font-semibold text-slate-700 mb-2">
-                            Nama Barang <span class="text-rose-500">*</span>
+                            Nama Infrastruktur <span class="text-rose-500">*</span>
                         </label>
 
                         <input
@@ -71,7 +71,7 @@
                     </div>
 
                     {{-- KODE BARANG --}}
-                    <div>
+                    <!-- <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-2">
                             Kode Barang
                         </label>
@@ -83,7 +83,7 @@
                             data-code-only
                             class="w-full rounded-xl border border-slate-300 px-4 py-3"
                         >
-                    </div>
+                    </div> -->
 
                     {{-- JENIS --}}
                     <div>

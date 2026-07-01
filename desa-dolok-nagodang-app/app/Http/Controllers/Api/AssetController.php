@@ -22,6 +22,7 @@ class AssetController extends Controller
         $filters = [
             'search' => trim((string) $request->query('search')),
             'condition' => trim((string) $request->query('condition')),
+            'description' => 'nullable|in:ADD,DD,HIBAH,SUMBANGAN',
             'category' => trim((string) $request->query('category')),
         ];
 

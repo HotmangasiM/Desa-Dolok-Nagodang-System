@@ -214,6 +214,7 @@
                         <th class="px-5 py-4 text-left font-semibold">Jumlah</th>
                         <th class="px-5 py-4 text-left font-semibold">Kondisi</th>
                         <th class="px-5 py-4 text-left font-semibold">Lokasi</th>
+                        <th class="px-5 py-4 text-left font-semibold">Keterangan</th>
                         <th class="px-5 py-4 text-center font-semibold">Aksi</th>
                     </tr>
                 </thead>
@@ -268,10 +269,20 @@
                             @endif
                         </td>
 
-                        <td class="px-5 py-4 text-slate-600">
+                            <td class="px-5 py-4 text-slate-600">
                             {{ $asset->location ?? '-' }}
                         </td>
 
+                        <td class="px-5 py-4">
+                            @if($asset->description)
+                                <span class="inline-flex rounded-full bg-indigo-100 px-3 py-1 text-xs font-semibold text-indigo-700">
+                                    {{ $asset->description }}
+                                </span>
+                            @else
+                                <span class="text-slate-400">-</span>
+                            @endif
+                        </td>
+                        
                         <td class="px-5 py-4">
                             <div class="flex items-center justify-center gap-2">
 
@@ -302,7 +313,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="9" class="px-5 py-8 text-center text-slate-500">
+                        <td colspan="10" class="px-5 py-8 text-center text-slate-500">
                             {{ $hasActiveFilters ? 'Tidak ada data inventaris yang cocok dengan filter pencarian.' : 'Data inventaris belum tersedia.' }}
                         </td>
                     </tr>
