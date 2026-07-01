@@ -116,7 +116,7 @@
                     <th class="px-4 py-4 text-left">Foto</th>
                     <th class="px-4 py-4 text-left">Nama Barang</th>
                     <th class="px-4 py-4 text-left">Jenis Barang</th>
-                    <th class="px-4 py-4 text-left">Kode Barang</th>
+                    <!-- <th class="px-4 py-4 text-left">Kode Barang</th> -->
                     <th class="px-4 py-4 text-left">Jumlah/Luas</th>
                     <th class="px-4 py-4 text-left">Nilai/Harga</th>
                     <th class="px-4 py-4 text-left">Tahun</th>
@@ -166,10 +166,10 @@
                         <td class="px-4 py-4">
                             {{ $item->jenis_barang }}
                         </td>
-
+<!-- 
                         <td class="px-4 py-4">
                             {{ $item->kode_barang }}
-                        </td>
+                        </td> -->
 
                         <td class="px-4 py-4">
                             {{ $item->jumlah_luas }}

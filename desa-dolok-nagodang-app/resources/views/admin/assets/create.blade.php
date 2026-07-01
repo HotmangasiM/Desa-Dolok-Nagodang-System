@@ -157,6 +157,23 @@
                         placeholder="Contoh: Rp 100.000.000"
                     >
                 </div>
+                  {{-- KETERANGAN --}}
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">
+                            Keterangan
+                        </label>
+
+                        <select
+                            name="description"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3"
+                        >
+                            <option value="">Pilih</option>
+                            <option value="ADD" {{ old('description') === 'ADD' ? 'selected' : '' }}>ADD</option>
+                            <option value="DD" {{ old('description') === 'DD' ? 'selected' : '' }}>DD</option>
+                            <option value="HIBAH" {{ old('description') === 'HIBAH' ? 'selected' : '' }}>HIBAH</option>
+                            <option value="SUMBANGAN" {{ old('description') === 'SUMBANGAN' ? 'selected' : '' }}>SUMBANGAN</option>
+                        </select>
+                    </div>
 
                 <div class="md:col-span-2 xl:col-span-2">
                     <label class="block text-sm font-semibold text-slate-700 mb-2">
@@ -184,7 +201,7 @@
                     </div>
                 </div>
 
-                <div class="xl:col-span-3">
+                <!-- <div class="xl:col-span-3">
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Catatan</label>
                     <textarea
                         name="notes"
@@ -203,6 +220,7 @@
                         placeholder="Deskripsi detail aset inventaris..."
                     >{{ old('description') }}</textarea>
                 </div>
+                 -->
             </div>
         </div>
 
