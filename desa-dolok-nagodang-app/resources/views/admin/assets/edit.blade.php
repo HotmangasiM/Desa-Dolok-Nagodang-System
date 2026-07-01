@@ -95,13 +95,38 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">Sumber</label>
-                    <input type="text" name="source" value="{{ old('source', $asset->source) }}"
-                        data-letter-space-only
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                        placeholder="Contoh: Dana Desa">
-                </div>
+    <label class="block text-sm font-semibold text-slate-700 mb-2">
+        Keterangan
+    </label>
 
+    <select
+        name="description"
+        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+    >
+        <option value="">Pilih Keterangan</option>
+        <option value="ADD"
+            {{ old('description', $asset->description) === 'ADD' ? 'selected' : '' }}>
+            ADD
+        </option>
+
+        <option value="DD"
+            {{ old('description', $asset->description) === 'DD' ? 'selected' : '' }}>
+            DD
+        </option>
+
+        <option value="HIBAH"
+            {{ old('description', $asset->description) === 'HIBAH' ? 'selected' : '' }}>
+            HIBAH
+        </option>
+
+        <option value="SUMBANGAN"
+            {{ old('description', $asset->description) === 'SUMBANGAN' ? 'selected' : '' }}>
+            SUMBANGAN
+        </option>
+    </select>
+
+    @include('admin.partials.field-error', ['field' => 'description'])
+</div>
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">
                         Nilai Aset
@@ -155,19 +180,13 @@
                         class="hidden mt-3 w-40 h-28 rounded-xl object-cover border border-slate-200 shadow-sm">
                 </div>
 
-                <div class="xl:col-span-3">
+                <!-- <div class="xl:col-span-3">
                     <label class="block text-sm font-semibold text-slate-700 mb-2">Catatan</label>
                     <textarea name="notes" rows="3"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm leading-6 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         placeholder="Catatan tambahan inventaris...">{{ old('notes', $asset->notes) }}</textarea>
-                </div>
+                </div> -->
 
-                <div class="xl:col-span-3">
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">Deskripsi</label>
-                    <textarea name="description" rows="4"
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm leading-6 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                        placeholder="Deskripsi detail aset inventaris...">{{ old('description', $asset->description) }}</textarea>
-                </div>
             </div>
         </div>
 
