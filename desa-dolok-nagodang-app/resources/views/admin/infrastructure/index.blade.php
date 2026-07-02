@@ -101,45 +101,44 @@
 
     </div>
 
-    {{-- TABLE --}}
-    <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+   {{-- TABLE --}}
+<div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
 
-        <div class="overflow-x-auto">
+    <div class="overflow-x-auto">
 
-            <table class="min-w-full text-sm">
+        <table class="w-full text-sm">
 
-                <thead class="bg-slate-50 border-b border-slate-200">
+            <thead class="bg-slate-50 border-b border-slate-200">
 
                 <tr>
 
-                    <th class="px-4 py-4 text-left">No</th>
-                    <th class="px-4 py-4 text-left">Foto</th>
-                    <th class="px-4 py-4 text-left">Nama Barang</th>
-                    <th class="px-4 py-4 text-left">Jenis Barang</th>
-                    <!-- <th class="px-4 py-4 text-left">Kode Barang</th> -->
-                    <th class="px-4 py-4 text-left">Jumlah/Luas</th>
-                    <th class="px-4 py-4 text-left">Nilai/Harga</th>
-                    <th class="px-4 py-4 text-left">Tahun</th>
-                    <th class="px-4 py-4 text-left">Kondisi</th>
-                    <th class="px-4 py-4 text-left">Keterangan</th>
-                    <th class="px-4 py-4 text-left">Status</th>
-                    <th class="px-4 py-4 text-center">Aksi</th>
+                    <th class="px-4 py-4 text-left font-semibold">No</th>
+                    <th class="px-4 py-4 text-left font-semibold">Foto</th>
+                    <th class="px-4 py-4 text-left font-semibold">Nama Barang</th>
+                    <th class="px-4 py-4 text-left font-semibold">Jenis Barang</th>
+                    <th class="px-4 py-4 text-left font-semibold">Jumlah/Luas</th>
+                    <th class="px-4 py-4 text-left font-semibold">Nilai/Harga</th>
+                    <th class="px-4 py-4 text-left font-semibold">Tahun</th>
+                    <th class="px-4 py-4 text-center font-semibold">Kondisi</th>
+                    <th class="px-4 py-4 text-left font-semibold">Keterangan</th>
+                    <th class="px-4 py-4 text-left font-semibold">Status</th>
+                    <th class="px-4 py-4 text-center font-semibold">Aksi</th>
 
                 </tr>
 
-                </thead>
+            </thead>
 
-                <tbody>
+            <tbody>
 
                 @forelse($data as $index => $item)
 
-                    <tr class="border-b border-slate-100 hover:bg-slate-50">
+                    <tr class="border-b border-slate-100 hover:bg-slate-50 transition">
 
-                        <td class="px-4 py-4">
+                        <td class="px-4 py-5 align-middle">
                             {{ ($data->firstItem() ?? 0) + $index }}
                         </td>
 
-                        <td class="px-4 py-4">
+                        <td class="px-4 py-5 align-middle">
 
                             @if($item->image)
 
@@ -159,31 +158,28 @@
 
                         </td>
 
-                        <td class="px-4 py-4 font-semibold text-slate-800">
+                        <td class="px-4 py-5 align-middle font-semibold text-slate-800">
                             {{ $item->nama_barang }}
                         </td>
 
-                        <td class="px-4 py-4">
+                        <td class="px-4 py-5 align-middle text-slate-700">
                             {{ $item->jenis_barang }}
                         </td>
-<!-- 
-                        <td class="px-4 py-4">
-                            {{ $item->kode_barang }}
-                        </td> -->
 
-                        <td class="px-4 py-4">
+                        <td class="px-4 py-5 align-middle">
                             {{ $item->jumlah_luas }}
                         </td>
 
-                        <td class="px-4 py-4">
+                        <td class="px-4 py-5 align-middle">
                             Rp {{ number_format($item->nilai_harga ?? 0, 0, ',', '.') }}
                         </td>
 
-                        <td class="px-4 py-4">
+                        <td class="px-4 py-5 align-middle">
                             {{ $item->tahun_pengadaan }}
                         </td>
 
-                        <td class="px-4 py-4">
+                        {{-- KONDISI --}}
+                        <td class="px-4 py-5 text-center align-middle">
 
                             @php
                                 $badge = 'bg-slate-100 text-slate-700';
@@ -197,27 +193,47 @@
                                 }
                             @endphp
 
-                            <span class="px-3 py-1 rounded-full text-xs font-semibold {{ $badge }}">
+                            <span
+                                class="inline-flex
+                                    items-center
+                                    justify-center
+                                    text-center
+                                    px-4 py-1.5
+                                    rounded-full
+                                    text-xs font-semibold
+                                    {{ $badge }}">
                                 {{ $item->kondisi }}
                             </span>
 
                         </td>
 
-                        <td class="px-4 py-4">
-                            {{ $item->keterangan }}
+                        {{-- KETERANGAN --}}
+                        <td class="px-4 py-5 align-middle">
+
+                            <span
+                                class="inline-flex items-center
+                                       rounded-full
+                                       bg-slate-100
+                                       px-3 py-1
+                                       text-xs font-medium
+                                       text-slate-700">
+                                {{ $item->keterangan ?? '-' }}
+                            </span>
+
                         </td>
 
-                        <td class="px-4 py-4">
+                        {{-- STATUS --}}
+                        <td class="px-4 py-5 align-middle">
 
-                            @if($item->status == 'publish')
+                            @if($item->status === 'publish')
 
-                                <span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-semibold">
+                                <span class="inline-flex rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
                                     Publish
                                 </span>
 
                             @else
 
-                                <span class="px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-xs font-semibold">
+                                <span class="inline-flex rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700">
                                     Draft
                                 </span>
 
@@ -225,17 +241,19 @@
 
                         </td>
 
-                        <td class="px-4 py-4">
+                        {{-- AKSI --}}
+                        <td class="px-4 py-5 align-middle">
 
                             <div class="flex justify-center gap-2">
 
-                                <a href="{{ route('admin.infrastructure.edit',$item->id) }}"
-                                   class="px-3 py-2 rounded-lg bg-sky-100 text-sky-700 text-xs font-medium">
+                                <a
+                                    href="{{ route('admin.infrastructure.edit', $item->id) }}"
+                                    class="rounded-lg bg-sky-100 px-4 py-2 text-xs font-medium text-sky-700 transition hover:bg-sky-200">
                                     Edit
                                 </a>
 
                                 <form
-                                    action="{{ route('admin.infrastructure.destroy',$item->id) }}"
+                                    action="{{ route('admin.infrastructure.destroy', $item->id) }}"
                                     method="POST"
                                     class="delete-form"
                                     data-delete-form>
@@ -246,7 +264,7 @@
                                     <button
                                         type="submit"
                                         data-name="{{ $item->nama_barang }}"
-                                        class="btn-delete px-3 py-2 rounded-lg bg-rose-100 text-rose-700 text-xs font-medium">
+                                        class="btn-delete rounded-lg bg-rose-100 px-4 py-2 text-xs font-medium text-rose-700 transition hover:bg-rose-200">
                                         Hapus
                                     </button>
 
@@ -262,10 +280,11 @@
 
                     <tr>
 
-                        <td colspan="12"
-                            class="text-center py-16 text-slate-500">
+                        <td colspan="11" class="py-16 text-center text-slate-500">
 
-                            {{ $hasActiveFilters ? 'Tidak ada data infrastruktur yang cocok dengan filter pencarian.' : 'Belum ada data infrastruktur desa.' }}
+                            {{ $hasActiveFilters
+                                ? 'Tidak ada data infrastruktur yang cocok dengan filter pencarian.'
+                                : 'Belum ada data infrastruktur desa.' }}
 
                         </td>
 
@@ -273,27 +292,31 @@
 
                 @endforelse
 
-                </tbody>
+            </tbody>
 
-            </table>
+        </table>
 
-        </div>
+    </div>
 
-        <div class="px-5 py-4 border-t border-slate-200">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-                <p class="text-sm text-slate-500">
-                    Menampilkan {{ $data->firstItem() ?? 0 }}
-                    sampai {{ $data->lastItem() ?? 0 }}
-                    dari {{ $data->total() }} data
-                </p>
+    <div class="border-t border-slate-200 px-5 py-4">
 
-                <div>
-                    {{ $data->links() }}
-                </div>
+        <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+
+            <p class="text-sm text-slate-500">
+                Menampilkan {{ $data->firstItem() ?? 0 }}
+                sampai {{ $data->lastItem() ?? 0 }}
+                dari {{ $data->total() }} data
+            </p>
+
+            <div>
+                {{ $data->links() }}
             </div>
+
         </div>
 
     </div>
+
+</div>
 
 </div>
 @endsection
