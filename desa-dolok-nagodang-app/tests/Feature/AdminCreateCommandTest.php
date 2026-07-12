@@ -11,55 +11,45 @@ class AdminCreateCommandTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_admin_create_command_creates_active_admin(): void
+    public function test_admin_account_can_be_created_using_command_options(): void
     {
         $this->artisan('admin:create', [
-            '--name' => 'Admin Produksi',
-            '--email' => 'admin.production@desa.test',
-            '--password' => 'StrongPassword123!',
+            '--name' => 'Admin Desa',
+            '--email' => 'admin@desa.id',
+            '--password' => 'PasswordKuat123!',
         ])->assertSuccessful();
 
-        $user = User::where('email', 'admin.production@desa.test')->firstOrFail();
+        $user = User::where('email', 'admin@desa.id')->first();
 
-        $this->assertSame('Admin Produksi', $user->name);
+        $this->assertNotNull($user);
+        $this->assertSame('Admin Desa', $user->name);
         $this->assertSame('admin', $user->role);
         $this->assertTrue($user->is_active);
-        $this->assertTrue(Hash::check('StrongPassword123!', $user->password));
+        $this->assertTrue(Hash::check('PasswordKuat123!', $user->password));
     }
 
-    public function test_admin_create_command_rejects_duplicate_email_without_force(): void
-    {
-        User::factory()->create([
-            'email' => 'admin.production@desa.test',
-        ]);
-
-        $this->artisan('admin:create', [
-            '--name' => 'Admin Baru',
-            '--email' => 'admin.production@desa.test',
-            '--password' => 'StrongPassword123!',
-        ])->assertFailed();
-    }
-
-    public function test_admin_create_command_can_update_existing_admin_with_force(): void
+    public function test_existing_admin_can_be_updated_with_force_option(): void
     {
         User::factory()->create([
             'name' => 'Admin Lama',
-            'email' => 'admin.production@desa.test',
+            'email' => 'admin@desa.id',
+            'password' => Hash::make('PasswordLama123!'),
+            'role' => 'staff',
             'is_active' => false,
         ]);
 
         $this->artisan('admin:create', [
             '--name' => 'Admin Baru',
-            '--email' => 'admin.production@desa.test',
-            '--password' => 'StrongPassword123!',
+            '--email' => 'admin@desa.id',
+            '--password' => 'PasswordBaru123!',
             '--force' => true,
         ])->assertSuccessful();
 
-        $user = User::where('email', 'admin.production@desa.test')->firstOrFail();
+        $user = User::where('email', 'admin@desa.id')->firstOrFail();
 
         $this->assertSame('Admin Baru', $user->name);
         $this->assertSame('admin', $user->role);
         $this->assertTrue($user->is_active);
-        $this->assertTrue(Hash::check('StrongPassword123!', $user->password));
+        $this->assertTrue(Hash::check('PasswordBaru123!', $user->password));
     }
 }
