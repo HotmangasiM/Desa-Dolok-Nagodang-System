@@ -16,6 +16,7 @@ class StoreLetterRequest extends FormRequest
     {
         return [
             'letter_number' => 'nullable|string|max:255|unique:letters,letter_number',
+            'letter_number_prefix' => ['required', 'regex:/^\d+$/', 'max:20'],
             'letter_type_id' => 'required|exists:letter_types,id',
             'citizen_id' => 'required|exists:citizens,id',
             'subject' => 'required|string|max:255',
@@ -33,6 +34,9 @@ class StoreLetterRequest extends FormRequest
         return [
             'letter_type_id.required' => 'Jenis Surat wajib dipilih.',
             'letter_type_id.exists' => 'Jenis Surat yang dipilih tidak valid.',
+            'letter_number_prefix.required' => 'Nomor urut surat wajib diisi.',
+            'letter_number_prefix.regex' => 'Nomor urut surat hanya boleh berisi angka.',
+            'letter_number.unique' => 'Nomor surat sudah digunakan. Silakan gunakan nomor urut yang berbeda.',
             'citizen_id.required' => 'Pemohon wajib dipilih.',
             'citizen_id.exists' => 'Pemohon yang dipilih tidak valid.',
             'subject.required' => 'Subjek surat wajib diisi.',
