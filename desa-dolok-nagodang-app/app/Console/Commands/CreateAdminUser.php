@@ -21,9 +21,9 @@ class CreateAdminUser extends Command
     public function handle(): int
     {
         $data = [
-            'name' => $this->option('name') ?: $this->ask('Nama admin'),
-            'email' => $this->option('email') ?: $this->ask('Email admin'),
-            'password' => $this->option('password') ?: $this->secret('Password admin'),
+            'name' => $this->resolveName(),
+            'email' => $this->resolveEmail(),
+            'password' => $this->resolvePassword(),
         ];
 
         $validator = Validator::make($data, [
@@ -63,5 +63,26 @@ class CreateAdminUser extends Command
         $this->line("Email: {$user->email}");
 
         return self::SUCCESS;
+    }
+
+    protected function resolveName(): string
+    {
+        return $this->option('name')
+            ?: env('ADMIN_ACCOUNT_NAME')
+            ?: $this->ask('Nama admin');
+    }
+
+    protected function resolveEmail(): string
+    {
+        return $this->option('email')
+            ?: env('ADMIN_ACCOUNT_EMAIL')
+            ?: $this->ask('Email admin');
+    }
+
+    protected function resolvePassword(): string
+    {
+        return $this->option('password')
+            ?: env('ADMIN_ACCOUNT_PASSWORD')
+            ?: $this->secret('Password admin');
     }
 }
