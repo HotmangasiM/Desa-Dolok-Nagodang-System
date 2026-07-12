@@ -19,6 +19,7 @@
         {{-- Field sistem --}}
         <input type="hidden" id="subjectInput" name="subject" value="{{ old('subject', 'Surat Elektronik') }}">
         <input type="hidden" name="status" value="{{ old('status', 'submitted') }}">
+        <input type="hidden" id="letter_number" name="letter_number" value="{{ old('letter_number') }}">
 
         {{-- Informasi Surat --}}
         <div class="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
@@ -32,14 +33,36 @@
             <div class="p-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">
-                        Nomor Surat
+                        Nomor Urut Surat <span class="text-rose-500">*</span>
                     </label>
-                    <input
-                        type="text"
-                        value="Otomatis dibuat setelah data disimpan"
-                        readonly
-                        class="w-full rounded-xl border border-slate-200 bg-slate-100 px-4 py-3 text-sm text-slate-500"
-                    >
+                    <div class="flex overflow-hidden rounded-xl border border-slate-300">
+                        <input
+                            type="text"
+                            id="letter_number_prefix"
+                            name="letter_number_prefix"
+                            value="{{ old('letter_number_prefix') }}"
+                            required
+                            data-required-label="Nomor Urut Surat"
+                            inputmode="numeric"
+                            maxlength="20"
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                            class="w-32 border-0 px-4 py-3 text-sm focus:outline-none focus:ring-0"
+                            placeholder="Contoh: 002"
+                        >
+                        <input
+                            type="text"
+                            id="letter_number_suffix_preview"
+                            value="{{ old('letter_number') ? preg_replace('/^\d+/', '', old('letter_number')) : '' }}"
+                            readonly
+                            class="min-w-0 flex-1 border-0 border-l border-slate-300 bg-slate-100 px-4 py-3 text-sm text-slate-500 focus:outline-none focus:ring-0"
+                            placeholder="/KODE/BULAN/TAHUN"
+                        >
+                    </div>
+                    @include('admin.partials.field-error', ['field' => 'letter_number_prefix'])
+                    @include('admin.partials.field-error', ['field' => 'letter_number'])
+                    <p class="mt-1 text-xs text-slate-400">
+                        Isi nomor urut secara manual. Format surat setelahnya dibuat otomatis oleh sistem.
+                    </p>
                 </div>
 
                 <div>
@@ -501,6 +524,10 @@
 document.addEventListener('DOMContentLoaded', function () {
     const letterTypeSelect = document.getElementById('letter_type_id');
     const citizenSelect = document.getElementById('citizen_id');
+    const submissionDateInput = document.querySelector('input[name="submission_date"]');
+    const letterNumberInput = document.getElementById('letter_number');
+    const letterNumberPrefixInput = document.getElementById('letter_number_prefix');
+    const letterNumberSuffixPreview = document.getElementById('letter_number_suffix_preview');
     const payloadSection = document.getElementById('payloadSection');
     const payloadDescription = document.getElementById('payloadDescription');
     const fieldGroups = document.querySelectorAll('.letter-fields');
@@ -545,6 +572,58 @@ document.addEventListener('DOMContentLoaded', function () {
     function getSelectedLetterName() {
         const selectedOption = getSelectedLetterOption();
         return selectedOption ? (selectedOption.dataset.name || selectedOption.textContent || '').trim() : '';
+    }
+
+    function toRomanMonth(month) {
+        const romans = {
+            1: 'I',
+            2: 'II',
+            3: 'III',
+            4: 'IV',
+            5: 'V',
+            6: 'VI',
+            7: 'VII',
+            8: 'VIII',
+            9: 'IX',
+            10: 'X',
+            11: 'XI',
+            12: 'XII',
+        };
+
+        return romans[month] || '-';
+    }
+
+    function buildLetterSuffix() {
+        const code = getSelectedLetterCode();
+        const submissionDate = submissionDateInput ? submissionDateInput.value : '';
+
+        if (!code || !submissionDate) {
+            return '';
+        }
+
+        const parts = submissionDate.split('-');
+
+        if (parts.length !== 3) {
+            return '';
+        }
+
+        const month = parseInt(parts[1], 10);
+        const year = parts[0];
+
+        return '/' + code + '/' + toRomanMonth(month) + '/' + year;
+    }
+
+    function syncLetterNumber() {
+        if (!letterNumberInput || !letterNumberPrefixInput || !letterNumberSuffixPreview) {
+            return;
+        }
+
+        const prefix = (letterNumberPrefixInput.value || '').replace(/\D/g, '');
+        const suffix = buildLetterSuffix();
+
+        letterNumberPrefixInput.value = prefix;
+        letterNumberSuffixPreview.value = suffix;
+        letterNumberInput.value = prefix && suffix ? prefix + suffix : '';
     }
 
     function setGroupInputsDisabled(group, disabled) {
@@ -692,6 +771,8 @@ document.addEventListener('DOMContentLoaded', function () {
         if (selectedCode === 'SKOT') {
             autofillChildPayload();
         }
+
+        syncLetterNumber();
     }
 
     if (letterTypeSelect) {
@@ -714,7 +795,16 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    if (submissionDateInput) {
+        submissionDateInput.addEventListener('change', syncLetterNumber);
+    }
+
+    if (letterNumberPrefixInput) {
+        letterNumberPrefixInput.addEventListener('input', syncLetterNumber);
+    }
+
     toggleLetterFields();
+    syncLetterNumber();
 
     const form = document.querySelector('form[action*="letters"]');
 

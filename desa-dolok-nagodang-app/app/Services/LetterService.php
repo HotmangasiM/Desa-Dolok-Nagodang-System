@@ -44,7 +44,13 @@ class LetterService
             $data['applicant_national_id'] = $citizen->nik;
         }
 
-        if (empty($data['letter_number'])) {
+        if (!empty($data['letter_number_prefix'])) {
+            $data['letter_number'] = $this->composeLetterNumber(
+                (string) $data['letter_number_prefix'],
+                (int) $data['letter_type_id'],
+                $data['submission_date']
+            );
+        } elseif (empty($data['letter_number'])) {
             $data['letter_number'] = $this->generateLetterNumber(
                 (int) $data['letter_type_id'],
                 $data['submission_date']
@@ -62,6 +68,7 @@ class LetterService
         //Hardcode sementar untuk field created_by oleh admin
         $data['created_by'] = auth()->id();
 
+        unset($data['letter_number_prefix']);
         $data['payload'] = $this->normalizePayload($data['payload'] ?? []);
         unset($data['citizen_id']);
 
@@ -72,6 +79,11 @@ class LetterService
 
     public function update(int $id, array $data)
     {
+        if (empty($data['submission_date'])) {
+            $existingLetter = $this->getById($id);
+            $data['submission_date'] = optional($existingLetter->submission_date)->toDateString() ?: now()->toDateString();
+        }
+
         if (!empty($data['citizen_id'])) {
             $citizen = Citizen::find($data['citizen_id']);
 
@@ -94,6 +106,15 @@ class LetterService
             $data['status'] = $statusMap[$data['status']] ?? $data['status'];
         }
 
+        if (!empty($data['letter_number_prefix'])) {
+            $data['letter_number'] = $this->composeLetterNumber(
+                (string) $data['letter_number_prefix'],
+                (int) $data['letter_type_id'],
+                $data['submission_date']
+            );
+        }
+
+        unset($data['letter_number_prefix']);
         $data['payload'] = $this->normalizePayload($data['payload'] ?? []);
 
         unset($data['citizen_id']);
@@ -108,12 +129,10 @@ class LetterService
 
     protected function generateLetterNumber(int $letterTypeId, string $submissionDate): string
     {
+        $suffix = $this->generateLetterNumberSuffix($letterTypeId, $submissionDate);
         $date = \Carbon\Carbon::parse($submissionDate);
         $month = (int) $date->format('m');
         $year = (int) $date->format('Y');
-
-        $letterType = LetterType::findOrFail($letterTypeId);
-        $code = strtoupper($letterType->code);
 
         $countThisMonth = Letter::query()
             ->where('letter_type_id', $letterTypeId)
@@ -122,9 +141,32 @@ class LetterService
             ->count();
 
         $sequence = str_pad((string) ($countThisMonth + 1), 3, '0', STR_PAD_LEFT);
+
+        return "{$sequence}{$suffix}";
+    }
+
+    protected function composeLetterNumber(string $prefix, int $letterTypeId, string $submissionDate): string
+    {
+        $numericPrefix = preg_replace('/\D/', '', $prefix);
+
+        if ($numericPrefix === null || $numericPrefix === '') {
+            return $this->generateLetterNumber($letterTypeId, $submissionDate);
+        }
+
+        return $numericPrefix . $this->generateLetterNumberSuffix($letterTypeId, $submissionDate);
+    }
+
+    protected function generateLetterNumberSuffix(int $letterTypeId, string $submissionDate): string
+    {
+        $date = \Carbon\Carbon::parse($submissionDate);
+        $month = (int) $date->format('m');
+        $year = (int) $date->format('Y');
+
+        $letterType = LetterType::findOrFail($letterTypeId);
+        $code = strtoupper($letterType->code);
         $romanMonth = $this->toRomanMonth($month);
 
-        return "{$sequence}/{$code}/{$romanMonth}/{$year}";
+        return "/{$code}/{$romanMonth}/{$year}";
     }
 
     protected function normalizePayload(array $payload): array

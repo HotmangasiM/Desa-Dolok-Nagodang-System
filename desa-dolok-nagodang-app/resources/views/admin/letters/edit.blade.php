@@ -3,6 +3,20 @@
 @section('content')
 @php
     $payload = old('payload', $letter->payload ?? []);
+    $currentLetterNumber = old('letter_number', $letter->letter_number ?? '');
+    $letterNumberPrefix = old('letter_number_prefix');
+    $letterNumberSuffix = '';
+
+    if ($letterNumberPrefix === null) {
+        if (preg_match('/^(\d+)(\/.*)$/', $currentLetterNumber, $matches)) {
+            $letterNumberPrefix = $matches[1];
+            $letterNumberSuffix = $matches[2];
+        } else {
+            $letterNumberPrefix = $currentLetterNumber;
+        }
+    } else {
+        $letterNumberSuffix = preg_replace('/^\d+/', '', $currentLetterNumber);
+    }
 
     $statusFormValue = old('status');
 
@@ -31,6 +45,7 @@
     <form action="{{ route('admin.letters.update', $letter->id) }}" method="POST" class="space-y-6" data-inline-validate>
         @csrf
         @method('PUT')
+        <input type="hidden" id="letter_number" name="letter_number" value="{{ $currentLetterNumber }}">
 
         {{-- Informasi Surat --}}
         <div class="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
@@ -42,15 +57,36 @@
             <div class="p-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-2">
-                        Nomor Surat
+                        Nomor Urut Surat <span class="text-rose-500">*</span>
                     </label>
-                    <input
-                        type="text"
-                        name="letter_number"
-                        value="{{ old('letter_number', $letter->letter_number) }}"
-                        readonly
-                        class="w-full rounded-xl border border-slate-200 bg-slate-100 px-4 py-3 text-sm text-slate-500"
-                    >
+                    <div class="flex overflow-hidden rounded-xl border border-slate-300">
+                        <input
+                            type="text"
+                            id="letter_number_prefix"
+                            name="letter_number_prefix"
+                            value="{{ $letterNumberPrefix }}"
+                            required
+                            data-required-label="Nomor Urut Surat"
+                            inputmode="numeric"
+                            maxlength="20"
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                            class="w-32 border-0 px-4 py-3 text-sm focus:outline-none focus:ring-0"
+                            placeholder="Contoh: 002"
+                        >
+                        <input
+                            type="text"
+                            id="letter_number_suffix_preview"
+                            value="{{ $letterNumberSuffix }}"
+                            readonly
+                            class="min-w-0 flex-1 border-0 border-l border-slate-300 bg-slate-100 px-4 py-3 text-sm text-slate-500 focus:outline-none focus:ring-0"
+                            placeholder="/KODE/BULAN/TAHUN"
+                        >
+                    </div>
+                    @include('admin.partials.field-error', ['field' => 'letter_number_prefix'])
+                    @include('admin.partials.field-error', ['field' => 'letter_number'])
+                    <p class="mt-1 text-xs text-slate-400">
+                        Ubah nomor urut secara manual. Format surat setelahnya dibuat otomatis oleh sistem.
+                    </p>
                 </div>
 
                 <div>
@@ -153,7 +189,7 @@
                     <input
                         type="date"
                         name="submission_date"
-                        value="{{ old('submission_date', now()->toDateString()) }}"
+                        value="{{ old('submission_date', $letter->submission_date ? $letter->submission_date->toDateString() : now()->toDateString()) }}"
                         min="{{ now()->toDateString() }}"
                         max="{{ now()->toDateString() }}"
                         class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
@@ -600,6 +636,67 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    const letterTypeSelect = document.getElementById('letter_type_id');
+    const submissionDateInput = document.querySelector('input[name="submission_date"]');
+    const letterNumberInput = document.getElementById('letter_number');
+    const letterNumberPrefixInput = document.getElementById('letter_number_prefix');
+    const letterNumberSuffixPreview = document.getElementById('letter_number_suffix_preview');
+
+    function toRomanMonth(month) {
+        const romans = {
+            1: 'I',
+            2: 'II',
+            3: 'III',
+            4: 'IV',
+            5: 'V',
+            6: 'VI',
+            7: 'VII',
+            8: 'VIII',
+            9: 'IX',
+            10: 'X',
+            11: 'XI',
+            12: 'XII',
+        };
+
+        return romans[month] || '-';
+    }
+
+    function buildLetterSuffix() {
+        const selectedOption = letterTypeSelect
+            ? letterTypeSelect.options[letterTypeSelect.selectedIndex]
+            : null;
+        const code = selectedOption ? (selectedOption.dataset.code || '').toUpperCase() : '';
+        const submissionDate = submissionDateInput ? submissionDateInput.value : '';
+
+        if (!code || !submissionDate) {
+            return '';
+        }
+
+        const parts = submissionDate.split('-');
+
+        if (parts.length !== 3) {
+            return '';
+        }
+
+        const month = parseInt(parts[1], 10);
+        const year = parts[0];
+
+        return '/' + code + '/' + toRomanMonth(month) + '/' + year;
+    }
+
+    function syncLetterNumber() {
+        if (!letterNumberInput || !letterNumberPrefixInput || !letterNumberSuffixPreview) {
+            return;
+        }
+
+        const prefix = (letterNumberPrefixInput.value || '').replace(/\D/g, '');
+        const suffix = buildLetterSuffix();
+
+        letterNumberPrefixInput.value = prefix;
+        letterNumberSuffixPreview.value = suffix;
+        letterNumberInput.value = prefix && suffix ? prefix + suffix : '';
+    }
+
     function formatRupiah(value) {
         const digits = (value || '').replace(/\D/g, '');
 
@@ -617,6 +714,20 @@ document.addEventListener('DOMContentLoaded', function () {
             input.value = formatRupiah(input.value);
         });
     });
+
+    if (letterTypeSelect) {
+        letterTypeSelect.addEventListener('change', syncLetterNumber);
+    }
+
+    if (submissionDateInput) {
+        submissionDateInput.addEventListener('change', syncLetterNumber);
+    }
+
+    if (letterNumberPrefixInput) {
+        letterNumberPrefixInput.addEventListener('input', syncLetterNumber);
+    }
+
+    syncLetterNumber();
 
     if (typeof Swal === 'undefined') {
         console.error('SweetAlert tidak ter-load!');
