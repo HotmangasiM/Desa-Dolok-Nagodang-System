@@ -1,0 +1,342 @@
+@extends('layouts.admin')
+
+@section('content')
+<div class="space-y-6">
+    @if ($errors->any())
+        <div class="rounded-2xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-700">
+            <div class="font-semibold mb-2">Terjadi kesalahan pada input:</div>
+            <ul class="list-disc list-inside space-y-1">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <form method="POST" action="{{ route('admin.assets.store') }}" enctype="multipart/form-data" data-inline-validate>
+        @csrf
+
+        <div class="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
+            <div class="px-6 py-4 border-b border-slate-200">
+                <h2 class="text-lg font-bold text-slate-800">Informasi Inventaris</h2>
+                <p class="text-sm text-slate-500 mt-1">Masukkan informasi utama aset inventaris desa.</p>
+            </div>
+
+            <div class="p-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">
+                        Nama Barang <span class="text-rose-500">*</span>
+                    </label>
+                    <input
+                        type="text"
+                        name="item_name"
+                        value="{{ old('item_name') }}"
+                        required
+                        data-required-label="Nama Barang"
+                        data-letter-space-only
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        placeholder="Masukkan nama barang"
+                    >
+                    @include('admin.partials.field-error', ['field' => 'item_name'])
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">
+                        Kode Barang <span class="text-rose-500">*</span>
+                    </label>
+                    <input
+                        type="text"
+                        name="item_code"
+                        value="{{ old('item_code') }}"
+                        required
+                        data-required-label="Kode Barang"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        placeholder="Masukkan kode barang"
+                    >
+                    @include('admin.partials.field-error', ['field' => 'item_code'])
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Kategori</label>
+                    <input
+                        type="text"
+                        name="category"
+                        value="{{ old('category') }}"
+                        data-letter-space-only
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        placeholder="Contoh: Elektronik"
+                    >
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">
+                        Jumlah <span class="text-rose-500">*</span>
+                    </label>
+                    <input
+                        type="number"
+                        name="quantity"
+                        min="0"
+                        value="{{ old('quantity', 0) }}"
+                        required
+                        data-required-label="Jumlah"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    >
+                    @include('admin.partials.field-error', ['field' => 'quantity'])
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">
+                        Kondisi <span class="text-rose-500">*</span>
+                    </label>
+
+                    <select
+                        name="condition"
+                        required
+                        data-required-label="Kondisi"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    >
+                        <option value="">Pilih Kondisi</option>
+                        <option value="good" {{ old('condition') === 'good' ? 'selected' : '' }}>Baik</option>
+                        <option value="damaged" {{ old('condition') === 'damaged' ? 'selected' : '' }}>Rusak</option>
+                    </select>
+                    @include('admin.partials.field-error', ['field' => 'condition'])
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Lokasi</label>
+                    <input
+                        type="text"
+                        name="location"
+                        value="{{ old('location') }}"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        placeholder="Contoh: Ruang Admin"
+                    >
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Tanggal Perolehan</label>
+                    <input
+                        type="date"
+                        name="acquisition_date"
+                        value="{{ old('acquisition_date') }}"
+                        max="{{ now()->toDateString() }}"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    >
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Sumber</label>
+                    <input
+                        type="text"
+                        name="source"
+                        value="{{ old('source') }}"
+                        data-letter-space-only
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        placeholder="Contoh: Dana Desa"
+                    >
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">
+                        Nilai Aset
+                    </label>
+
+                    <input
+                        type="hidden"
+                        name="asset_value"
+                        id="asset_value"
+                        value="{{ old('asset_value') }}"
+                    >
+
+                    <input
+                        type="text"
+                        id="asset_value_display"
+                        value="{{ old('asset_value') ? 'Rp ' . number_format((float) old('asset_value'), 0, ',', '.') : '' }}"
+                        inputmode="numeric"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        placeholder="Contoh: Rp 100.000.000"
+                    >
+                </div>
+
+                <div class="md:col-span-2 xl:col-span-2">
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">
+                        Foto Aset <span class="text-rose-500">*</span>
+                    </label>
+
+                    <input
+                        type="file"
+                        name="asset_photo"
+                        required
+                        data-required-label="Foto Aset"
+                        accept="image/*"
+                        onchange="previewAssetImage(event)"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    >
+                    @include('admin.partials.field-error', ['field' => 'asset_photo'])
+
+                    <p class="text-xs text-slate-500 mt-2">
+                        Format: JPG, PNG, JPEG (max 2MB)
+                    </p>
+
+                    <div class="mt-4">
+                        <img id="assetPreview"
+                             class="hidden w-40 h-28 object-cover rounded-xl border border-slate-200 shadow-sm">
+                    </div>
+                </div>
+
+                <div class="xl:col-span-3">
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Catatan</label>
+                    <textarea
+                        name="notes"
+                        rows="3"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm leading-6 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        placeholder="Catatan tambahan inventaris..."
+                    >{{ old('notes') }}</textarea>
+                </div>
+
+                <div class="xl:col-span-3">
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Deskripsi</label>
+                    <textarea
+                        name="description"
+                        rows="4"
+                        class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm leading-6 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        placeholder="Deskripsi detail aset inventaris..."
+                    >{{ old('description') }}</textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center justify-end gap-3">
+            <a href="{{ route('admin.assets.index') }}"
+               class="w-full sm:w-auto inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 transition">
+                Batal
+            </a>
+
+            <button
+                type="submit"
+                class="w-full sm:w-auto inline-flex items-center justify-center rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-700 shadow-lg shadow-emerald-600/20 transition">
+                Simpan Inventaris
+            </button>
+        </div>
+    </form>
+</div>
+@endsection
+
+@push('scripts')
+<script>
+function previewAssetImage(event) {
+    const input = event.target;
+    const preview = document.getElementById('assetPreview');
+
+    if (!input.files || !input.files[0] || !preview) return;
+
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+        preview.src = e.target.result;
+        preview.classList.remove('hidden');
+    };
+
+    reader.readAsDataURL(input.files[0]);
+}
+
+function formatRupiah(value) {
+    const numericValue = value.replace(/[^0-9]/g, '');
+
+    if (!numericValue) {
+        return {
+            raw: '',
+            formatted: ''
+        };
+    }
+
+    return {
+        raw: numericValue,
+        formatted: 'Rp ' + new Intl.NumberFormat('id-ID').format(numericValue)
+    };
+}
+
+function sanitizeLetterSpaceInput(value) {
+    return value.replace(/[^\p{L}\s]/gu, '').replace(/\s{2,}/g, ' ');
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.querySelector('form[action*="assets"]');
+    const assetValue = document.getElementById('asset_value');
+    const assetValueDisplay = document.getElementById('asset_value_display');
+
+    document.querySelectorAll('[data-letter-space-only]').forEach(function (input) {
+        input.addEventListener('input', function () {
+            this.value = sanitizeLetterSpaceInput(this.value);
+        });
+    });
+
+    if (assetValueDisplay && assetValue) {
+        assetValueDisplay.addEventListener('input', function () {
+            const result = formatRupiah(this.value);
+
+            assetValue.value = result.raw;
+            this.value = result.formatted;
+        });
+    }
+
+    if (!form) return;
+
+    form.addEventListener('submit', function (e) {
+        if (assetValueDisplay && assetValue) {
+            const result = formatRupiah(assetValueDisplay.value);
+            assetValue.value = result.raw;
+            assetValueDisplay.value = result.formatted;
+        }
+
+        if (form.dataset.confirmed === 'true') {
+            return;
+        }
+
+        if (window.AdminInlineValidation && !window.AdminInlineValidation.validateForm(form)) {
+            e.preventDefault();
+            return;
+        }
+
+        if (typeof Swal === 'undefined') {
+            return;
+        }
+
+        e.preventDefault();
+
+        Swal.fire({
+            title: 'Konfirmasi Tambah Data',
+            text: 'Apakah Anda yakin ingin menyimpan data inventaris ini?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, simpan',
+            cancelButtonText: 'Batal',
+            confirmButtonColor: '#10b981',
+            cancelButtonColor: '#6b7280',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.dataset.confirmed = 'true';
+
+                Swal.fire({
+                    title: 'Menyimpan...',
+                    text: 'Mohon tunggu',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    showConfirmButton: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                if (form.requestSubmit) {
+                    form.requestSubmit();
+                } else {
+                    form.submit();
+                }
+            }
+        });
+    });
+});
+</script>
+@endpush
